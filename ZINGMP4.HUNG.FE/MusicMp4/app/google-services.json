@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "995036119523",
+    "project_id": "musicmp4-a2b4c",
+    "storage_bucket": "musicmp4-a2b4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995036119523:android:a0f35419f5276d799b60d6",
+        "android_client_info": {
+          "package_name": "com.monopoco.musicmp4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9ARTzCTpKIs3jQ0t06vokAGstzqnAmoc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
