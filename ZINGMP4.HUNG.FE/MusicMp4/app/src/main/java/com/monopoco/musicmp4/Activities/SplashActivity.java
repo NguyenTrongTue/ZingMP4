@@ -28,9 +28,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Intent intent;
-                if (user != null) {
 
-                    intent = new Intent(SplashActivity.this, HomeActivity.class);
+                if (user != null) {
+                    intent = new Intent(SplashActivity.this, MainActivity.class);
                 } else {
                     intent = new Intent(SplashActivity.this, SignInActivity.class);
                 }

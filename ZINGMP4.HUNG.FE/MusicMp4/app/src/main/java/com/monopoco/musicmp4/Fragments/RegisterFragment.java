@@ -1,6 +1,7 @@
 package com.monopoco.musicmp4.Fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.monopoco.musicmp4.Activities.HomeActivity;
+import com.monopoco.musicmp4.Activities.MainActivity;
 import com.monopoco.musicmp4.R;
 
 
@@ -43,10 +44,14 @@ public class RegisterFragment extends Fragment {
 
     private LinearLayout loading;
 
+    private Drawable errorIcon;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
+
+        errorIcon = getResources().getDrawable(R.drawable.ic_error);
 
         toSignInText = view.findViewById(R.id.text_to_login);
         frameLayout = getActivity().findViewById(R.id.sign_in_frame_layout);
@@ -84,6 +89,8 @@ public class RegisterFragment extends Fragment {
                 setFragment(new SignInFragment());
             }
         });
+
+        errorIcon.setBounds(0, 0, errorIcon.getIntrinsicWidth(), errorIcon.getIntrinsicHeight());
 
         email.addTextChangedListener(new TextWatcher() {
             @Override
@@ -157,7 +164,7 @@ public class RegisterFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Todo: handle if create successful
-                            Intent intent = new Intent(getActivity(), HomeActivity.class);
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
                             getActivity().startActivity(intent);
                             getActivity().finish();
                         } else {
@@ -170,12 +177,12 @@ public class RegisterFragment extends Fragment {
                     }
                 });
             } else {
-                confirmPassword.setError("Password doesn't match.");
+                confirmPassword.setError("Password doesn't match.", errorIcon);
                 signUpButton.setEnabled(true);
                 loading.setVisibility(View.GONE);
             }
         } else {
-            email.setError("Email invalidate.");
+            email.setError("Email invalidate.", errorIcon);
             signUpButton.setEnabled(true);
             loading.setVisibility(View.GONE);
         }

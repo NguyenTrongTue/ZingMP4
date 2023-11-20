@@ -14,7 +14,8 @@
         <!-- Status bar color -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/primary</item>
         <item name="android:windowBackground">@drawable/dark_background</item>
-
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
 
     </style>
 

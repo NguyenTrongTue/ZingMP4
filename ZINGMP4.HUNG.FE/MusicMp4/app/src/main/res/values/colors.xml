@@ -9,4 +9,6 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="button_color">#3990ff</color>
+    <color name="transparent">#00000000</color>
+    <color name="singer_name_color">#B3A5C0FF</color>
 </resources>

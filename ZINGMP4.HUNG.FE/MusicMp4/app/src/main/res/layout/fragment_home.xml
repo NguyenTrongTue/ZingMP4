@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.HomeFragment">
+    <TextView
+        android:id="@+id/text_recommended"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Recommended for you"
+        android:fontFamily="@font/circular_std_font"
+        android:textSize="30dp"
+        android:paddingLeft="70px"
+        android:textFontWeight="600"
+        android:gravity="center_vertical"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="650px"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/text_recommended">
+
+        <LinearLayout
+            android:id="@+id/linear_recommended"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@drawable/divider_horizontal"
+            android:dividerPadding="20px"
+            android:orientation="horizontal"
+            android:showDividers="middle" />
+
+    </HorizontalScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

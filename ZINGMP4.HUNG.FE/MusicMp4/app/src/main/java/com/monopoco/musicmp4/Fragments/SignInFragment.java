@@ -1,6 +1,7 @@
 package com.monopoco.musicmp4.Fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,9 +26,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.monopoco.musicmp4.Activities.HomeActivity;
-import com.monopoco.musicmp4.Activities.SignInActivity;
-import com.monopoco.musicmp4.Activities.SplashActivity;
+import com.monopoco.musicmp4.Activities.MainActivity;
 import com.monopoco.musicmp4.R;
 
 
@@ -48,12 +46,16 @@ public class SignInFragment extends Fragment {
 
     private FirebaseAuth mAuth;
 
+    private Drawable errorIcon;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
+
+        errorIcon = getResources().getDrawable(R.drawable.ic_error);
 
         dontHaveAnAccount = view.findViewById(R.id.text_to_register);
 
@@ -81,6 +83,8 @@ public class SignInFragment extends Fragment {
                 setFragment(new RegisterFragment());
             }
         });
+
+        errorIcon.setBounds(0, 0, errorIcon.getIntrinsicWidth(), errorIcon.getIntrinsicHeight());
 
         email.addTextChangedListener(new TextWatcher() {
             @Override
@@ -136,7 +140,7 @@ public class SignInFragment extends Fragment {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        Intent intent = new Intent(getActivity(), HomeActivity.class);
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
                         getActivity().startActivity(intent);
                         getActivity().finish();
                         loading.setVisibility(View.GONE);
@@ -157,7 +161,7 @@ public class SignInFragment extends Fragment {
                 }
             });
         } else {
-            email.setError("Email invalidate.");
+            email.setError("Email invalidate.", errorIcon);
             loading.setVisibility(View.GONE);
             loginButton.setEnabled(true);
         }
