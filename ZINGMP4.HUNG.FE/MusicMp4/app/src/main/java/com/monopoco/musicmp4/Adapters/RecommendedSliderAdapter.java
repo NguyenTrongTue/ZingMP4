@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.monopoco.musicmp4.Models.RecommendedModel;
+import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
 
 import java.util.List;
@@ -18,11 +18,11 @@ import java.util.List;
 public class RecommendedSliderAdapter extends PagerAdapter {
 
     private Context context;
-    private List<RecommendedModel> recommendedModelList;
+    private List<SongModel> songModelList;
 
-    public RecommendedSliderAdapter(Context context, List<RecommendedModel> recommendedModelList) {
+    public RecommendedSliderAdapter(Context context, List<SongModel> songModelList) {
         this.context = context;
-        this.recommendedModelList = recommendedModelList;
+        this.songModelList = songModelList;
     }
 
     @NonNull
@@ -31,11 +31,11 @@ public class RecommendedSliderAdapter extends PagerAdapter {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.recomment_slide_item, null);
         ImageView slideImage = view.findViewById(R.id.image_song);
-        slideImage.setImageResource(recommendedModelList.get(position).getImage());
+        slideImage.setImageResource(songModelList.get(position).getImage());
         TextView songName = view.findViewById(R.id.song_name);
-        songName.setText(recommendedModelList.get(position).getSongName());
+        songName.setText(songModelList.get(position).getSongName());
         TextView singerName = view.findViewById(R.id.singer_name);
-        singerName.setText(recommendedModelList.get(position).getSinger());
+        singerName.setText(songModelList.get(position).getSinger());
         container.addView(view);
         return view;
     }
@@ -47,7 +47,7 @@ public class RecommendedSliderAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return this.recommendedModelList.size();
+        return this.songModelList.size();
     }
 
     @Override

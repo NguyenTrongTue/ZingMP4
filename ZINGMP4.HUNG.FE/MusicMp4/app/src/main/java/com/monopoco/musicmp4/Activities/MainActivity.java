@@ -4,19 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.monopoco.musicmp4.Fragments.HomeFragment;
+import com.monopoco.musicmp4.Fragments.LikedSongFragment;
+import com.monopoco.musicmp4.Fragments.ProfileFragment;
 import com.monopoco.musicmp4.R;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -24,6 +26,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FrameLayout frameLayout;
 
     private DrawerLayout drawerLayout;
+
+    private ImageView closeNavIcon;
+
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +42,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        closeNavIcon = navigationView.getHeaderView(0).findViewById(R.id.close_nav);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav,
                 R.string.close_nav);
@@ -50,6 +58,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setFragment(new HomeFragment());
             navigationView.setCheckedItem(R.id.nav_home);
         }
+
+        closeNavIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeNavMenu();
+            }
+        });
+    }
+
+    public void closeNavMenu() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
     }
 
     private void setFragment(Fragment fragment) {
@@ -58,8 +80,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        int id = item.getItemId();
+        Fragment toFragment = null;
+        if (id == R.id.nav_home) {
+            toFragment = new HomeFragment();
+        } else if (id == R.id.nav_profile) {
+            toFragment = new ProfileFragment();
+        } else if (id == R.id.nav_liked_song) {
+            toFragment = new LikedSongFragment();
+        }
+        if (toFragment != null) {
+            setFragment(toFragment);
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

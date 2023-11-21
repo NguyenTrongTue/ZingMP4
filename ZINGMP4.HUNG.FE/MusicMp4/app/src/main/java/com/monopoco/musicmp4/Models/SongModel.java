@@ -1,13 +1,13 @@
 package com.monopoco.musicmp4.Models;
 
 
-public class RecommendedModel {
+public class SongModel {
 
     private int Image;
     private String songName;
     private String singer;
 
-    public RecommendedModel(int image, String songName, String singer) {
+    public SongModel(int image, String songName, String singer) {
         Image = image;
         this.songName = songName;
         this.singer = singer;
