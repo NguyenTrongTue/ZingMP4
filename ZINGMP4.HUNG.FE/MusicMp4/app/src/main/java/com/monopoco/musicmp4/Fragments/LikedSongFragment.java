@@ -1,5 +1,6 @@
 package com.monopoco.musicmp4.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.Adapters.GridAdapter;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
@@ -39,18 +41,18 @@ public class LikedSongFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_liked_song, container, false);
         songModelList = new ArrayList<>();
-        songModelList.add(new SongModel(R.drawable.queen1, "Bohemian Rhapsody", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen2, "Crazy Little Thing Called Love", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen3, "I Was Born To Love You", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen4, "Somebody To Love", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen1, "Bohemian Rhapsody", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen2, "Crazy Little Thing Called Love", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen3, "I Was Born To Love You", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen4, "Somebody To Love", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen1, "Bohemian Rhapsody", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen2, "Crazy Little Thing Called Love", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen3, "I Was Born To Love You", "Queen"));
-        songModelList.add(new SongModel(R.drawable.queen4, "Somebody To Love", "Queen"));
+        songModelList.add(new SongModel(R.drawable.queen1, "Bohemian Rhapsody", "Queen", R.raw.silent_night));
+        songModelList.add(new SongModel(R.drawable.queen2, "Crazy Little Thing Called Love", "Queen", R.raw.our_last_chrismas));
+        songModelList.add(new SongModel(R.drawable.queen3, "I Was Born To Love You", "Queen", R.raw.silent_night));
+        songModelList.add(new SongModel(R.drawable.queen4, "Somebody To Love", "Queen", R.raw.silent_night));
+        songModelList.add(new SongModel(R.drawable.queen5, "Bohemian Rhapsody 2", "Queen", R.raw.silent_night));
+        songModelList.add(new SongModel(R.drawable.queen2, "Crazy Little Thing Called Love", "Queen", R.raw.silent_night));
+        songModelList.add(new SongModel(R.drawable.queen3, "I Was Born To Love You", "Queen", R.raw.silent_night));
+        songModelList.add(new SongModel(R.drawable.queen4, "Somebody To Love", "Queen", R.raw.silent_night));
+        songModelList.add(new SongModel(R.drawable.queen1, "Bohemian Rhapsody", "Queen", R.raw.silent_night));
+        songModelList.add(new SongModel(R.drawable.queen2, "Crazy Little Thing Called Love", "Queen", R.raw.silent_night));
+        songModelList.add(new SongModel(R.drawable.queen3, "I Was Born To Love You", "Queen", R.raw.silent_night));
+        songModelList.add(new SongModel(R.drawable.queen4, "Somebody To Love", "Queen", R.raw.silent_night));
 
         likedSongGridView = view.findViewById(R.id.like_song_grid_view);
         GridAdapter gridAdapter = new GridAdapter(songModelList, getContext());
@@ -58,7 +60,9 @@ public class LikedSongFragment extends Fragment {
         likedSongGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                intent.putExtra("songInfo", songModelList.get(position));
+                startActivity(intent);
             }
         });
         return view;

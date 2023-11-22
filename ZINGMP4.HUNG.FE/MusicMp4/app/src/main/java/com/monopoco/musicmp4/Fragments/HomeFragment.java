@@ -32,10 +32,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        songModels.add(new SongModel(R.drawable.queen1, "Bohemian Rhapsody", "Queen"));
-        songModels.add(new SongModel(R.drawable.queen2, "Crazy Little Thing Called Love", "Queen"));
-        songModels.add(new SongModel(R.drawable.queen3, "I Was Born To Love You", "Queen"));
-        songModels.add(new SongModel(R.drawable.queen4, "Somebody To Love", "Queen"));
+        songModels.add(new SongModel(R.drawable.queen1, "Bohemian Rhapsody", "Queen", R.raw.silent_night));
+        songModels.add(new SongModel(R.drawable.queen2, "Crazy Little Thing Called Love", "Queen", R.raw.silent_night));
+        songModels.add(new SongModel(R.drawable.queen3, "I Was Born To Love You", "Queen", R.raw.silent_night));
+        songModels.add(new SongModel(R.drawable.queen4, "Somebody To Love", "Queen", R.raw.silent_night));
 
         playListModels.add(new PlayListModel(R.drawable.playlist1, "My playlist 1"));
         playListModels.add(new PlayListModel(R.drawable.playlist2, "My playlist 2"));

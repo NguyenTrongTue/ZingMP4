@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.MusicPlayerFragment"
+    android:padding="70px">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingHorizontal="70px"
+        android:paddingVertical="70px">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/transparent"
+            app:cardCornerRadius="1000px"
+            android:clipToPadding="false"
+            app:cardElevation="20dp"
+            android:outlineAmbientShadowColor="@color/white"
+            android:outlineSpotShadowColor="@color/white"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:padding="00px"
+                    android:id="@+id/song_image_player"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/queen5"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="H,1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/song_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Song Name"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:singleLine="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:focusableInTouchMode="true"
+        android:textColor="@color/white"
+        android:maxLines="1"
+        android:gravity="center_vertical"
+        android:fontFamily="@font/circular_std_font"
+        android:textSize="35dp"
+        android:textFontWeight="700"
+        android:ellipsize="marquee"/>
+    <TextView
+        android:id="@+id/singer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Singer"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:singleLine="true"
+        android:textFontWeight="100"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:focusableInTouchMode="true"
+        android:textColor="@color/singer_name_color"
+        android:maxLines="1"
+        android:gravity="center_vertical"
+        android:fontFamily="@font/circular_std_font"
+        android:textSize="23dp"
+        android:ellipsize="marquee"/>
+
+</LinearLayout>

@@ -1,16 +1,20 @@
 package com.monopoco.musicmp4.Models;
 
 
-public class SongModel {
+import java.io.Serializable;
+
+public class SongModel implements Serializable {
 
     private int Image;
     private String songName;
     private String singer;
+    private int resource;
 
-    public SongModel(int image, String songName, String singer) {
+    public SongModel(int image, String songName, String singer, int resource) {
         Image = image;
         this.songName = songName;
         this.singer = singer;
+        this.resource = resource;
     }
 
     public int getImage() {
@@ -35,5 +39,13 @@ public class SongModel {
 
     public void setSinger(String singer) {
         this.singer = singer;
+    }
+
+    public int getResource() {
+        return resource;
+    }
+
+    public void setResource(int resource) {
+        this.resource = resource;
     }
 }

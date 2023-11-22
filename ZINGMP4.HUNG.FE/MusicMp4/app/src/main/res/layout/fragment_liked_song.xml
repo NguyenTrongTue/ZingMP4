@@ -23,6 +23,7 @@ tools:context=".Fragments.LikedSongFragment">
         android:verticalSpacing="70px"
         android:horizontalSpacing="70px"
         android:paddingRight="70px"
+        android:layout_marginBottom="70px"
         android:scrollbars="none"
         android:numColumns="2"
         android:stretchMode="columnWidth"/>
