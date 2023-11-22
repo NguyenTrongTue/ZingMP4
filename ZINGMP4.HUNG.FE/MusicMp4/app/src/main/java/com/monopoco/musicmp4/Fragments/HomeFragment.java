@@ -1,5 +1,6 @@
 package com.monopoco.musicmp4.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
@@ -54,6 +56,22 @@ public class HomeFragment extends Fragment {
         linearRecommended = view.findViewById(R.id.linear_recommended);
         songModels.forEach(songModel -> {
             View viewItem = inflater.inflate(R.layout.recomment_slide_item, null);
+            viewItem.findViewById(R.id.item_view).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                    intent.putExtra("songInfo", songModel);
+                    startActivity(intent);
+                }
+            });
+//            view.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(getActivity(), PlayerActivity.class);
+//                    intent.putExtra("songInfo", songModel);
+//                    startActivity(intent);
+//                }
+//            });
             ImageView slideImage = viewItem.findViewById(R.id.image_song);
             slideImage.setImageResource(songModel.getImage());
             TextView songName = viewItem.findViewById(R.id.song_name);

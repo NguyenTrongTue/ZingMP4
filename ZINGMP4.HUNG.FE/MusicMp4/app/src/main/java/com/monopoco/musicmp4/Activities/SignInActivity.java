@@ -24,7 +24,7 @@ public class SignInActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
         setContentView(R.layout.activity_sign_in);
         frameLayout = findViewById(R.id.sign_in_frame_layout);
         setFragment(new SignInFragment());
