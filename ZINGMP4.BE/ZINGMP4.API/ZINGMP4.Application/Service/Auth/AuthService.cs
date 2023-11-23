@@ -32,7 +32,7 @@ namespace ZINGMP4.Application.Service.Auth
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -84,7 +84,7 @@ namespace ZINGMP4.Application.Service.Auth
 
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\ZINGMP4.Infrastructure\ZINGMP4.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

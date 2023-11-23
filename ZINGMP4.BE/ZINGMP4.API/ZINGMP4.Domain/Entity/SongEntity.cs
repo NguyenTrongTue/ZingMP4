@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZINGMP4.Domain.Entity
 {
+    [Table("song")]
     public class SongEntity
     {
         [Required]
@@ -14,10 +16,16 @@ namespace ZINGMP4.Domain.Entity
         public string singer_name { get; set; } = string.Empty;
 
         [Required]
+        public string lyrics { get; set; } = string.Empty;
+
+        [Required]
         public string thumnail { get; set; } = string.Empty;
         [Required]
         public int number_of_listens { get; set; } = 0;
 
         public string location { get; set; } = string.Empty;
+
+        [Required]
+        public string link_song { get; set; } = string.Empty;
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface;
-using ZINGMP4.Domain.Interface.UnitOfWork;
 
 namespace ZINGMP4.Infrastructure.Repository
 {

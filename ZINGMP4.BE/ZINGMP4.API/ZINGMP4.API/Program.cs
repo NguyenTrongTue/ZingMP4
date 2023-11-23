@@ -1,6 +1,8 @@
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using ZINGMP4.Application.Interface.Song;
 using ZINGMP4.Application.Service.Auth;
+using ZINGMP4.Application.Service.Song;
 using ZINGMP4.Domain.Interface;
 using ZINGMP4.Domain.Interface.Auth;
 using ZINGMP4.Domain.MISAException;
@@ -52,6 +54,11 @@ namespace ZingMP4.API
             var connectionString = builder.Configuration.GetConnectionString("MP4");
 
             builder.Services.AddScoped<IAuthInterface, AuthService>();
+
+            builder.Services.AddScoped<ISongRepository, SongRepository>();
+
+            builder.Services.AddScoped<ISongInterface, SongService>();
+
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 

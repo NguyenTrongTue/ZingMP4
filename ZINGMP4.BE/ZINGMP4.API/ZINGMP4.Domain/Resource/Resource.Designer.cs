@@ -70,7 +70,7 @@ namespace ZINGMP4.Domain.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lỗi hệ thống, vui lòng liên hệ MISA để được trợ giúp..
+        ///   Looks up a localized string similar to Lỗi hệ thống, vui lòng liên hệ để được trợ giúp..
         /// </summary>
         public static string ExceptionSystemDefault {
             get {
