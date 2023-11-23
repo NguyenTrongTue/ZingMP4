@@ -12,12 +12,10 @@ namespace ZingMP4.API.Controllers
     public class UserController : ControllerBase
     {
         #region Fields
-        private readonly IConfiguration _iconfiguration;
         private readonly IAuthInterface _authInterface;
         #endregion
         public UserController(IConfiguration iconfiguration, IAuthInterface authInterface)
         {
-            _iconfiguration = iconfiguration;
             _authInterface = authInterface;
         }
 

@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZINGMP4.Domain.Entity
 {
+    [Table("user_verify")]
     public class UserEntity
     {
         /// <summary>
@@ -9,10 +11,10 @@ namespace ZINGMP4.Domain.Entity
         /// </summary>
         public Guid user_id { get; set; } = Guid.Empty;
         /// <summary>
-        /// Tên đăng nhập của người dùng
+        /// Email người dùng
         /// </summary>
-        public string username { get; set; } = string.Empty;
-
+        [Required, EmailAddress]
+        public string email { get; set; } = string.Empty;
         /// <summary>
         /// Mật khẩu được mã hóa và lưu vào db.
         /// </summary>
@@ -25,10 +27,9 @@ namespace ZINGMP4.Domain.Entity
         public byte[] password_salt { get; set; }
 
         /// <summary>
-        /// Email người dùng
+        /// Tên đăng nhập của người dùng
         /// </summary>
-        [Required, EmailAddress]
-        public string email { get; set; } = string.Empty;
+        public string username { get; set; } = string.Empty;
 
         /// <summary>
         /// Ảnh đại diện của người dùng

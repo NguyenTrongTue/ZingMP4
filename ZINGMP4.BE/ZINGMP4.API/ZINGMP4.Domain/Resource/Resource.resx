@@ -121,7 +121,7 @@
     <value>Không tìm thấy tài nguyên trên hệ thống</value>
   </data>
   <data name="ExceptionSystemDefault" xml:space="preserve">
-    <value>Lỗi hệ thống, vui lòng liên hệ MISA để được trợ giúp.</value>
+    <value>Lỗi hệ thống, vui lòng liên hệ để được trợ giúp.</value>
   </data>
   <data name="ExceptionValidateDefault" xml:space="preserve">
     <value>Dữ liệu không hợp lệ, vui lòng kiểm tra lại.</value>
