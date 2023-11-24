@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using System.Security.Cryptography;
 using ZINGMP4.Application.Dto;
 using ZINGMP4.Application.Dto.User;
 using ZINGMP4.Domain.Entity;
@@ -8,6 +7,8 @@ using ZINGMP4.Domain.Interface.Auth;
 using ZINGMP4.Domain.MISAException;
 using ZINGMP4.Domain.Resource;
 using Microsoft.Extensions.Configuration;
+using ZINGMP4.Application.Request;
+using ZINGMP4.Application.Helper;
 
 namespace ZINGMP4.Application.Service.Auth
 {
@@ -15,37 +16,39 @@ namespace ZINGMP4.Application.Service.Auth
     {
         protected readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
-        private readonly IConfiguration _iconfiguration;
+        private readonly IConfiguration _configuration;
 
 
         public AuthService(IMapper mapper, IUserRepository userRepository, IConfiguration iconfiguration)
         {
             _mapper = mapper;
             _userRepository = userRepository;
-            _iconfiguration = iconfiguration;
-        }
-        private static void CreatePassword(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            try
-            {
-                using var hmac = new HMACSHA512();
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _configuration = iconfiguration;
         }
 
-        private static bool VetifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
+        public async Task<UserDto> EditUserInfoAsync(UserEditRequest userEditRequest)
         {
-            using var hmac = new HMACSHA512(passwordSalt);
-            var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            var file = userEditRequest.avatar;
+            string fileName = FileHelper.GenerateFileNameAsync(file);
+            var baseUrl = _configuration.GetSection("BaseUrl");
 
-            return computedHash.SequenceEqual(passwordHash);
+            var exactPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\songs\\lyrics", fileName);
+
+            using (var stream = new FileStream(exactPath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var avatar_url = baseUrl.Value + "/users/" + fileName;
+
+
+            var userEntity = await _userRepository.EditUserInfoAsync(userEditRequest.user_name, avatar_url, userEditRequest.email);
+
+
+            var result = _mapper.Map<UserDto>(userEntity);
+            return result;
         }
-           
+
         public async Task<UserDto> Login(UserLoginDto userLoginDto)
         {
             var userExists = await _userRepository.GetUserByEmailAsync(userLoginDto.email);
@@ -53,7 +56,7 @@ namespace ZINGMP4.Application.Service.Auth
             {
                 throw new ConflictException(Resource.UserNotExists);
             }
-            if (!VetifyPassword(userLoginDto.password, userExists.password_hash, userExists.password_salt))
+            if (!AuthHelper.VetifyPassword(userLoginDto.password, userExists.password_hash, userExists.password_salt))
             {
                 throw new AuthException(Resource.IncorrectPassword);
             }
@@ -72,13 +75,16 @@ namespace ZINGMP4.Application.Service.Auth
                 {
                     throw new NotFoundException(Resource.UserExists);
                 }
-                CreatePassword(userDto.password, out byte[] passwordHash, out byte[] passwordSalt);
+                AuthHelper.CreatePassword(userDto.password, out byte[] passwordHash, out byte[] passwordSalt);
                 var user = _mapper.Map<UserEntity>(userDto);
 
                 user.password_hash = passwordHash;
                 user.password_salt = passwordSalt;
 
-                await _userRepository.InsertUser(user);
+                user.user_id = Guid.NewGuid();
+                user.avatar = string.Empty;
+
+                await _userRepository.InsertEntity(user);
 
                 var result = _mapper.Map<UserDto>(user);
 

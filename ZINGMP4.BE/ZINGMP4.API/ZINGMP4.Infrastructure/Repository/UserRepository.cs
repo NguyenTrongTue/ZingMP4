@@ -3,20 +3,40 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface;
+using ZINGMP4.Infrastructure.Repository.Base;
 
 namespace ZINGMP4.Infrastructure.Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<UserEntity>, IUserRepository
 
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfiguration _configuration;
         #region Constructor
-        public UserRepository(IUnitOfWork unitOfWork, IConfiguration configuration)
+        public UserRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _configuration = configuration;
         }
+
+        public async Task<UserEntity> EditUserInfoAsync(string user_name, string avatar_url, string email)
+        {
+            var param = new DynamicParameters();
+
+            param.Add("username", user_name);
+            param.Add("avatar", avatar_url);
+            param.Add("email", email);
+
+            var sql = "update public.user_verify set username = @username, avatar = @avatar where email = @email";
+
+            await _unitOfWork.Connection.ExecuteAsync(sql, param);
+
+            var sql1 = "select * from public.user_verify where email = @email";
+            var newInfoUser = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<UserEntity>(sql1,
+param);
+
+            return newInfoUser;
+
+        }
+
 
         public Task<List<PlaylistEntity>> GetPlayListsAsync(Guid userId)
         {
@@ -49,30 +69,6 @@ namespace ZINGMP4.Infrastructure.Repository
 
             return result;
         }
-
-        public async Task<int> InsertUser(UserEntity userEntity)
-        {
-            var param = new DynamicParameters();
-            var entityProperty = typeof(UserEntity).GetProperties();
-
-
-            foreach (var property in entityProperty)
-            {
-                var paramName = property.Name;
-
-                var paramValue = property.GetValue(userEntity);
-
-                param.Add(paramName, paramValue);
-            }
-
-            var sql = "INSERT INTO public.user_verify (user_id, username, password_hash, password_salt, avatar, email) VALUES (@user_id, @username, @password_hash, @password_salt, @avatar, @email);";
-
-            var result = await _unitOfWork.Connection.ExecuteAsync(sql, param);
-
-            return result;
-
-        }
-
         public async Task<int> UpdateUser(UserEntity userEntity)
         {
             var param = new DynamicParameters();

@@ -5,7 +5,8 @@ namespace ZINGMP4.Domain.Interface
 {
     public interface ISongRepository : IBaseCRUDRepostory<SongEntity>
     {
-        Task <List<SongEntity>> GetTrending();
+        Task<int> UpdateNumberOfListens(Guid song_id);
 
+        Task<List<SongEntity>> GetTrendingAsync();
     }
 }

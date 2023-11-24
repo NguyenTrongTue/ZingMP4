@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ZINGMP4.Application.Dto;
 using ZINGMP4.Application.Dto.User;
+using ZINGMP4.Application.Request;
 using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface.Auth;
 
@@ -25,7 +26,7 @@ namespace ZingMP4.API.Controllers
         /// <param name="userDto">Thông tin của người dùng</param>
         /// <returns>Trả về thông tin người dùng đã được đăng ký.</returns>
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserUpdateDto userDto)
+        public async Task<IActionResult> Register([FromForm] UserUpdateDto userDto)
         {
             var result = await _authInterface.Register(userDto);
 
@@ -41,6 +42,19 @@ namespace ZingMP4.API.Controllers
         public async Task<IActionResult> Login(UserLoginDto userDto)
         {
             var result = await _authInterface.Login(userDto);
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userDto"></param>
+        /// <returns></returns>
+        [HttpPost("edit_user_info")]
+        public async Task<IActionResult> EditUserInfoAsync([FromForm] UserEditRequest userEdit)
+        {
+            var result = await _authInterface.EditUserInfoAsync(userEdit);
 
             return Ok(result);
         }
