@@ -4,6 +4,7 @@ using ZINGMP4.Application.Interface.Song;
 using TagLib;
 using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface;
+using ZINGMP4.Application.Helper;
 
 namespace ZINGMP4.Application.Service.Song
 {
@@ -26,7 +27,8 @@ namespace ZINGMP4.Application.Service.Song
                 var result = await _songRepository.InsertEntity(songEntity);
 
                 return result;
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -34,15 +36,12 @@ namespace ZINGMP4.Application.Service.Song
 
         private async Task<SongEntity> WriteFile(IFormFile file)
         {
-            string fileName = "";
             try
             {
-                var extension = Path.GetExtension(file.FileName);
-                var fileId = Guid.NewGuid();
-                fileName = fileId + extension;
+                string fileName = FileHelper.GenerateFileNameAsync(file);
 
                 var baseUrl = _configuration.GetSection("BaseUrl");
-                
+
                 var exactPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\songs\\lyrics", fileName);
 
                 using (var stream = new FileStream(exactPath, FileMode.Create))
@@ -61,7 +60,6 @@ namespace ZINGMP4.Application.Service.Song
                     song_name = songInfo["Title"],
                     number_of_listens = 0,
                     thumnail = songInfo["Thumnail"],
-                    lyrics = songInfo["Lyrics"],
                     link_song = fullUrl
 
                 };
@@ -83,13 +81,11 @@ namespace ZINGMP4.Application.Service.Song
                 var title = file.Tag.Title;
                 var artist = file.Tag.FirstPerformer;
                 var album = file.Tag.Album;
-                var lyrics = file.Tag.Lyrics;
 
 
                 result.Add("Title", title);
                 result.Add("Artist", artist);
                 result.Add("Album", album);
-                result.Add("Lyrics", lyrics);
                 if (file.Tag.Pictures.Length > 0)
                 {
                     // Get the first picture
@@ -99,7 +95,7 @@ namespace ZINGMP4.Application.Service.Song
 
                     // Save the picture to a file
                     SavePictureToFile(picture, Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\songs\\images", $"{filePictureName}.jpg"));
-                    
+
                     var fullUrl = baseUrl.Value + "/songs/images/" + $"{filePictureName}.jpg";
 
                     result.Add("Thumnail", fullUrl);
@@ -115,7 +111,7 @@ namespace ZINGMP4.Application.Service.Song
         }
 
 
-        private static void  SavePictureToFile(IPicture picture, string filePath)
+        private static void SavePictureToFile(IPicture picture, string filePath)
         {
             try
             {
@@ -124,10 +120,24 @@ namespace ZINGMP4.Application.Service.Song
                     fs.Write(picture.Data.Data, 0, picture.Data.Count);
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
+        }
+
+        public async Task<int> UpdateNumberOfListens(Guid song_id)
+        {
+            var res = await _songRepository.UpdateNumberOfListens(song_id);
+
+            return 1;
+        }
+
+        public async Task<List<SongEntity>> GetTrendingAsync()
+        {
+            var res = await _songRepository.GetTrendingAsync();
+
+            return res;
         }
     }
 }

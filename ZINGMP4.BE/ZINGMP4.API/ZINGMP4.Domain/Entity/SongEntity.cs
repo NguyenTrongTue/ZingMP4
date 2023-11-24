@@ -16,9 +16,6 @@ namespace ZINGMP4.Domain.Entity
         public string singer_name { get; set; } = string.Empty;
 
         [Required]
-        public string lyrics { get; set; } = string.Empty;
-
-        [Required]
         public string thumnail { get; set; } = string.Empty;
         [Required]
         public int number_of_listens { get; set; } = 0;

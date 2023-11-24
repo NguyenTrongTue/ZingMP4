@@ -25,7 +25,7 @@ namespace ZINGMP4.API.Controllers
         {
             try
             {
-                var result = _songInterface.AddSong(file);
+                var result = await _songInterface.AddSong(file);
                 return Ok(1);
             }
             catch (Exception ex)
@@ -53,6 +53,46 @@ namespace ZINGMP4.API.Controllers
         public async Task<IActionResult> DeleteSong(SongDto songDto)
         {
             return Ok(1);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userDto"></param>
+        /// <returns></returns>
+        [HttpPost("update_listen_of_number")]
+        public async Task<IActionResult> UpdateNumberOfListens(Guid song_id)
+        {
+            try
+            {
+                var res = await _songInterface.UpdateNumberOfListens(song_id);
+                return Ok(1);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userDto"></param>
+        /// <returns></returns>
+        [HttpGet("get_trending")]
+        public async Task<IActionResult> GetTrending()
+        {
+            try
+            {
+                var res = await _songInterface.GetTrendingAsync();
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
     }
 }

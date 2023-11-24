@@ -2,25 +2,23 @@
 using Microsoft.Extensions.Configuration;
 using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface;
+using ZINGMP4.Infrastructure.Repository.Base;
 
 namespace ZINGMP4.Infrastructure.Repository
 {
-    public class SongRepository : ISongRepository
+    public class SongRepository : BaseRepository<SongEntity>, ISongRepository
     {
 
         #region Fields
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfiguration _configuration;
         #endregion
 
         #region Constructor
-        #endregion
-     
-        public SongRepository(IUnitOfWork unitOfWork, IConfiguration configuration)
+        public SongRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _configuration = configuration;
         }
+        #endregion
 
         public Task AddSong(SongEntity song)
         {
@@ -37,32 +35,28 @@ namespace ZINGMP4.Infrastructure.Repository
             throw new NotImplementedException();
         }
 
-        public Task<List<SongEntity>> GetTrending()
+        public async Task<List<SongEntity>> GetTrendingAsync()
         {
-            throw new NotImplementedException();
+            var sql = "select * from public.song order by number_of_listens desc";
+
+            var res = await _unitOfWork.Connection.QueryAsync<SongEntity>(sql);
+
+            return res.ToList();
         }
 
-        public async Task<SongEntity> InsertEntity(SongEntity songEnity)
+        public async Task<int> UpdateNumberOfListens(Guid song_id)
         {
-            
             var param = new DynamicParameters();
-            var entityProperty = typeof(SongEntity).GetProperties();
 
 
-            foreach (var property in entityProperty)
-            {
-                var paramName = property.Name;
+            param.Add("song_id", song_id);
 
-                var paramValue = property.GetValue(songEnity);
 
-                param.Add(paramName, paramValue);
-            }
-
-            var sql = "INSERT INTO public.song (song_id, song_name, singer_name, thumnail, number_of_listens, location, lyrics, link_song) VALUES (@song_id, @song_name, @singer_name, @thumnail, @number_of_listens, @location, @lyrics, @link_song);";
+            var sql = "update public.song set number_of_listens = number_of_listens + 1 where song_id = @song_id";
 
             await _unitOfWork.Connection.ExecuteAsync(sql, param);
 
-            return songEnity;
+            return 1;
         }
 
         public Task<SongEntity> UpdateSong(SongEntity entity)
@@ -70,7 +64,7 @@ namespace ZINGMP4.Infrastructure.Repository
             throw new NotImplementedException();
         }
 
-  
+
         #endregion
     }
 }
