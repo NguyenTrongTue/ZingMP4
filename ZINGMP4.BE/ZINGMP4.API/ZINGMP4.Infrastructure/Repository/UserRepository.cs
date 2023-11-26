@@ -1,22 +1,24 @@
 ﻿using Dapper;
-using Microsoft.Extensions.Configuration;
-using Npgsql;
 using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface;
 using ZINGMP4.Infrastructure.Repository.Base;
+using System.Data;
 
 namespace ZINGMP4.Infrastructure.Repository
 {
     public class UserRepository : BaseRepository<UserEntity>, IUserRepository
 
     {
-        private readonly IUnitOfWork _unitOfWork;
+        #region Properties
+        private readonly IUnitOfWork _unitOfWork; 
+        #endregion
         #region Constructor
         public UserRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-
+        #endregion
+        #region Functions
         public async Task<UserEntity> EditUserInfoAsync(string user_name, string avatar_url, string email)
         {
             var param = new DynamicParameters();
@@ -37,25 +39,17 @@ param);
 
         }
 
+        public async Task<List<SongEntity>> GetRecentSongsAsync(Guid userId)
+        {
+            var param = new DynamicParameters();
 
-        public Task<List<PlaylistEntity>> GetPlayListsAsync(Guid userId)
-        {
-            throw new NotImplementedException();
-        }
+            param.Add("p_user_id", userId);
 
-        public Task<List<SongEntity>> GetRecentSongsAsync(Guid userId)
-        {
-            throw new NotImplementedException();
-        }
+            var sql = "select * from public.func_get_recently_played(@p_user_id)";
 
-        public Task<List<SongEntity>> GetSongsByPlayListAsync(Guid PlaylistId)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-        public Task<UserEntity> GetUserAsync(Guid Id)
-        {
-            throw new NotImplementedException();
+            var res = await _unitOfWork.Connection.QueryAsync<SongEntity>(sql, param, commandType: CommandType.Text);
+
+            return res.ToList();
         }
 
         public async Task<UserEntity> GetUserByEmailAsync(string email)
@@ -68,30 +62,8 @@ param);
             var result = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<UserEntity>(funtionName, param, transaction: _unitOfWork.Transaction);
 
             return result;
-        }
-        public async Task<int> UpdateUser(UserEntity userEntity)
-        {
-            var param = new DynamicParameters();
-            var entityProperty = typeof(UserEntity).GetProperties();
+        } 
+        #endregion
 
-
-            foreach (var property in entityProperty)
-            {
-                var paramName = property.Name;
-
-                var paramValue = property.GetValue(userEntity);
-
-                param.Add(paramName, paramValue);
-            }
-
-            var sql = "UPDATE public.user_verify " +
-          "SET username = @username, password_hash = @password_hash, password_salt = @password_salt, avatar = @avatar, email = @email " +
-          "WHERE user_id = @user_id;";
-
-
-            var result = await _unitOfWork.Connection.ExecuteAsync(sql, param);
-
-            return result;
-        }
     }
 }

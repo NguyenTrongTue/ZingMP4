@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ZINGMP4.Application.Dto;
 using ZINGMP4.Application.Dto.User;
+using ZINGMP4.Application.Interface;
 using ZINGMP4.Application.Request;
-using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface.Auth;
 
 namespace ZingMP4.API.Controllers
@@ -14,10 +13,12 @@ namespace ZingMP4.API.Controllers
     {
         #region Fields
         private readonly IAuthInterface _authInterface;
+        private readonly IUserService _userService;
         #endregion
-        public UserController(IConfiguration iconfiguration, IAuthInterface authInterface)
+        public UserController(IAuthInterface authInterface, IUserService userService)
         {
             _authInterface = authInterface;
+            _userService = userService;
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace ZingMP4.API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Login
         /// </summary>
         /// <param name="userDto"></param>
         /// <returns></returns>
@@ -47,7 +48,7 @@ namespace ZingMP4.API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Thay đổi thông tin người dùng.
         /// </summary>
         /// <param name="userDto"></param>
         /// <returns></returns>
@@ -58,5 +59,20 @@ namespace ZingMP4.API.Controllers
 
             return Ok(result);
         }
+
+        /// <summary>
+        /// Lấy các hát truy cập gần đây
+        /// </summary>
+        /// <param name="userDto"></param>
+        /// <returns></returns>
+        /// Created by: nttue 20/11/2023
+        [HttpGet("get_recently_played")]
+        public async Task<IActionResult> GetRecentlyPlayed(Guid user_id)
+        {
+            var result = await _userService.GetRecentlyPlayedAsync(user_id);
+
+            return Ok(result);
+        }
+
     }
 }
