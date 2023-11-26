@@ -1,5 +1,6 @@
 package com.monopoco.musicmp4.Services;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,17 +28,38 @@ public class MediaPlayerService extends Service {
 
     private MediaPlayer mediaPlayer;
 
+    private final IBinder binder = new LocalBinder();
+
     @Override
     public void onCreate() {
         super.onCreate();
         Log.e("monopoco", "Creating Service");
     }
 
-    @Nullable
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+
+    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
+    }
+
+    /**
+     * Class used for the client Binder.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with IPC.
+     */
+    public class LocalBinder extends Binder {
+        public MediaPlayerService getService() {
+            // Return this instance of LocalService so clients can call public methods.
+            return MediaPlayerService.this;
+        }
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -55,10 +77,20 @@ public class MediaPlayerService extends Service {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(getApplicationContext(), songModel.getResource());
         } else {
-            mediaPlayer.release();
+            mediaPlayer.reset();
             mediaPlayer = MediaPlayer.create(getApplicationContext(), songModel.getResource());
         }
         mediaPlayer.start();
+    }
+
+    private void playOrPauseMusic() {
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+            } else {
+                Log.e("monopoco", mediaPlayer.toString());
+            }
+        }
     }
 
     @Override

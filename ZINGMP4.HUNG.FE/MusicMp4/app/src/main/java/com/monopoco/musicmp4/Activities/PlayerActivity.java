@@ -31,6 +31,11 @@ public class PlayerActivity extends AppCompatActivity {
     private FrameLayout frameLayout;
 
     private SongModel songModel;
+
+    private MediaPlayerService mediaPlayerService;
+
+    boolean mBound = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,17 +50,14 @@ public class PlayerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        if (mediaPlayer.isPlaying()) {
-//            mediaPlayer.reset();
-//        }
-
-//        mediaPlayer = MediaPlayer.create(this, R.raw.silent_night);
         songModel = (SongModel) getIntent().getSerializableExtra("songInfo");
         frameLayout = findViewById(R.id.player_frame_layout);
-        setFragment(new MusicPlayerFragment(songModel));
         startService();
-    }
+        Intent intent = new Intent(this, MediaPlayerService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
 
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -77,5 +79,30 @@ public class PlayerActivity extends AppCompatActivity {
         startService(intent);
     }
 
+    /** Defines callbacks for service binding, passed to bindService(). */
+    private ServiceConnection connection = new ServiceConnection() {
 
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance.
+            MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
+            mediaPlayerService = binder.getService();
+            mBound = true;
+            boolean isPlaying = false;
+            if (mediaPlayerService.getMediaPlayer().isPlaying()) {
+                isPlaying = true;
+            }
+            setFragment(new MusicPlayerFragment(songModel, isPlaying));
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    public MediaPlayerService getMediaPlayerService() {
+        return mediaPlayerService;
+    }
 }
