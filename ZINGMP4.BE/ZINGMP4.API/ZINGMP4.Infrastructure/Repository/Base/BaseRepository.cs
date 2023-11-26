@@ -22,16 +22,6 @@ namespace ZINGMP4.Infrastructure.Repository.Base
         }
         #endregion
 
-        public Task<TEntity> DeleteEntity(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<TEntity>> Filter(int take, int skip, string searchKey)
-        {
-            throw new NotImplementedException();
-        }
-
         public virtual async Task<TEntity> InsertEntity(TEntity entity)
         {
             var param = new DynamicParameters();
@@ -59,9 +49,5 @@ namespace ZINGMP4.Infrastructure.Repository.Base
             return entity;
         }
 
-        public Task<TEntity> UpdateSong(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

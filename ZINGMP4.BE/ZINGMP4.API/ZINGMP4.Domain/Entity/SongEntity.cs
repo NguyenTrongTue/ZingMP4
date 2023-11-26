@@ -7,6 +7,7 @@ namespace ZINGMP4.Domain.Entity
     public class SongEntity
     {
         [Required]
+        [Key]
         public Guid song_id { get; set; } = Guid.Empty;
 
         [Required]

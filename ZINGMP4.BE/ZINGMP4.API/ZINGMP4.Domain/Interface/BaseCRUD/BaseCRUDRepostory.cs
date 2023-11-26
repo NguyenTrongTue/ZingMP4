@@ -1,15 +1,13 @@
-﻿using ZINGMP4.Domain.Entity;
-
-namespace ZINGMP4.Domain.Interface.BaseCRUD
+﻿namespace ZINGMP4.Domain.Interface.BaseCRUD
 {
     public interface IBaseCRUDRepostory<TEntity>
     {
-        Task<List<TEntity>> Filter(int take, int skip, string searchKey);
-
+        /// <summary>
+        /// Hàm insert 1 bản ghi vào database.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// Created by: nttue - 20/11/2023
         Task<TEntity> InsertEntity(TEntity entity);
-
-        Task<TEntity> UpdateSong(TEntity entity);
-
-        Task<TEntity> DeleteEntity(TEntity entity);
     }
 }

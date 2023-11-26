@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using ZINGMP4.Application.Request;
 using ZINGMP4.Application.Helper;
 
-namespace ZINGMP4.Application.Service.Auth
+namespace ZINGMP4.Application.Service
 {
     public class AuthService : IAuthInterface
     {
@@ -42,7 +42,7 @@ namespace ZINGMP4.Application.Service.Auth
             var avatar_url = baseUrl.Value + "/users/" + fileName;
 
 
-            var userEntity = await _userRepository.EditUserInfoAsync(userEditRequest.user_name, avatar_url, userEditRequest.email);
+            var userEntity = await _userRepository.EditUserInfoAsync(userEditRequest?.user_name, avatar_url, userEditRequest.email);
 
 
             var result = _mapper.Map<UserDto>(userEntity);

@@ -5,17 +5,27 @@ namespace ZINGMP4.Domain.Interface
 {
     public interface IUserRepository : IBaseCRUDRepostory<UserEntity>
     {
-        Task<UserEntity> GetUserAsync(Guid Id);
+        /// <summary>
+        /// Hàm lấy ra tài khoản người dùng theo email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        /// Created by: nttue - 20/11/2023
         Task<UserEntity> GetUserByEmailAsync(string email);
+
+        /// <summary>
+        /// Hàm sửa thông tin tài khoản người dùng
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        /// Created by: nttue - 20/11/2023
         Task<UserEntity> EditUserInfoAsync(string user_name, string avatar_url, string email);
-        Task<List<PlaylistEntity>> GetPlayListsAsync(Guid userId);
-
-        Task<List<SongEntity>> GetSongsByPlayListAsync(Guid PlaylistId);
-
+        /// <summary>
+        /// Lấy các hát truy cập gần đây
+        /// </summary>
+        /// <param name="userDto"></param>
+        /// <returns></returns>
+        /// Created by: nttue 20/11/2023
         Task<List<SongEntity>> GetRecentSongsAsync(Guid userId);
-
-        Task<int> UpdateUser(UserEntity userEntity);
-
-
     }
 }

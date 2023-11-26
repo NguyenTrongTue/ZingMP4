@@ -9,6 +9,7 @@ namespace ZINGMP4.Domain.Entity
         /// <summary>
         /// Id người dùng
         /// </summary>
+        [Key]
         public Guid user_id { get; set; } = Guid.Empty;
         /// <summary>
         /// Email người dùng

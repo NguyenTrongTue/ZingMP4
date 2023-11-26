@@ -5,19 +5,27 @@ using TagLib;
 using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface;
 using ZINGMP4.Application.Helper;
+using ZINGMP4.Application.Request;
 
-namespace ZINGMP4.Application.Service.Song
+namespace ZINGMP4.Application.Service
 {
     public class SongService : ISongInterface
     {
+        #region Fields
         private readonly IConfiguration _configuration;
         private readonly ISongRepository _songRepository;
+        #endregion
+
+
+        #region Constructor
         public SongService(IConfiguration configuration, ISongRepository songRepository)
         {
             _configuration = configuration;
             _songRepository = songRepository;
-        }
+        } 
+        #endregion
 
+        #region Functions
         public async Task<SongEntity> AddSong(IFormFile file)
         {
             try
@@ -32,6 +40,27 @@ namespace ZINGMP4.Application.Service.Song
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task UpdateNumberOfListens(Guid song_id, Guid user_id)
+        {
+            await _songRepository.UpdateNumberOfListens(song_id, user_id);
+        }
+
+        public async Task<List<SongEntity>> GetTrendingAsync()
+        {
+            var res = await _songRepository.GetTrendingAsync();
+
+            return res;
+        }
+
+        public async Task<List<SongEntity>> SearchSongAsync(FilterSongRequest request)
+        {
+            var res = await _songRepository.SearchSongAsync(request.take, request.skip, request.filter);
+
+
+            return res;
+
         }
 
         private async Task<SongEntity> WriteFile(IFormFile file)
@@ -94,7 +123,7 @@ namespace ZINGMP4.Application.Service.Song
                     var filePictureName = Guid.NewGuid();
 
                     // Save the picture to a file
-                    SavePictureToFile(picture, Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\songs\\images", $"{filePictureName}.jpg"));
+                    FileHelper.SavePictureToFile(picture, Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\songs\\images", $"{filePictureName}.jpg"));
 
                     var fullUrl = baseUrl.Value + "/songs/images/" + $"{filePictureName}.jpg";
 
@@ -108,36 +137,7 @@ namespace ZINGMP4.Application.Service.Song
             {
                 throw;
             }
-        }
-
-
-        private static void SavePictureToFile(IPicture picture, string filePath)
-        {
-            try
-            {
-                using (FileStream fs = System.IO.File.Create(filePath))
-                {
-                    fs.Write(picture.Data.Data, 0, picture.Data.Count);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async Task<int> UpdateNumberOfListens(Guid song_id)
-        {
-            var res = await _songRepository.UpdateNumberOfListens(song_id);
-
-            return 1;
-        }
-
-        public async Task<List<SongEntity>> GetTrendingAsync()
-        {
-            var res = await _songRepository.GetTrendingAsync();
-
-            return res;
-        }
+        } 
+        #endregion
     }
 }

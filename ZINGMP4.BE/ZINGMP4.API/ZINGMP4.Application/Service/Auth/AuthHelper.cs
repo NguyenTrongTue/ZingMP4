@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace ZINGMP4.Application.Service.Auth
+namespace ZINGMP4.Application.Service
 {
     public class AuthHelper
     {

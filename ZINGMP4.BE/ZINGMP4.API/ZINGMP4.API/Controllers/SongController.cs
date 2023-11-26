@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ZINGMP4.Application.Dto.Song;
 using ZINGMP4.Application.Interface.Song;
+using ZINGMP4.Application.Request;
 
 namespace ZINGMP4.API.Controllers
 {
@@ -16,10 +17,12 @@ namespace ZINGMP4.API.Controllers
             _songInterface = songInterface;
         }
         /// <summary>
-        /// 
+        /// Hàm thêm bài hát 
         /// </summary>
-        /// <param name="userDto"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        /// Created by: nttue - 20/11/2023
         [HttpPost("add_song")]
         public async Task<IActionResult> AddSong(IFormFile file)
         {
@@ -34,38 +37,19 @@ namespace ZINGMP4.API.Controllers
             }
 
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="userDto"></param>
-        /// <returns></returns>
-        [HttpPost("update_song")]
-        public async Task<IActionResult> UpdateSong(SongDto songDto)
-        {
-            return Ok(1);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="userDto"></param>
-        /// <returns></returns>
-        [HttpPost("delete_song")]
-        public async Task<IActionResult> DeleteSong(SongDto songDto)
-        {
-            return Ok(1);
-        }
 
         /// <summary>
-        /// 
+        /// Hàm cập nhật số lượt nghe, và bài truy cập gần đây
         /// </summary>
         /// <param name="userDto"></param>
         /// <returns></returns>
         [HttpPost("update_listen_of_number")]
-        public async Task<IActionResult> UpdateNumberOfListens(Guid song_id)
+        public async Task<IActionResult> UpdateNumberOfListens(Guid song_id, Guid user_id)
         {
             try
             {
-                var res = await _songInterface.UpdateNumberOfListens(song_id);
+                await _songInterface.UpdateNumberOfListens(song_id, user_id);
+
                 return Ok(1);
             }
             catch (Exception ex)
@@ -76,7 +60,7 @@ namespace ZINGMP4.API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Lấy ra các bài hát phổ biến
         /// </summary>
         /// <param name="userDto"></param>
         /// <returns></returns>
@@ -94,5 +78,26 @@ namespace ZINGMP4.API.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Hàm tìm kiếm các bài hát
+        /// </summary>
+        /// <param name="userDto"></param>
+        /// <returns></returns>
+        [HttpPost("search_song")]
+        public async Task<IActionResult> SearchSong(FilterSongRequest request)
+        {
+            try
+            {
+                var res = await _songInterface.SearchSongAsync(request);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
+
     }
 }
