@@ -11,16 +11,23 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.SearchView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.monopoco.musicmp4.Fragments.HomeFragment;
+import com.monopoco.musicmp4.Fragments.LibraryFragment;
 import com.monopoco.musicmp4.Fragments.LikedSongFragment;
 import com.monopoco.musicmp4.Fragments.ProfileFragment;
+import com.monopoco.musicmp4.Fragments.SearchFragment;
 import com.monopoco.musicmp4.R;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -35,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseAuth mAuth;
 
+    private SearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar); //Ignore red line errors
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         drawerLayout = findViewById(R.id.drawer_layout);
 
 
@@ -79,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void closeNavMenu() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-
             drawerLayout.closeDrawer(GravityCompat.START);
         }
     }
@@ -90,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -98,9 +106,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_home) {
             toFragment = new HomeFragment();
         } else if (id == R.id.nav_profile) {
+//            mAuth.signOut();
             toFragment = new ProfileFragment();
         } else if (id == R.id.nav_liked_song) {
             toFragment = new LikedSongFragment();
+        } else if (id == R.id.nav_logout) {
+            mAuth.signOut();
+            Intent intent = new Intent(this, SignInActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.nav_search) {
+            toFragment = new SearchFragment();
+        } else if (id == R.id.nav_playlist) {
+            toFragment = new LibraryFragment();
         }
         if (toFragment != null) {
             setFragment(toFragment);

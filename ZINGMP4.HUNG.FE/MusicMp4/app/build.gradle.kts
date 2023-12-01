@@ -59,4 +59,10 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
 
     implementation("com.google.firebase:firebase-auth")
+
+    implementation("com.github.Dimezis:BlurView:version-2.0.0")
+
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.LibraryFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:text="Your Playlists"
+            android:fontFamily="@font/circular_std_font"
+            android:textSize="30dp"
+            android:paddingLeft="70px"
+            android:textColor="@color/white"/>
+        <ImageView
+            android:id="@+id/lbr_btn_add"
+            android:paddingRight="70px"
+            android:layout_width="50dp"
+            android:padding="12dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_plus"
+            ></ImageView>
+    </LinearLayout>
+
+
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_marginTop="10dp"
+        android:paddingTop="20dp"
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <GridView
+            android:layout_marginTop="30dp"
+            android:paddingLeft="70px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/library_grid_view"
+            android:verticalSpacing="70px"
+            android:horizontalSpacing="70px"
+            android:paddingRight="70px"
+            android:layout_marginBottom="70px"
+            android:scrollbars="none"
+            android:numColumns="2"
+            android:stretchMode="columnWidth"/>
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+</LinearLayout>

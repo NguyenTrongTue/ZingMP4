@@ -13,7 +13,7 @@
         android:orientation="vertical">
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/toolbar_height"
             android:id="@+id/toolbar"
             android:elevation="4dp"
             android:background="@color/transparent"
@@ -31,7 +31,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-        <include layout="@layout/music_bottom_sheet"/>
+<!--        <include layout="@layout/music_bottom_sheet"/>-->
 <!--        </androidx.core.widget.NestedScrollView>-->
     </LinearLayout>
 

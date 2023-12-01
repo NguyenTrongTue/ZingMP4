@@ -125,6 +125,10 @@ public class MusicPlayerFragment extends Fragment {
 
     private void onPlayClick() {
         ((PlayerActivity) getActivity()).getMediaPlayerService().getMediaPlayer().start();
+//        if (mSeekbar.getProgress() > 0) {
+//            ((PlayerActivity) getActivity()).getMediaPlayerService().getMediaPlayer().seekTo(mSeekbar.getProgress() * 1000);
+//        } else {
+//        }
         playOrPauseButton.setImageResource(R.drawable.ic_pause);
     }
 
@@ -175,12 +179,18 @@ public class MusicPlayerFragment extends Fragment {
             runnable = new Runnable() {
                 @Override
                 public void run() {
-                    if(mediaPlayer != null & mediaPlayer.isPlaying()) {
-                        mSeekbar.setProgress(mediaPlayer.getCurrentPosition() / 1000);
-                        handler.postDelayed(runnable, 1000);
+                    if(mediaPlayer != null ) {
+                        if ( mediaPlayer.isPlaying()) {
+                            mSeekbar.setProgress(mediaPlayer.getCurrentPosition() / 1000);
+                            int duration = mediaPlayer.getCurrentPosition();
+                            int minute = (duration / 1000)  / 60;
+                            int second = (int)((duration / 1000) % 60);
+                            mTimeFrom.setText(String.format("%d:%02d", minute, second ));
+                        }
                     } else {
                         mSeekbar.setProgress(0);
                     }
+                    handler.postDelayed(runnable, 1000);
 
                 }
             };

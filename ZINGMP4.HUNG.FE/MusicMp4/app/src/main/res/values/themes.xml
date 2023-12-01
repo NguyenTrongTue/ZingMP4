@@ -32,6 +32,11 @@
         <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="android:fontFamily">@font/circular_std_font</item>
     </style>
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+
+    </style>
     <!-- Base application theme. -->
     <style name="Base.Theme.MusicMP4" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->

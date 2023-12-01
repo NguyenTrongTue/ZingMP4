@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.PlayListActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:background="@color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+                app:contentScrim="@color/transparent"
+                app:expandedTitleGravity="center_horizontal|bottom"
+                app:expandedTitleTextAppearance="@style/ExpandedAppBar"
+                app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
+                app:title="Playlist Name"
+                android:id="@+id/collapsing_toolbar">
+                <ImageView
+                    android:id="@+id/playlist_image"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/playlist1"/>
+
+                <androidx.appcompat.widget.Toolbar
+                    app:titleTextAppearance="@style/ExpandedAppBar"
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_height"
+                    android:elevation="4dp"
+                    android:background="@color/transparent"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    app:layout_collapseMode="pin"/>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:minHeight="1000dp"/>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.core.widget.NestedScrollView>
+    
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_play_pl"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_play"
+        app:backgroundTint="@color/green"
+        android:baselineAlignBottom="false"
+        app:fabCustomSize="40dp"
+        app:layout_anchor="@id/nested"
+        app:layout_anchorGravity="top|center"/>
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
