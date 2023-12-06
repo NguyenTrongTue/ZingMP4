@@ -42,22 +42,59 @@
                     app:layout_collapseMode="pin"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested"
+    <androidx.core.widget.NestedScrollView
+        android:paddingTop="30dp"
+        android:id="@+id/nested"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_margin="5dp"
+                android:id="@+id/item_add_song"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
+                android:layout_height="60dp">
+                <ImageView
+                    android:background="@color/gray"
+                    android:id="@+id/s_image"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_plus"
+                    app:layout_constraintTop_toTopOf="@+id/item_add_song"
+                    app:layout_constraintLeft_toLeftOf="@+id/item_add_song"/>
+
+                <TextView
+                    android:gravity="center|start"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:minHeight="1000dp"/>
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-        </androidx.core.widget.NestedScrollView>
-    
+                    app:layout_constraintLeft_toRightOf="@id/s_image"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:text="Add to this playlist"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcl_song"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+
+
+    </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_play_pl"
         android:layout_width="40dp"

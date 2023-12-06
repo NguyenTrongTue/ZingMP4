@@ -64,5 +64,9 @@ dependencies {
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    implementation("androidx.media:media:1.1.0")
+
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+
 
 }

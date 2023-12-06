@@ -26,11 +26,14 @@ import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
 import com.monopoco.musicmp4.Services.MediaPlayerService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerActivity extends AppCompatActivity {
 
     private FrameLayout frameLayout;
 
-    private SongModel songModel;
+    private ArrayList<SongModel> songModels;
 
     private MediaPlayerService mediaPlayerService;
 
@@ -50,7 +53,7 @@ public class PlayerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        songModel = (SongModel) getIntent().getSerializableExtra("songInfo");
+        songModels = (ArrayList<SongModel>) getIntent().getSerializableExtra("songsInfo");
         frameLayout = findViewById(R.id.player_frame_layout);
         startService();
         Intent intent = new Intent(this, MediaPlayerService.class);
@@ -73,9 +76,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     public void startService() {
         Intent intent = new Intent(this, MediaPlayerService.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("song", songModel);
-        intent.putExtras(bundle);
+        intent.putExtra("songs", songModels);
         startService(intent);
     }
 
@@ -93,7 +94,7 @@ public class PlayerActivity extends AppCompatActivity {
             if (mediaPlayerService.getMediaPlayer().isPlaying()) {
                 isPlaying = true;
             }
-            setFragment(new MusicPlayerFragment(songModel, isPlaying));
+            setFragment(new MusicPlayerFragment(mediaPlayerService.getCurrentSong(), isPlaying));
         }
 
         @Override

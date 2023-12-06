@@ -19,7 +19,6 @@
         android:hint="What do you want to listen to?"
         android:inputType="textEmailAddress"
         android:nextFocusDown="@id/login_password_field"
-        android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
@@ -27,6 +26,7 @@
         android:textColor="@color/white"
         android:textColorHint="#B9FFFFFF"
         android:textColorLink="@color/white"
+        android:paddingLeft="10dp"
         android:textCursorDrawable="@drawable/text_cursor"
         android:textSize="20dp" />
     <androidx.recyclerview.widget.RecyclerView

@@ -33,6 +33,8 @@ import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import eightbitlab.com.blurview.BlurView;
@@ -211,7 +213,7 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
             @Override
             public void onItemClick(View v, int position) {
                 Intent intent = new Intent(v.getContext(), PlayerActivity.class);
-                intent.putExtra("songInfo", songModelList.get(position));
+                intent.putExtra("songsInfo", new ArrayList<SongModel>(Arrays.asList(songModelList.get(position))));
                 v.getContext().startActivity(intent);
             }
         });

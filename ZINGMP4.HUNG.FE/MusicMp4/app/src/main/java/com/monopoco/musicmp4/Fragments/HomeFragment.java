@@ -13,12 +13,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.monopoco.musicmp4.Activities.PlayListActivity;
 import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -34,17 +36,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        songModels.add(new SongModel(R.drawable.queen1, "Bohemian Rhapsody", "Queen", R.raw.silent_night));
-        songModels.add(new SongModel(R.drawable.queen2, "Crazy Little Thing Called Love", "Queen", R.raw.silent_night));
-        songModels.add(new SongModel(R.drawable.queen3, "I Was Born To Love You", "Queen", R.raw.silent_night));
-        songModels.add(new SongModel(R.drawable.queen4, "Somebody To Love", "Queen", R.raw.silent_night));
+        songModels = SongModel.songModelList1;
 
-        playListModels.add(new PlayListModel(R.drawable.playlist1, "My playlist 1"));
-        playListModels.add(new PlayListModel(R.drawable.playlist2, "My playlist 2"));
-        playListModels.add(new PlayListModel(R.drawable.playlist3, "My playlist 3"));
-        playListModels.add(new PlayListModel(R.drawable.playlist4, "My playlist 4"));
-
-
+        playListModels = PlayListModel.playListModelList;
 
     }
 
@@ -60,7 +54,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), PlayerActivity.class);
-                    intent.putExtra("songInfo", songModel);
+                    intent.putExtra("songsInfo", new ArrayList<SongModel>(Arrays.asList(songModel)));
                     startActivity(intent);
                 }
             });
@@ -101,6 +95,15 @@ public class HomeFragment extends Fragment {
 
         playListModels.forEach(playListModel -> {
             View viewItem = inflater.inflate(R.layout.play_list_item, null);
+            viewItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                    intent.putExtra("playlistInfo", playListModel);
+                    startActivity(intent);
+                }
+            });
+
             ImageView playlistImage = viewItem.findViewById(R.id.play_list_image);
             playlistImage.setImageResource(playListModel.getImage());
             TextView playListName = viewItem.findViewById(R.id.play_list_name);
