@@ -32,6 +32,7 @@
             android:enabled="true"
             android:exported="true" />
 
+
         <activity
             android:name=".Activities.PlayerActivity"
             android:exported="false" />
@@ -62,6 +63,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name="com.monopoco.musicmp4.Receiver.NotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="actionprevious" />
+                <action android:name="actionnext" />
+                <action android:name="actionplay" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

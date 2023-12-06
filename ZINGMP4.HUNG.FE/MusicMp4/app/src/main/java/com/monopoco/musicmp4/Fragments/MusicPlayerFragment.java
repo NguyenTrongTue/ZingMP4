@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -118,68 +119,63 @@ public class MusicPlayerFragment extends Fragment {
         skipFwdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSkipFwd();
+                ((PlayerActivity)getActivity()).onSkipFwd();
             }
         });
 
         skipBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSkipBack();
+                ((PlayerActivity)getActivity()).onSkipBack();
             }
         });
 
         playOrPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    if (((PlayerActivity) getActivity()).getMediaPlayerService() != null && ((PlayerActivity) getActivity()).getMediaPlayerService().getMediaPlayer() != null) {
-                        if (((PlayerActivity) getActivity()).getMediaPlayerService().getMediaPlayer().isPlaying()) {
-                            onPauseClick();
-                        } else {
-                            onPlayClick();
-                        }
-                    }
-                }
+                ((PlayerActivity)getActivity()).playOrPauseClick();
             }
         });
+
+
+        repeatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((PlayerActivity)getActivity()).onRepeatClick(repeatButton);
+            }
+        });
+
         if (isPlaying) {
             playOrPauseButton.setImageResource(R.drawable.ic_pause);
-            showNotification(R.drawable.ic_pause);
+            ((PlayerActivity)getActivity()).showNotification(R.drawable.ic_pause);
         } else {
             playOrPauseButton.setImageResource(R.drawable.ic_play);
-            showNotification(R.drawable.ic_play);
+            ((PlayerActivity)getActivity()).showNotification(R.drawable.ic_play);
         }
-
-
-
     }
 
-
-    private void onSkipFwd() {
-        ((PlayerActivity) getActivity()).getMediaPlayerService().nextSong();
-        songModel = ((PlayerActivity) getActivity()).getMediaPlayerService().getCurrentSong();
-        initValue(this.getView());
-        showNotification(R.drawable.ic_pause);
+    public ImageView getPlayOrPauseButton() {
+        return playOrPauseButton;
     }
 
-    private void onSkipBack() {
-        ((PlayerActivity) getActivity()).getMediaPlayerService().preSong();
-        songModel = ((PlayerActivity) getActivity()).getMediaPlayerService().getCurrentSong();
-        initValue(this.getView());
-        showNotification(R.drawable.ic_pause);
+    public void setPlayOrPauseButton(ImageView playOrPauseButton) {
+        this.playOrPauseButton = playOrPauseButton;
     }
 
-    private void onPauseClick() {
-        ((PlayerActivity) getActivity()).getMediaPlayerService().getMediaPlayer().pause();
-        playOrPauseButton.setImageResource(R.drawable.ic_play);
-        showNotification(R.drawable.ic_play);
+    public ImageView getShuffleButton() {
+        return shuffleButton;
     }
 
-    private void onPlayClick() {
-        ((PlayerActivity) getActivity()).getMediaPlayerService().getMediaPlayer().start();
-        playOrPauseButton.setImageResource(R.drawable.ic_pause);
-        showNotification(R.drawable.ic_pause);
+    public void setShuffleButton(ImageView shuffleButton) {
+        this.shuffleButton = shuffleButton;
+    }
+
+    public ImageView getRepeatButton() {
+        return repeatButton;
+    }
+
+    public void setRepeatButton(ImageView repeatButton) {
+        this.repeatButton = repeatButton;
     }
 
     public void initValue(View view) {
@@ -250,61 +246,6 @@ public class MusicPlayerFragment extends Fragment {
             };
 
             handler.postDelayed(runnable, 1000);
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    onPauseClick();
-                }
-            });
         }
     }
-
-    public void showNotification(int playOrPauseBtn) {
-        Intent intent = new Intent(getContext(), PlayerActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        Intent prevIntent = new Intent(getContext(), NotificationReceiver.class)
-                .setAction(ACTION_PREVIOUS);
-        PendingIntent prevPending = PendingIntent.getBroadcast(getContext(), 0, prevIntent, PendingIntent.FLAG_IMMUTABLE);
-
-        Intent pauseIntent = new Intent(getContext(), NotificationReceiver.class)
-                .setAction(ACTION_PLAY);
-        PendingIntent pausePending = PendingIntent.getBroadcast(getContext(), 0, pauseIntent, PendingIntent.FLAG_IMMUTABLE);
-
-        Intent nextIntent = new Intent(getContext(), NotificationReceiver.class)
-                .setAction(ACTION_PREVIOUS);
-        PendingIntent nextPending = PendingIntent.getBroadcast(getContext(), 0, nextIntent, PendingIntent.FLAG_IMMUTABLE);
-
-        byte[] picture = null;
-
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(), songModel.getImage());
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        picture = stream.toByteArray();
-
-        Bitmap thumb = null;
-        if (picture != null) {
-            thumb = BitmapFactory.decodeByteArray(picture, 0, picture.length);
-        } else {
-            thumb = BitmapFactory.decodeResource(getResources(), R.drawable.queen1);
-        }
-
-        Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_ID_2)
-                .setSmallIcon(R.drawable.ic_play)
-                .setLargeIcon(thumb)
-                .setContentTitle(songModel.getSongName())
-                .setContentText(songModel.getSinger())
-                .addAction(R.drawable.ic_skip_back, "Previous", prevPending)
-                .addAction(playOrPauseBtn, "Pause", pausePending)
-                .addAction(R.drawable.ic_skip_fwd, "Next", nextPending)
-                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()))
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setOnlyAlertOnce(true)
-                .build();
-
-        NotificationManager notificationManager =(NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
-    }
-
-
 }

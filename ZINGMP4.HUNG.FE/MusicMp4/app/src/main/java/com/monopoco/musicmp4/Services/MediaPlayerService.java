@@ -1,5 +1,7 @@
 package com.monopoco.musicmp4.Services;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
@@ -16,6 +18,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
 
@@ -39,11 +42,16 @@ public class MediaPlayerService extends Service {
 
     private ArrayList<SongModel> listSong;
 
+    private PlayerActivity callBack;
+
+    private Boolean isRepeat;
+
     @Override
     public void onCreate() {
         super.onCreate();
         listSong = new ArrayList<>();
-        currentIndexPlaying = 0;
+        currentIndexPlaying = -1;
+        isRepeat = false;
         Log.e("monopoco", "Creating Service");
     }
 
@@ -71,18 +79,49 @@ public class MediaPlayerService extends Service {
         return binder;
     }
 
+    public Boolean getRepeat() {
+        return isRepeat;
+    }
+
+    public void setRepeat(Boolean repeat) {
+        isRepeat = repeat;
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            if (listSong.size() > 0) {
-                listSong.removeAll(listSong.subList(currentIndexPlaying + 1, listSong.size()));
+            if (bundle.get("songs") != null) {
+                if (listSong.size() > 0) {
+                    listSong.removeAll(listSong.subList(currentIndexPlaying + 1, listSong.size()));
+                }
+                currentIndexPlaying += 1;
+                listSong.addAll((ArrayList<SongModel>) bundle.get("songs"));
+                if (currentIndexPlaying >= listSong.size()) {
+                    currentIndexPlaying = listSong.size() - 1;
+                }
+                currentSong = listSong.get(currentIndexPlaying);
+                if (listSong != null && listSong.size() > 0) {
+                    startMusic(currentSong);
+                }
             }
-            listSong.addAll((ArrayList<SongModel>) bundle.get("songs"));
-            currentSong = listSong.get(currentIndexPlaying);
-            if (listSong != null && listSong.size() > 0) {
-                startMusic(currentSong);
+
+            Log.e("monopoco", String.valueOf(callBack == null));
+
+            if (intent.getStringExtra("ActionName") != null && callBack != null) {
+                String actionName = intent.getStringExtra("ActionName");
+                switch (actionName) {
+                    case "playPause":
+
+                        callBack.playOrPauseClick();
+                        break;
+                    case "next":
+                        callBack.onSkipFwd();
+                        break;
+                    case "previous":
+                        callBack.onSkipBack();
+                        break;
+                }
             }
         }
         return START_NOT_STICKY;
@@ -103,7 +142,7 @@ public class MediaPlayerService extends Service {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
             } else {
-                Log.e("monopoco", mediaPlayer.toString());
+                mediaPlayer.start();
             }
         }
     }
@@ -157,5 +196,9 @@ public class MediaPlayerService extends Service {
 
     public void setCurrentSong(SongModel currentSong) {
         this.currentSong = currentSong;
+    }
+
+    public void setCallBack(PlayerActivity activity) {
+        this.callBack = activity;
     }
 }
