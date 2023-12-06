@@ -96,7 +96,6 @@ namespace ZINGMP4.API.Controllers
             {
                 throw new Exception(ex.Message);
             }
-
         }
 
     }

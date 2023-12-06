@@ -12,12 +12,12 @@ namespace ZingMP4.API.Controllers
     public class UserController : ControllerBase
     {
         #region Fields
-        private readonly IAuthInterface _authInterface;
+        private readonly IAuthService _authService;
         private readonly IUserService _userService;
         #endregion
-        public UserController(IAuthInterface authInterface, IUserService userService)
+        public UserController(IAuthService authService, IUserService userService)
         {
-            _authInterface = authInterface;
+            _authService = authService;
             _userService = userService;
         }
 
@@ -29,7 +29,7 @@ namespace ZingMP4.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] UserUpdateDto userDto)
         {
-            var result = await _authInterface.Register(userDto);
+            var result = await _authService.Register(userDto);
 
             return Ok(result);
         }
@@ -42,7 +42,7 @@ namespace ZingMP4.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginDto userDto)
         {
-            var result = await _authInterface.Login(userDto);
+            var result = await _authService.Login(userDto);
 
             return Ok(result);
         }
@@ -55,7 +55,7 @@ namespace ZingMP4.API.Controllers
         [HttpPost("edit_user_info")]
         public async Task<IActionResult> EditUserInfoAsync([FromForm] UserEditRequest userEdit)
         {
-            var result = await _authInterface.EditUserInfoAsync(userEdit);
+            var result = await _authService.EditUserInfoAsync(userEdit);
 
             return Ok(result);
         }
@@ -72,6 +72,20 @@ namespace ZingMP4.API.Controllers
             var result = await _userService.GetRecentlyPlayedAsync(user_id);
 
             return Ok(result);
+        }
+
+        [HttpGet("get_new_password")]
+        public async Task<IActionResult> GetNewPasswordAsync(string email)
+        {
+            try
+            {
+                _authService.GetNewPasswordAsync(email);
+                return Ok(1);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
     }
