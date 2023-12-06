@@ -9,21 +9,50 @@ using ZINGMP4.Domain.Resource;
 using Microsoft.Extensions.Configuration;
 using ZINGMP4.Application.Request;
 using ZINGMP4.Application.Helper;
+using System.Net.Mail;
+using MimeKit.Text;
+using MimeKit;
+using MailKit.Security;
+using MailKit.Net.Smtp;
+
 
 namespace ZINGMP4.Application.Service
 {
-    public class AuthService : IAuthInterface
+    public class AuthService : IAuthService
     {
         protected readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly IConfiguration _config;
 
-
-        public AuthService(IMapper mapper, IUserRepository userRepository, IConfiguration iconfiguration)
+        public AuthService(IMapper mapper, IUserRepository userRepository, IConfiguration iconfiguration, IConfiguration config)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _configuration = iconfiguration;
+            _config = config;
+        }
+
+        public void GetNewPasswordAsync(string p_email)
+        {
+            var request = new EmailDto()
+            {
+                Subject = "ZING-MP4: Lấy lại mật khẩu",
+                To = p_email,
+                Body = AuthHelper.GenerateRandomPassword()
+            };
+
+            var email = new MimeMessage();
+            email.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUsername").Value));
+            email.To.Add(MailboxAddress.Parse(request.To));
+            email.Subject = request.Subject;
+            email.Body = new TextPart(TextFormat.Html) { Text = request.Body };
+
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            smtp.Connect(_config.GetSection("EmailHost").Value, 465, true);
+            smtp.Authenticate(_config.GetSection("EmailUsername").Value, _config.GetSection("EmailPassword").Value);
+            smtp.Send(email);
+            smtp.Disconnect(true);
         }
 
         public async Task<UserDto> EditUserInfoAsync(UserEditRequest userEditRequest)
@@ -48,7 +77,6 @@ namespace ZINGMP4.Application.Service
             var result = _mapper.Map<UserDto>(userEntity);
             return result;
         }
-
         public async Task<UserDto> Login(UserLoginDto userLoginDto)
         {
             var userExists = await _userRepository.GetUserByEmailAsync(userLoginDto.email);

@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using System.Text;
 
 namespace ZINGMP4.Application.Service
 {
@@ -24,6 +25,26 @@ namespace ZINGMP4.Application.Service
             var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
 
             return computedHash.SequenceEqual(passwordHash);
+        }
+
+        public static string GenerateRandomPassword()
+        {
+            const string lowerChars = "abcdefghijklmnopqrstuvwxyz";
+            const string upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string digitChars = "0123456789";
+
+            string allChars = lowerChars + upperChars + digitChars;
+
+            Random random = new Random();
+            StringBuilder password = new StringBuilder();
+
+            for (int i = 0; i < 6; i++)
+            {
+                int randomIndex = random.Next(0, allChars.Length);
+                password.Append(allChars[randomIndex]);
+            }
+
+            return password.ToString();
         }
     }
 }

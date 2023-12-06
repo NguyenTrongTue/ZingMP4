@@ -54,7 +54,7 @@ namespace ZingMP4.API
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             var connectionString = builder.Configuration.GetConnectionString("MP4");
 
-            builder.Services.AddScoped<IAuthInterface, AuthService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
