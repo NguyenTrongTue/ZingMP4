@@ -27,6 +27,8 @@ namespace ZINGMP4.Domain.Interface.Auth
         /// <returns></returns>
         Task<UserDto> EditUserInfoAsync(UserEditRequest userEditRequest);
 
-        void GetNewPasswordAsync(string email);
+        Task<UserDto> GetUserInfoByIdAsync(Guid id);
+
+        Task GetNewPasswordAsync(string email);
     }
 }

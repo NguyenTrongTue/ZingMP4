@@ -25,5 +25,7 @@ namespace ZINGMP4.Domain.Entity
 
         [Required]
         public string link_song { get; set; } = string.Empty;
+
+        public int liked { get; set; }
     }
 }

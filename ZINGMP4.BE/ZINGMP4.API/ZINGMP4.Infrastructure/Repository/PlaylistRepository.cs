@@ -59,7 +59,19 @@ namespace ZINGMP4.Infrastructure.Repository
 
             return result.ToList();
 
-        } 
+        }
+
+        public async Task<List<PlaylistEntity>> GetPlaylistByUserAsync(Guid user_id)
+        {
+            var param = new DynamicParameters();
+            param.Add("user_id", user_id);
+
+            var functionName = "select * from public.playlist where user_id = @user_id";
+
+            var result = await _unitOfWork.Connection.QueryAsync<PlaylistEntity>(functionName, param);
+
+            return result.ToList();
+        }
         #endregion
     }
 }

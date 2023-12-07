@@ -26,5 +26,7 @@ namespace ZINGMP4.Domain.Interface
         /// <returns></returns>
         /// Created by: nttue 20/11/2023
         Task<List<SongEntity>> SearchSongAsync(int take, int skip, string filter);
+
+        Task LikeSong(Guid song_id);
     }
 }

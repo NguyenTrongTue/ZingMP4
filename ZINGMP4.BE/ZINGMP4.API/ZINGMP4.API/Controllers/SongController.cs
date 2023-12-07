@@ -96,7 +96,24 @@ namespace ZINGMP4.API.Controllers
             {
                 throw new Exception(ex.Message);
             }
+
         }
+
+        [HttpGet("like_song")]
+        public async Task<IActionResult> LikeSong(Guid id)
+        {
+            try
+            {
+                await _songInterface.LikeSong(id);
+
+                return Ok(1);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
     }
 }
