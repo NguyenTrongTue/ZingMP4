@@ -79,8 +79,22 @@ namespace ZingMP4.API.Controllers
         {
             try
             {
-                _authService.GetNewPasswordAsync(email);
+               await _authService.GetNewPasswordAsync(email);
                 return Ok(1);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpGet("get_user_by_id")]
+        public async Task<IActionResult> GetUserInfoById(Guid id)
+        {
+            try
+            {
+                var user = await _authService.GetUserInfoByIdAsync(id);
+                return Ok(user);
             }
             catch (Exception ex)
             {

@@ -36,6 +36,8 @@ namespace ZINGMP4.Application.Interface.Playlist
         /// Created by: nttue 24/12/2023
         Task<PlaylistResponseDto> GetPlaylistAsync(Guid playlist_id);
 
+        Task<List<PlaylistEntity>> GetPlaylistByUserAsync(Guid user_id);
+
 
     }
 }

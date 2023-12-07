@@ -19,5 +19,7 @@ namespace ZINGMP4.Application.Dto.Song
         public int number_of_listens { get; set; } = 0;
 
         public string location { get; set; } = string.Empty;
+
+        public int liked { get; set; }
     }
 }

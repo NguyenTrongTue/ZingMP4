@@ -62,7 +62,28 @@ param);
             var result = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<UserEntity>(funtionName, param, transaction: _unitOfWork.Transaction);
 
             return result;
-        } 
+        }
+
+        public async Task<UserEntity> GetUserInfoByIdAsync(Guid id)
+        {
+            var param = new DynamicParameters();
+            param.Add("user_id", id);
+            var funtionName = "select * from public.user_verify where user_id = @user_id;";
+            var result = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<UserEntity>(funtionName, param, transaction: _unitOfWork.Transaction);
+
+            return result;
+        }
+
+        public async Task UpdatePasswordAsync(string email, byte[] password_hash, byte[] password_salt)
+        {
+            var param = new DynamicParameters();
+            param.Add("email", email);
+            param.Add("password_hash", password_hash);
+            param.Add("password_salt", password_salt);
+            var funtionName = "update public.user_verify set password_hash = @password_hash, password_salt = @password_salt where email = @email;";
+
+            await _unitOfWork.Connection.ExecuteAsync(funtionName, param);
+        }
         #endregion
 
     }

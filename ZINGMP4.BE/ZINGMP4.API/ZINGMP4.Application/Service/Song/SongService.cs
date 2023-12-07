@@ -137,7 +137,12 @@ namespace ZINGMP4.Application.Service
             {
                 throw;
             }
-        } 
+        }
+
+        public async Task LikeSong(Guid song_id)
+        {
+            await _songRepository.LikeSong(song_id);
+        }
         #endregion
     }
 }

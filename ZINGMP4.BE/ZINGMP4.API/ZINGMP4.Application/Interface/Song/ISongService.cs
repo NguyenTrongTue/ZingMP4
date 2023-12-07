@@ -35,5 +35,7 @@ namespace ZINGMP4.Application.Interface.Song
         /// <returns></returns>
         /// Created by: nttue 20/11/2023
         Task<List<SongEntity>> SearchSongAsync(FilterSongRequest request);
+
+        Task LikeSong(Guid song_id);
     }
 }
