@@ -41,7 +41,7 @@ public class LikedSongFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_liked_song, container, false);
-        songModelList = SongModel.songModelList4;
+//        songModelList = SongModel.songModelList4;
         likedSongGridView = view.findViewById(R.id.like_song_grid_view);
         GridAdapter gridAdapter = new GridAdapter(songModelList, getContext());
         likedSongGridView.setAdapter(gridAdapter);

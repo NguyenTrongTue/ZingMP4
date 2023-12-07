@@ -48,7 +48,7 @@ public class InsertSongAdapter extends RecyclerView.Adapter<InsertSongAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.txtSongName.setText(songModelList.get(position).getSongName());
         holder.txtSingerName.setText(songModelList.get(position).getSinger());
-        holder.songImage.setImageResource(songModelList.get(position).getImage());
+//        holder.songImage.setImageResource(songModelList.get(position).getImage());
         holder.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

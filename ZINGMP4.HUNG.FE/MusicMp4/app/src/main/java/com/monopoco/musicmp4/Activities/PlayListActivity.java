@@ -29,6 +29,8 @@ import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
 
+import java.util.ArrayList;
+
 public class PlayListActivity extends AppCompatActivity {
 
     private PlayListModel playListModel;
@@ -112,7 +114,7 @@ public class PlayListActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         searchSongRcv.setLayoutManager(llm);
 
-        InsertSongAdapter insertSongAdapter = new InsertSongAdapter(SongModel.songModelList4, PlayListActivity.this);
+        InsertSongAdapter insertSongAdapter = new InsertSongAdapter(new ArrayList<>(), PlayListActivity.this);
 
         searchSongRcv.setAdapter(insertSongAdapter);
 

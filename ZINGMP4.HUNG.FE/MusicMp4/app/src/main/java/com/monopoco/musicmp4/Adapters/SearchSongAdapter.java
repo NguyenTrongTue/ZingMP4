@@ -91,7 +91,7 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
         LinearLayout viewArtists = dialog.findViewById(R.id.bts_artists);
 
         ImageView songImage  = dialog.findViewById(R.id.bts_song_img);
-        songImage.setImageResource(songModel.getImage());
+//        songImage.setImageResource(songModel.getImage());
         TextView songName = dialog.findViewById(R.id.bts_txt_song);
         songName.setText(songModel.getSongName());
         TextView singer = dialog.findViewById(R.id.bts_txt_singer);
@@ -150,7 +150,7 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
         });
 
         PlayListViewBottomAdapter playListViewBottomAdapter = new PlayListViewBottomAdapter(
-                PlayListModel.playListModelList, context
+                new ArrayList<>(), context
         );
 
         listView.setAdapter(playListViewBottomAdapter);
@@ -201,7 +201,7 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.txtSongName.setText(songModelList.get(position).getSongName());
         holder.txtSingerName.setText(songModelList.get(position).getSinger());
-        holder.songImage.setImageResource(songModelList.get(position).getImage());
+//        holder.songImage.setImageResource(songModelList.get(position).getImage());
         holder.moreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -108,10 +108,10 @@ public class LibraryFragment extends Fragment {
     }
 
     private List<PlayListModel> getPlayListModels() {
-        if (PlayListModel.playListModelList != null) {
-            return PlayListModel.playListModelList;
-        } else {
-            return new ArrayList<>();
-        }
+//        if (PlayListModel.playListModelList != null) {
+//            return PlayListModel.playListModelList;
+//        } else {
+//        }
+        return new ArrayList<>();
     }
 }

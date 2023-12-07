@@ -1,6 +1,9 @@
 package com.monopoco.musicmp4.Adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 public class GridAdapter extends BaseAdapter {
@@ -51,7 +57,13 @@ public class GridAdapter extends BaseAdapter {
         TextView singerName = convertView.findViewById(R.id.singer_name);
 
         // Set value
-        imageView.setImageResource(songModelList.get(position).getImage());
+        try {
+            URL newurl = new URL(songModelList.get(position).getImageUrl());
+            Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
+            imageView.setImageBitmap(mIcon_val);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         songName.setText(songModelList.get(position).getSongName());
         singerName.setText(songModelList.get(position).getSinger());
         return convertView;

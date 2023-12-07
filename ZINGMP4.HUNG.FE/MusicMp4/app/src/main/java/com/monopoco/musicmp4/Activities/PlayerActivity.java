@@ -198,9 +198,9 @@ public class PlayerActivity extends AppCompatActivity {
 
         byte[] picture = null;
 
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(), mediaPlayerService.getCurrentSong().getImage());
+//        Bitmap bmp = BitmapFactory.decodeResource(getResources(), mediaPlayerService.getCurrentSong().getImageUrl());
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+//        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         picture = stream.toByteArray();
 
         Bitmap thumb = null;

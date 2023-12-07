@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Utils.SongUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -129,10 +130,28 @@ public class MediaPlayerService extends Service {
 
     private void startMusic(SongModel songModel) {
         if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), songModel.getResource());
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build()
+            );
+            Uri songUri = Uri.parse(SongUtils.getSongResource(songModel.getResource()));
+            try {
+                mediaPlayer.setDataSource(getApplicationContext(), songUri);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
         } else {
             mediaPlayer.reset();
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), songModel.getResource());
+            mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.silent_night);
+        }
+        try {
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         mediaPlayer.start();
     }
@@ -164,7 +183,7 @@ public class MediaPlayerService extends Service {
             currentIndexPlaying += 1;
             startMusic(listSong.get(currentIndexPlaying));
         } else {
-            listSong.add(SongModel.allSongFake.get(new Random().nextInt(SongModel.allSongFake.size())));
+//            listSong.add(SongModel.allSongFake.get(new Random().nextInt(SongModel.allSongFake.size())));
             currentIndexPlaying += 1;
             startMusic(listSong.get(currentIndexPlaying));
         }
@@ -176,7 +195,7 @@ public class MediaPlayerService extends Service {
             currentIndexPlaying -= 1;
             startMusic(listSong.get(currentIndexPlaying));
         } else {
-            listSong.add(0, SongModel.allSongFake.get(new Random().nextInt(SongModel.allSongFake.size())));
+//            listSong.add(0, SongModel.allSongFake.get(new Random().nextInt(SongModel.allSongFake.size())));
             startMusic(listSong.get(currentIndexPlaying));
         }
     }

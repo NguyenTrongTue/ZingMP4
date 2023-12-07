@@ -71,18 +71,6 @@ public class SearchFragment extends Fragment {
 
         // Data
         ArrayList<SongModel> songModelArrayList = new ArrayList<>();
-        songModelArrayList.add(SongModel.song1);
-        songModelArrayList.add(SongModel.song2);
-        songModelArrayList.add(SongModel.song3);
-        songModelArrayList.add(SongModel.song4);
-        songModelArrayList.add(SongModel.song5);
-        songModelArrayList.add(SongModel.song6);
-        songModelArrayList.add(SongModel.song7);
-        songModelArrayList.add(SongModel.song8);
-        songModelArrayList.add(SongModel.song9);
-        songModelArrayList.add(SongModel.song10);
-        songModelArrayList.add(SongModel.song11);
-        songModelArrayList.add(SongModel.song12);
 
         rclSearchSong.setHasFixedSize(true);
 

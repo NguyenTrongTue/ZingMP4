@@ -40,6 +40,7 @@ import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
 import com.monopoco.musicmp4.Receiver.NotificationReceiver;
+import com.monopoco.musicmp4.Utils.ImageUtils;
 
 import java.io.ByteArrayOutputStream;
 
@@ -180,7 +181,8 @@ public class MusicPlayerFragment extends Fragment {
 
     public void initValue(View view) {
         if (view != null) {
-            songImageView.setImageResource(songModel.getImage());
+//            songImageView.setImageResource(songModel.getImage());
+            ImageUtils.setImageUrl(songModel.getImageUrl(), songImageView, getContext());
             Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
             rotation.setRepeatCount(Animation.INFINITE);
             seekBarHandler = new Handler();

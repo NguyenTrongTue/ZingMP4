@@ -28,7 +28,15 @@ import com.monopoco.musicmp4.Fragments.LibraryFragment;
 import com.monopoco.musicmp4.Fragments.LikedSongFragment;
 import com.monopoco.musicmp4.Fragments.ProfileFragment;
 import com.monopoco.musicmp4.Fragments.SearchFragment;
+import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Requests.APIService;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -47,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
 //        getSupportActionBar().hide();
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
