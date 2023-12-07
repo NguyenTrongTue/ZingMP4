@@ -20,7 +20,7 @@ namespace ZINGMP4.Infrastructure.Repository
             _unitOfWork = unitOfWork;
         }
         #endregion
-        
+
         #region Functions
         public async Task<List<SongEntity>> GetTrendingAsync()
         {
@@ -31,13 +31,24 @@ namespace ZINGMP4.Infrastructure.Repository
             return res.ToList();
         }
 
+        public async Task LikeSong(Guid song_id)
+        {
+            var param = new DynamicParameters();
+
+            param.Add("song_id", song_id);
+
+            var sql = "update public.song set liked = liked + 1 where song_id = @song_id";
+
+            await _unitOfWork.Connection.ExecuteAsync(sql, param);
+        }
+
         public async Task<List<SongEntity>> SearchSongAsync(int take, int skip, string filter)
         {
             var param = new DynamicParameters();
 
 
             param.Add("p_take", take);
-            param.Add("p_skip", skip); 
+            param.Add("p_skip", skip);
             param.Add("p_filter", filter);
 
 

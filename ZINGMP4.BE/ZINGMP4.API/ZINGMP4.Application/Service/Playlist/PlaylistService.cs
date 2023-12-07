@@ -78,5 +78,12 @@ namespace ZINGMP4.Application.Service
             return result;
 
         }
+
+        public async Task<List<PlaylistEntity>> GetPlaylistByUserAsync(Guid user_id)
+        {
+            var res = await _playlistRepository.GetPlaylistByUserAsync(user_id);
+
+            return res;
+        }
     }
 }

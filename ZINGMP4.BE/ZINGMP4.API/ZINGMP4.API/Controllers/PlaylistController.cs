@@ -100,5 +100,25 @@ namespace ZINGMP4.API.Controllers
                 throw new Exception(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Hàm lấy ra playlist của người dùng
+        /// </summary>
+        /// <param name="userDto"></param>
+        /// <returns></returns>
+        /// Created by: nttue 24/12/2023
+        [HttpGet("get_playlist_by_user")]
+        public async Task<IActionResult> GetPlaylistByUser(Guid user_id)
+        {
+            try
+            {
+                var result = await _playlistService.GetPlaylistByUserAsync(user_id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

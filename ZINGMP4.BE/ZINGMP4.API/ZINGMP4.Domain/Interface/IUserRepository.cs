@@ -27,5 +27,9 @@ namespace ZINGMP4.Domain.Interface
         /// <returns></returns>
         /// Created by: nttue 20/11/2023
         Task<List<SongEntity>> GetRecentSongsAsync(Guid userId);
+
+        Task<UserEntity> GetUserInfoByIdAsync(Guid id);
+
+        Task UpdatePasswordAsync(string email, byte[] password_hash, byte[] password_salt);
     }
 }

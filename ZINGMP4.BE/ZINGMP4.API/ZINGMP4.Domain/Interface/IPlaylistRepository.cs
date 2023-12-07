@@ -9,6 +9,8 @@ namespace ZINGMP4.Domain.Interface
         Task AddSongToPlaylistAsync(PlaylistConfigEntity playlistConfigEntity);
 
         Task DeleteSongToPlaylistAsync(PlaylistConfigEntity playlistConfigEntity);
-        Task <List<PlaylistModal>> GetPlaylistAsync(Guid playlist_id);
+        Task<List<PlaylistModal>> GetPlaylistAsync(Guid playlist_id);
+
+        Task<List<PlaylistEntity>> GetPlaylistByUserAsync(Guid user_id);
     }
 }

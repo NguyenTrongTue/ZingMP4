@@ -33,13 +33,14 @@ namespace ZINGMP4.Application.Service
             _config = config;
         }
 
-        public void GetNewPasswordAsync(string p_email)
+        public async Task GetNewPasswordAsync(string p_email)
         {
+            var password = AuthHelper.GenerateRandomPassword();
             var request = new EmailDto()
             {
                 Subject = "ZING-MP4: Lấy lại mật khẩu",
                 To = p_email,
-                Body = AuthHelper.GenerateRandomPassword()
+                Body = password
             };
 
             var email = new MimeMessage();
@@ -53,6 +54,10 @@ namespace ZINGMP4.Application.Service
             smtp.Authenticate(_config.GetSection("EmailUsername").Value, _config.GetSection("EmailPassword").Value);
             smtp.Send(email);
             smtp.Disconnect(true);
+
+            AuthHelper.CreatePassword(password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            await _userRepository.UpdatePasswordAsync(p_email, passwordHash, passwordSalt);
         }
 
         public async Task<UserDto> EditUserInfoAsync(UserEditRequest userEditRequest)
@@ -124,5 +129,13 @@ namespace ZINGMP4.Application.Service
             }
         }
 
+        public async Task<UserDto> GetUserInfoByIdAsync(Guid id)
+        {
+            var user = await _userRepository.GetUserInfoByIdAsync(id);
+
+            var userDto = _mapper.Map<UserDto>(user);
+
+            return userDto;
+        }
     }
 }
