@@ -6,6 +6,7 @@ using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface;
 using ZINGMP4.Application.Helper;
 using ZINGMP4.Application.Request;
+using ZINGMP4.Domain.Model;
 
 namespace ZINGMP4.Application.Service
 {
@@ -57,8 +58,6 @@ namespace ZINGMP4.Application.Service
         public async Task<List<SongEntity>> SearchSongAsync(FilterSongRequest request)
         {
             var res = await _songRepository.SearchSongAsync(request.take, request.skip, request.filter);
-
-
             return res;
 
         }
@@ -139,9 +138,26 @@ namespace ZINGMP4.Application.Service
             }
         }
 
-        public async Task LikeSong(Guid song_id)
+        public async Task<SongModal> LikeSong(Guid song_id, Guid user_id)
         {
-            await _songRepository.LikeSong(song_id);
+           var song =  await _songRepository.LikeSong(song_id, user_id);
+
+            return song;
+        }
+
+        public async Task<bool> CheckLikeSongAsync(Guid song_id, Guid user_id)
+        {
+            var song = await _songRepository.CheckLikeSongAsync(song_id, user_id);
+
+            return song;
+        }
+
+        public async Task<SongEntity> GetSongByRandomAsync()
+        {
+            var result = await _songRepository.GetSongByRandomAsync();
+
+            return result;
+
         }
         #endregion
     }

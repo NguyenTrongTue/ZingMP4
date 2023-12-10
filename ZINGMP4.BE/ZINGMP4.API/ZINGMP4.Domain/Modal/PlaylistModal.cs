@@ -28,5 +28,7 @@ namespace ZINGMP4.Domain.Modal
 
         public string link_song { get; set; } = string.Empty;
 
+        public int liked { get; set; } = 0;
+
     }
 }

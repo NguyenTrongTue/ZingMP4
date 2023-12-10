@@ -4,6 +4,7 @@ using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface;
 using ZINGMP4.Infrastructure.Repository.Base;
 using System.Data;
+using ZINGMP4.Domain.Model;
 
 namespace ZINGMP4.Infrastructure.Repository
 {
@@ -19,6 +20,29 @@ namespace ZINGMP4.Infrastructure.Repository
         {
             _unitOfWork = unitOfWork;
         }
+
+        public async Task<bool> CheckLikeSongAsync(Guid song_id, Guid user_id)
+        {
+            var param = new DynamicParameters();
+
+            param.Add("p_song_id", song_id);
+            param.Add("p_user_id", user_id);
+
+            var sql = "select count(1) from public.liked_song_config where song_id = @p_song_id and user_id = @p_user_id";
+
+            var result = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<int>(sql, param);
+
+            return result == 0 ? false : true;
+        }
+
+        public async Task<SongEntity> GetSongByRandomAsync()
+        {
+            var sql = "select * from public.song order by random() limit 1";
+
+            var song = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<SongEntity>(sql);
+
+            return song;
+        }
         #endregion
 
         #region Functions
@@ -31,15 +55,18 @@ namespace ZINGMP4.Infrastructure.Repository
             return res.ToList();
         }
 
-        public async Task LikeSong(Guid song_id)
+        public async Task<SongModal> LikeSong(Guid song_id, Guid user_id)
         {
             var param = new DynamicParameters();
 
-            param.Add("song_id", song_id);
+            param.Add("p_song_id", song_id);
+            param.Add("p_user_id", user_id);
 
-            var sql = "update public.song set liked = liked + 1 where song_id = @song_id";
+            var sql = "select * from public.func_like_song(@p_song_id, @p_user_id)";
 
-            await _unitOfWork.Connection.ExecuteAsync(sql, param);
+            var result = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<SongModal>(sql, param, commandType: CommandType.Text);
+
+            return result;
         }
 
         public async Task<List<SongEntity>> SearchSongAsync(int take, int skip, string filter)
