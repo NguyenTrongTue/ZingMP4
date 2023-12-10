@@ -1,0 +1,1 @@
+ALTER TABLE public.playlist ADD playlist_image text NULL;

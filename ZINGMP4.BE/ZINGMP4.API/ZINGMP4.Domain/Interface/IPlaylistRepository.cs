@@ -12,5 +12,7 @@ namespace ZINGMP4.Domain.Interface
         Task<List<PlaylistModal>> GetPlaylistAsync(Guid playlist_id);
 
         Task<List<PlaylistEntity>> GetPlaylistByUserAsync(Guid user_id);
+
+        Task UpdatePlaylistImageAsync(string image, Guid playlist_id);
     }
 }
