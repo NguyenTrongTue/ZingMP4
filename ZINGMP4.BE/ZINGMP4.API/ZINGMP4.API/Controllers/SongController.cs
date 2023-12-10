@@ -100,13 +100,13 @@ namespace ZINGMP4.API.Controllers
         }
 
         [HttpGet("like_song")]
-        public async Task<IActionResult> LikeSong(Guid id)
+        public async Task<IActionResult> LikeSong(Guid song_id, Guid user_id)
         {
             try
             {
-                await _songInterface.LikeSong(id);
+                var song = await _songInterface.LikeSong(song_id, user_id);
 
-                return Ok(1);
+                return Ok(song);
             }
             catch (Exception ex)
             {
@@ -114,6 +114,34 @@ namespace ZINGMP4.API.Controllers
             }
         }
 
+        [HttpGet("is_liked_song")]
+        public async Task<IActionResult> CheckLikeSong(Guid song_id, Guid user_id)
+        {
+            try
+            {
+                var song = await _songInterface.CheckLikeSongAsync(song_id, user_id);
 
+                return Ok(song);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpGet("get_song_by_random")]
+        public async Task<IActionResult> GetSongByRandom()
+        {
+            try
+            {
+                var song = await _songInterface.GetSongByRandomAsync();
+
+                return Ok(song);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
