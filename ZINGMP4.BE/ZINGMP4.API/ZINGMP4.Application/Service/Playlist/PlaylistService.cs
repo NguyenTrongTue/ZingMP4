@@ -70,11 +70,12 @@ namespace ZINGMP4.Application.Service
                 location = item.location,
                 number_of_listens = item.number_of_listens
             }).ToList();
-
-            var result = _mapper.Map<PlaylistResponseDto>(res[0]);
-
-            result.song_entities = listSong;
-
+            var result = new PlaylistResponseDto();
+            if(res.Count > 0)
+            {
+                result = _mapper.Map<PlaylistResponseDto>(res[0]);
+                result.song_entities = listSong;
+            }
             return result;
 
         }
