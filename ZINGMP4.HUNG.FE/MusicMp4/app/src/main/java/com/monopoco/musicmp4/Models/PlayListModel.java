@@ -1,5 +1,6 @@
 package com.monopoco.musicmp4.Models;
 
+import com.google.gson.annotations.SerializedName;
 import com.monopoco.musicmp4.R;
 
 import java.io.Serializable;
@@ -8,34 +9,29 @@ import java.util.List;
 
 public class PlayListModel implements Serializable {
 
-    private long id;
+    @SerializedName("playlist_id")
+    private String playlistId;
 
-    private int Image;
+//    private String  Image;
 
+    @SerializedName("playlist_name")
     private String playListName;
 
-    private List<SongModel> songModelList;
-
-
-
-    public PlayListModel(int image, String playListName) {
-        Image = image;
-        this.playListName = playListName;
-    }
-
-    public PlayListModel(long id, int image, String playListName, List<SongModel> songModelList) {
-        this.id = id;
-        Image = image;
+    public PlayListModel(String playlistId, String playListName, List<SongModel> songModelList) {
+        this.playlistId = playlistId;
         this.playListName = playListName;
         this.songModelList = songModelList;
     }
 
-    public int getImage() {
-        return Image;
+    @SerializedName("song_entities")
+    private List<SongModel> songModelList;
+
+    public String getPlaylistId() {
+        return playlistId;
     }
 
-    public void setImage(int image) {
-        Image = image;
+    public void setPlaylistId(String playlistId) {
+        this.playlistId = playlistId;
     }
 
     public String getPlayListName() {
@@ -44,14 +40,6 @@ public class PlayListModel implements Serializable {
 
     public void setPlayListName(String playListName) {
         this.playListName = playListName;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public List<SongModel> getSongModelList() {

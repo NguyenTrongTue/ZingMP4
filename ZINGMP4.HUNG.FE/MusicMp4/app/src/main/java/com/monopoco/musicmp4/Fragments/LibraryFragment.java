@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.monopoco.musicmp4.Activities.PlayListActivity;
 import com.monopoco.musicmp4.Activities.PlayerActivity;
@@ -30,9 +31,14 @@ import com.monopoco.musicmp4.Adapters.GridAdapter;
 import com.monopoco.musicmp4.Adapters.LibraryAdapter;
 import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Requests.APIService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LibraryFragment extends Fragment {
 
@@ -41,6 +47,8 @@ public class LibraryFragment extends Fragment {
     private GridView gridView;
 
     private ImageView btnAddNew;
+
+    private LibraryAdapter libraryAdapter;
 
     private List<PlayListModel> playListModelList;
 
@@ -86,32 +94,63 @@ public class LibraryFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(false);
+                getPlayListModels();
+
             }
         });
 
         gridView = view.findViewById(R.id.library_grid_view);
-        playListModelList = getPlayListModels();
-
-        LibraryAdapter libraryAdapter = new LibraryAdapter(playListModelList, getContext());
-        gridView.setAdapter(libraryAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), PlayListActivity.class);
-                intent.putExtra("playlistInfo", playListModelList.get(position));
-                startActivity(intent);
-            }
-        });
+        getPlayListModels();
+//        libraryAdapter = new LibraryAdapter(playListModelList, getContext());
+//        gridView.setAdapter(libraryAdapter);
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(getActivity(), PlayListActivity.class);
+//                intent.putExtra("playlistInfo", playListModelList.get(position));
+//                startActivity(intent);
+//            }
+//        });
 
         return view;
     }
 
-    private List<PlayListModel> getPlayListModels() {
-//        if (PlayListModel.playListModelList != null) {
-//            return PlayListModel.playListModelList;
-//        } else {
-//        }
-        return new ArrayList<>();
+    private void getPlayListModels() {
+
+        List<PlayListModel> playListModels = new ArrayList<>();
+
+        String userID = "4e0907f7-c69f-47eb-9bad-140357181195";
+        APIService.getService().GetPlayListOfUser(userID).enqueue(new Callback<List<PlayListModel>>() {
+            @Override
+            public void onResponse(Call<List<PlayListModel>> call, Response<List<PlayListModel>> response) {
+                if (response.body() != null) {
+                    playListModels.addAll(response.body());
+                    playListModelList = playListModels;
+
+                    libraryAdapter = new LibraryAdapter(playListModelList, getContext());
+                    gridView.setAdapter(libraryAdapter);
+                    gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                            intent.putExtra("playlistId", playListModelList.get(position).getPlaylistId());
+                            startActivity(intent);
+                        }
+                    });
+                    if (swipeRefreshLayout.isRefreshing()) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PlayListModel>> call, Throwable t) {
+                Log.e("monopoco", "Call get playlist Error");
+                Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
+
+
 }

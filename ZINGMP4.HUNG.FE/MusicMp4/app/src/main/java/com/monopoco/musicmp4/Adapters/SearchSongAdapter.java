@@ -32,6 +32,7 @@ import com.monopoco.musicmp4.Interfaces.ItemClickListener;
 import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +50,22 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
 
     public SearchSongAdapter(List<SongModel> songModelList, Context context) {
         this.songModelList = songModelList;
+        this.context = context;
+    }
+
+    public List<SongModel> getSongModelList() {
+        return songModelList;
+    }
+
+    public void setSongModelList(List<SongModel> songModelList) {
+        this.songModelList = songModelList;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
         this.context = context;
     }
 
@@ -91,6 +108,7 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
         LinearLayout viewArtists = dialog.findViewById(R.id.bts_artists);
 
         ImageView songImage  = dialog.findViewById(R.id.bts_song_img);
+        ImageUtils.setImageUrl(songModel.getImageUrl(), songImage, getContext());
 //        songImage.setImageResource(songModel.getImage());
         TextView songName = dialog.findViewById(R.id.bts_txt_song);
         songName.setText(songModel.getSongName());
@@ -202,6 +220,7 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
         holder.txtSongName.setText(songModelList.get(position).getSongName());
         holder.txtSingerName.setText(songModelList.get(position).getSinger());
 //        holder.songImage.setImageResource(songModelList.get(position).getImage());
+        ImageUtils.setImageUrl(songModelList.get(position).getImageUrl(), holder.songImage, getContext());
         holder.moreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

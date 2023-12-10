@@ -23,7 +23,7 @@ public class PlayListViewBottomAdapter extends BaseAdapter {
 
     private Context context;
 
-    private Set<Long> idsChosen;
+    private Set<String> idsChosen;
 
 
     public PlayListViewBottomAdapter(List<PlayListModel> playListModelList, Context context) {
@@ -44,7 +44,7 @@ public class PlayListViewBottomAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return playListModelList.get(position).getId();
+        return position;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class PlayListViewBottomAdapter extends BaseAdapter {
         ImageView checkRadio = convertView.findViewById(R.id.playlist_item_check);
 
 
-        imageView.setImageResource(playListModelList.get(position).getImage());
+//        imageView.setImageResource(playListModelList.get(position).getImage());
         playlistName.setText(playListModelList.get(position).getPlayListName());
         String songNumber;
         if (playListModelList.get(position).getSongModelList().size() == 0) {
@@ -80,11 +80,11 @@ public class PlayListViewBottomAdapter extends BaseAdapter {
 
                 Log.e("monopco", idsChosen.toString());
 
-                if (idsChosen.contains(playListModelList.get(position).getId())) {
-                    idsChosen.remove(playListModelList.get(position).getId());
+                if (idsChosen.contains(playListModelList.get(position).getPlaylistId())) {
+                    idsChosen.remove(playListModelList.get(position).getPlaylistId());
                     checkRadio.setImageResource(R.drawable.ic_empty_circle);
                 } else {
-                    idsChosen.add(playListModelList.get(position).getId());
+                    idsChosen.add(playListModelList.get(position).getPlaylistId());
                     checkRadio.setImageResource(R.drawable.ic_check_circle);
                 }
             }

@@ -27,6 +27,9 @@ public class SongModel implements Serializable {
     @SerializedName("link_song")
     private String resource;
 
+    @SerializedName("liked")
+    private Integer liked;
+
     public SongModel(String id, String imageUrl, String songName, String singer, String resource) {
         this.id = id;
         this.imageUrl = imageUrl;

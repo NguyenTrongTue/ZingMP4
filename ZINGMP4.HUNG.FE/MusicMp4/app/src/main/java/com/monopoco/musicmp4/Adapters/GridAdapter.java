@@ -33,7 +33,7 @@ public class GridAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return songModelList.size();
+        return songModelList != null ? songModelList.size() : 0;
     }
 
     @Override

@@ -29,10 +29,17 @@
         android:paddingLeft="10dp"
         android:textCursorDrawable="@drawable/text_cursor"
         android:textSize="20dp" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcl_search_song"
-        android:layout_marginTop="10dp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:paddingTop="20dp"
+        android:id="@+id/search_reload"
         android:layout_width="match_parent"
-        android:layout_weight="9"
-        android:layout_height="0dp"/>
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcl_search_song"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_weight="9"
+            android:layout_height="0dp"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

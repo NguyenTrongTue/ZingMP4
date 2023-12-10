@@ -26,6 +26,7 @@
             app:layout_constraintLeft_toLeftOf="@id/insert_song_header"/>
 
         <EditText
+            android:id="@+id/insert_song_field"
             android:drawablePadding="10dp"
             android:layout_weight="9"
             android:layout_marginRight="30dp"
@@ -34,6 +35,8 @@
             android:textCursorDrawable="@drawable/text_cursor"
             android:background="@drawable/edittext_border"
             android:layout_width="0dp"
+            android:singleLine="true"
+            android:maxLines="1"
             android:layout_height="30dp"
             android:elevation="0dp"
             android:textColor="@color/white"

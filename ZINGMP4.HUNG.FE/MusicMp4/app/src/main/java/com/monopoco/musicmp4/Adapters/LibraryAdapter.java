@@ -49,7 +49,7 @@ public class LibraryAdapter extends BaseAdapter {
         TextView authTxt = convertView.findViewById(R.id.auth);
 
         // Set value
-        imageView.setImageResource(playListModelList.get(position).getImage());
+//        imageView.setImageResource(playListModelList.get(position).getImage());
         libraryNameTxt.setText(playListModelList.get(position).getPlayListName());
         authTxt.setText(playListModelList.get(position).getPlayListName());
         return convertView;

@@ -20,6 +20,7 @@ import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.Interfaces.ItemClickListener;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Utils.ImageUtils;
 
 import java.util.List;
 
@@ -34,6 +35,21 @@ public class InsertSongAdapter extends RecyclerView.Adapter<InsertSongAdapter.Vi
         this.context = context;
     }
 
+    public List<SongModel> getSongModelList() {
+        return songModelList;
+    }
+
+    public void setSongModelList(List<SongModel> songModelList) {
+        this.songModelList = songModelList;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -49,12 +65,13 @@ public class InsertSongAdapter extends RecyclerView.Adapter<InsertSongAdapter.Vi
         holder.txtSongName.setText(songModelList.get(position).getSongName());
         holder.txtSingerName.setText(songModelList.get(position).getSinger());
 //        holder.songImage.setImageResource(songModelList.get(position).getImage());
+        ImageUtils.setImageUrl(songModelList.get(position).getImageUrl(), holder.songImage, getContext());
         holder.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (context instanceof PlayListActivity) {
                     ((PlayListActivity) context).dismissDialog();
-                    ((PlayListActivity) context).addSongToPlaylist(songModelList.get(holder.getAdapterPosition()));
+                    ((PlayListActivity) context).addSongToPlaylist(songModelList.get(holder.getAdapterPosition()).getId());
                 }
                 Log.e("monopoco", "Hello mother fucker");
             }

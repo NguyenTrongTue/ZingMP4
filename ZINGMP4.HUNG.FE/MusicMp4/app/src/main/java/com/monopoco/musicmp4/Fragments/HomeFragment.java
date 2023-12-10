@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment {
                     });
 
                     ImageView playlistImage = viewItem.findViewById(R.id.play_list_image);
-                    playlistImage.setImageResource(playListModel.getImage());
+//                    playlistImage.setImageResource(playListModel.getImage());
                     TextView playListName = viewItem.findViewById(R.id.play_list_name);
                     playListName.setText(playListModel.getPlayListName());
                     if (playListModels.indexOf(playListModel) == 0) {
