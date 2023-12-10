@@ -1,5 +1,6 @@
 ﻿using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface.BaseCRUD;
+using ZINGMP4.Domain.Model;
 
 namespace ZINGMP4.Domain.Interface
 {
@@ -27,6 +28,10 @@ namespace ZINGMP4.Domain.Interface
         /// Created by: nttue 20/11/2023
         Task<List<SongEntity>> SearchSongAsync(int take, int skip, string filter);
 
-        Task LikeSong(Guid song_id);
+        Task<SongModal> LikeSong(Guid song_id, Guid user_id);
+
+        Task<bool> CheckLikeSongAsync(Guid song_id, Guid user_id);
+
+        Task<SongEntity> GetSongByRandomAsync();
     }
 }
