@@ -18,5 +18,7 @@ namespace ZINGMP4.Domain.Entity
 
         public bool is_public { get; set; } = true;
 
+        public string playlist_image { get; set; } = string.Empty;
+
     }
 }

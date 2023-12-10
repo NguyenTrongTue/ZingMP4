@@ -35,6 +35,16 @@ namespace ZINGMP4.Infrastructure.Repository
             return result == 0 ? false : true;
         }
 
+        public async Task<SongEntity> GetSongByIdAsync(Guid song_id)
+        {
+            var param = new DynamicParameters();
+            param.Add("p_song_id", song_id);
+
+            var sql = "select * from public.song where song_id = @p_song_id";
+            var result = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<SongEntity>(sql, param);
+            return result;
+        }
+
         public async Task<SongEntity> GetSongByRandomAsync()
         {
             var sql = "select * from public.song order by random() limit 1";

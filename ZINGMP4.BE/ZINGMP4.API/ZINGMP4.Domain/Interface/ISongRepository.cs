@@ -33,5 +33,7 @@ namespace ZINGMP4.Domain.Interface
         Task<bool> CheckLikeSongAsync(Guid song_id, Guid user_id);
 
         Task<SongEntity> GetSongByRandomAsync();
+
+        Task<SongEntity> GetSongByIdAsync(Guid song_id);
     }
 }
