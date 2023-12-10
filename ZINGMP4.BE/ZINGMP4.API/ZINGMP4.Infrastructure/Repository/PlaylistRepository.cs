@@ -72,6 +72,17 @@ namespace ZINGMP4.Infrastructure.Repository
 
             return result.ToList();
         }
+
+        public async Task UpdatePlaylistImageAsync(string image, Guid playlist_id)
+        {
+            var param = new DynamicParameters();
+            param.Add("p_image", image);
+            param.Add("p_playlist_id", playlist_id);
+
+            var functionName = "update public.playlist set playlist_image = @p_image where playlist_id = @p_playlist_id";
+
+           await _unitOfWork.Connection.ExecuteAsync(functionName, param);
+        }
         #endregion
     }
 }

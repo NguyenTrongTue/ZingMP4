@@ -10,11 +10,14 @@ namespace ZINGMP4.Application.Service
     {
         private readonly IMapper _mapper;
         private readonly IPlaylistRepository _playlistRepository;
+        private readonly ISongRepository _songRepository;
 
-        public PlaylistService(IMapper mapper, IPlaylistRepository playlistRepository)
+        public PlaylistService(IMapper mapper, IPlaylistRepository playlistRepository, ISongRepository songRepository)
         {
             _mapper = mapper;
             _playlistRepository = playlistRepository;
+            _songRepository = songRepository;
+
         }
 
         public async Task<PlaylistEntity> AddPlaylistAsync(PlaylistDto playlistDto)
@@ -37,7 +40,18 @@ namespace ZINGMP4.Application.Service
                 playlist_id = playlistConfig.playlist_id,
                 song_id = playlistConfig.song_id
             };
+
+            var song = await _songRepository.GetSongByIdAsync(playlistConfig.song_id);
+            if(song == null)
+            {
+                throw new Exception("Bài hát không tồn tại");
+            }
+            
+
+
             await _playlistRepository.AddSongToPlaylistAsync(playlistConfigEntity);
+
+            await _playlistRepository.UpdatePlaylistImageAsync(song.thumnail, playlistConfig.playlist_id);
 
 
         }
