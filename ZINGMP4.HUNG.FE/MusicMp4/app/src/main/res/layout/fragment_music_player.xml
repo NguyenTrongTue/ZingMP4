@@ -63,7 +63,6 @@
         android:textColor="@color/white"
         android:maxLines="1"
         android:gravity="center_vertical"
-        android:fontFamily="@font/circular_std_font"
         android:textSize="35dp"
         android:textFontWeight="700"
         android:ellipsize="marquee"/>
@@ -81,7 +80,6 @@
         android:textColor="@color/singer_name_color"
         android:maxLines="1"
         android:gravity="center_vertical"
-        android:fontFamily="@font/circular_std_font"
         android:textSize="23dp"
         android:ellipsize="marquee"/>
 
@@ -106,7 +104,6 @@
             android:layout_height="20dp"
             android:textColor="@color/white"
             android:paddingLeft="5dp"
-            android:fontFamily="@font/circular_std_font"
             android:textSize="16dp"
             android:layout_weight="0.5"
             android:gravity="center_vertical|start"
@@ -114,7 +111,6 @@
         <TextView
             android:id="@+id/music_time_end"
             android:layout_width="match_parent"
-            android:fontFamily="@font/circular_std_font"
             android:layout_height="20dp"
             android:textColor="@color/white"
             android:paddingRight="5dp"

@@ -15,7 +15,6 @@
         android:background="@drawable/edittext_border"
         android:drawableLeft="@drawable/ic_search"
         android:drawablePadding="10dp"
-        android:fontFamily="@font/circular_std_font"
         android:hint="What do you want to listen to?"
         android:inputType="textEmailAddress"
         android:nextFocusDown="@id/login_password_field"
@@ -28,7 +27,7 @@
         android:textColorLink="@color/white"
         android:paddingLeft="10dp"
         android:textCursorDrawable="@drawable/text_cursor"
-        android:textSize="20dp" />
+        android:textSize="18dp" />
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:paddingTop="20dp"
         android:id="@+id/search_reload"

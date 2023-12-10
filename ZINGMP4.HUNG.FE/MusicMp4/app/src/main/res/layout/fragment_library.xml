@@ -17,7 +17,6 @@
             android:layout_height="match_parent"
             android:gravity="center|start"
             android:text="Your Playlists"
-            android:fontFamily="@font/circular_std_font"
             android:textSize="30dp"
             android:paddingLeft="70px"
             android:textColor="@color/white"/>

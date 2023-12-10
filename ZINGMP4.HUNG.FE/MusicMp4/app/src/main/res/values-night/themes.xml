@@ -16,7 +16,7 @@
         <item name="android:windowBackground">@drawable/dark_background</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:fontFamily">@font/circular_std_font</item>
+        <item name="android:fontFamily">@font/rethink_sans_regular</item>
 
     </style>
 
@@ -28,7 +28,7 @@
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:fontFamily">@font/circular_std_font</item>
+        <item name="android:fontFamily">@font/rethink_sans_regular</item>
 
         <item name="android:statusBarColor" tools:targetApi="l">@color/primary</item>
 

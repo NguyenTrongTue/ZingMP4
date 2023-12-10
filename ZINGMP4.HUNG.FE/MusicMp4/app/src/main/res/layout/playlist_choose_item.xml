@@ -24,7 +24,7 @@
 
             android:id="@+id/playlist_item_name"
             android:text="Playlist name"
-            android:textSize="19dp"
+            android:textSize="18dp"
             android:ellipsize="end"
             android:textColor="@color/white"
             android:gravity="bottom|start"
@@ -34,7 +34,7 @@
         <TextView
             android:id="@+id/playlist_item_songs"
             android:text="0 songs"
-            android:textSize="15dp"
+            android:textSize="14dp"
             android:ellipsize="end"
             android:textColor="@color/gray"
             android:gravity="top|start"

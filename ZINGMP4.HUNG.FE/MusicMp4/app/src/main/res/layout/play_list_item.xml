@@ -36,7 +36,6 @@
             android:id="@+id/play_list_name"
             android:layout_width="500px"
             android:layout_height="100px"
-            android:fontFamily="@font/circular_std_font"
             android:ellipsize="end"
             android:singleLine="true"
             android:gravity="center"

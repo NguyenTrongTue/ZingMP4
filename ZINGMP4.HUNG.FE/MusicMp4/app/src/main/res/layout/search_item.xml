@@ -32,7 +32,7 @@
                 android:ellipsize="end"
                 android:text="Song name"
                 android:textFontWeight="700"
-                android:textSize="20dp"
+                android:textSize="18dp"
                 android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"/>
@@ -43,6 +43,7 @@
                 android:ellipsize="end"
                 android:gravity="top"
                 android:text="singer"
+                android:textSize="14dp"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"/>
         </LinearLayout>
