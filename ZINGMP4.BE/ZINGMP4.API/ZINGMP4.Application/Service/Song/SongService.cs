@@ -71,7 +71,7 @@ namespace ZINGMP4.Application.Service
 
                 var baseUrl = _configuration.GetSection("BaseUrl");
 
-                var exactPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\songs\\lyrics", fileName);
+                var exactPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/songs/lyrics", fileName);
 
                 using (var stream = new FileStream(exactPath, FileMode.Create))
                 {
@@ -111,6 +111,7 @@ namespace ZINGMP4.Application.Service
                 var artist = file.Tag.FirstPerformer;
                 var album = file.Tag.Album;
 
+                
 
                 result.Add("Title", title);
                 result.Add("Artist", artist);
@@ -123,7 +124,7 @@ namespace ZINGMP4.Application.Service
                     var filePictureName = Guid.NewGuid();
 
                     // Save the picture to a file
-                    FileHelper.SavePictureToFile(picture, Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\songs\\images", $"{filePictureName}.jpg"));
+                    FileHelper.SavePictureToFile(picture, Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/songs/images", $"{filePictureName}.jpg"));
 
                     var fullUrl = baseUrl.Value + "/songs/images/" + $"{filePictureName}.jpg";
 

@@ -146,7 +146,12 @@ public class MediaPlayerService extends Service {
 
         } else {
             mediaPlayer.reset();
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.silent_night);
+            Uri songUri = Uri.parse(SongUtils.getSongResource(songModel.getResource()));
+            try {
+                mediaPlayer.setDataSource(getApplicationContext(), songUri);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         try {
             mediaPlayer.prepare();
