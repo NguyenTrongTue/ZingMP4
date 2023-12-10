@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -29,6 +30,7 @@ import com.monopoco.musicmp4.Activities.PlayListActivity;
 import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.Adapters.GridAdapter;
 import com.monopoco.musicmp4.Adapters.LibraryAdapter;
+import com.monopoco.musicmp4.Models.NewPlaylistModel;
 import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.R;
 import com.monopoco.musicmp4.Requests.APIService;
@@ -70,9 +72,21 @@ public class LibraryFragment extends Fragment {
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.new_playlist_bottom);
 
+                EditText editText = dialog.findViewById(R.id.pls_name_field);
+                AppCompatButton submitBtn = dialog.findViewById(R.id.pls_btn_add);
+
+                submitBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addNewPlaylist(editText.getText().toString());
+                        dialog.dismiss();
+                        btnAddNew.setClickable(true);
+                        getPlayListModels();
+                    }
+                });
+
                 ImageView closeBtn = dialog.findViewById(R.id.new_pl_close);
 
-                EditText editText = dialog.findViewById(R.id.pls_name_field);
 
                 editText.requestFocus();
                 closeBtn.setOnClickListener(new View.OnClickListener() {
@@ -101,16 +115,6 @@ public class LibraryFragment extends Fragment {
 
         gridView = view.findViewById(R.id.library_grid_view);
         getPlayListModels();
-//        libraryAdapter = new LibraryAdapter(playListModelList, getContext());
-//        gridView.setAdapter(libraryAdapter);
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(getActivity(), PlayListActivity.class);
-//                intent.putExtra("playlistInfo", playListModelList.get(position));
-//                startActivity(intent);
-//            }
-//        });
 
         return view;
     }
@@ -150,6 +154,30 @@ public class LibraryFragment extends Fragment {
             }
         });
 
+    }
+
+    private void addNewPlaylist(String playlistName) {
+        NewPlaylistModel newPlaylistModel = new NewPlaylistModel(
+                "4e0907f7-c69f-47eb-9bad-140357181195",
+                playlistName,
+                1,
+                true
+        );
+        APIService.getService().AddNewPlaylist(newPlaylistModel).enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.code() == 200) {
+
+                    Toast.makeText(getContext(), "New playlist successfully added", Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 

@@ -43,6 +43,7 @@
             android:textColor="@color/white"
             android:layout_height="80dp"/>
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pls_btn_add"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:background="@drawable/button_green"

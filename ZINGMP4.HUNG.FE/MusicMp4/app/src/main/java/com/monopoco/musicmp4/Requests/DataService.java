@@ -1,5 +1,6 @@
 package com.monopoco.musicmp4.Requests;
 
+import com.monopoco.musicmp4.Models.NewPlaylistModel;
 import com.monopoco.musicmp4.Models.PlayListAddSongModel;
 import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.Models.SearchModel;
@@ -37,7 +38,7 @@ public interface DataService {
 
 
     @Headers({"Accept: application/json", "Content-Type: application/json"})
-    @POST("Playlist/add_song_playlist")
-    Call<Integer> AddNewPlaylist(@Body PlayListAddSongModel body);
+    @POST("Playlist/add_playlist")
+    Call<Integer> AddNewPlaylist(@Body NewPlaylistModel body);
 
 }
