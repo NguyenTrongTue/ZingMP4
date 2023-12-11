@@ -58,7 +58,7 @@ namespace ZINGMP4.Infrastructure.Repository
         #region Functions
         public async Task<List<SongEntity>> GetTrendingAsync()
         {
-            var sql = "select * from public.song order by number_of_listens desc";
+            var sql = "select * from public.song order by number_of_listens desc limit 10";
 
             var res = await _unitOfWork.Connection.QueryAsync<SongEntity>(sql);
 

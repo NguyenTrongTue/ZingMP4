@@ -29,7 +29,7 @@ namespace ZINGMP4.API.Controllers
             try
             {
                 var result = await _songInterface.AddSong(file);
-                return Ok(1);
+                return Ok(result);
             }
             catch (Exception ex)
             {
