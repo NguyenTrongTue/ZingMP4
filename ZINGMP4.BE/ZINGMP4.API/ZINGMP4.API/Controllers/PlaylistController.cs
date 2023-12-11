@@ -32,7 +32,7 @@ namespace ZINGMP4.API.Controllers
             try
             {
                 var result = await _playlistService.AddPlaylistAsync(playlistDto);
-                return Ok(1);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -53,7 +53,8 @@ namespace ZINGMP4.API.Controllers
             try
             {
                 await _playlistService.AddSongToPlaylistAsync(playlistConfig);
-                return Ok(1);
+                var result = await _playlistService.GetPlaylistAsync(playlistConfig.playlist_id);
+                return Ok(result);
             }
             catch (Exception ex)
             {
