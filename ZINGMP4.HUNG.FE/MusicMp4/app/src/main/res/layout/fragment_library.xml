@@ -27,7 +27,7 @@
             android:padding="12dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_plus"
-            ></ImageView>
+            />
     </LinearLayout>
 
 

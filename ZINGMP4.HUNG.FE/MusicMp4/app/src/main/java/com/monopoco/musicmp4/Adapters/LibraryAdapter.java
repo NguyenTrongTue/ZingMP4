@@ -8,9 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.util.Strings;
 import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Utils.ImageUtils;
 
 import java.util.List;
 
@@ -47,11 +49,15 @@ public class LibraryAdapter extends BaseAdapter {
         ImageView imageView = convertView.findViewById(R.id.image_library);
         TextView libraryNameTxt = convertView.findViewById(R.id.library_name);
         TextView authTxt = convertView.findViewById(R.id.auth);
-
+        if (Strings.isEmptyOrWhitespace(playListModelList.get(position).getPlaylistImage())) {
+            imageView.setImageResource(R.drawable.playlist_empty);
+        } else {
+            ImageUtils.setImageUrl(playListModelList.get(position).getPlaylistImage(), imageView, parent.getContext());
+        }
         // Set value
 //        imageView.setImageResource(playListModelList.get(position).getImage());
         libraryNameTxt.setText(playListModelList.get(position).getPlayListName());
-        authTxt.setText(playListModelList.get(position).getPlayListName());
+        authTxt.setText(playListModelList.get(position).getUserName());
         return convertView;
     }
 
