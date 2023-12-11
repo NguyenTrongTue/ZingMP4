@@ -46,9 +46,6 @@ namespace ZINGMP4.Application.Service
             {
                 throw new Exception("Bài hát không tồn tại");
             }
-            
-
-
             await _playlistRepository.AddSongToPlaylistAsync(playlistConfigEntity);
 
             await _playlistRepository.UpdatePlaylistImageAsync(song.thumnail, playlistConfig.playlist_id);
@@ -72,8 +69,6 @@ namespace ZINGMP4.Application.Service
         public async Task<PlaylistResponseDto> GetPlaylistAsync(Guid playlist_id)
         {
             var res = await _playlistRepository.GetPlaylistAsync(playlist_id);
-
-
             var listSong = res.Select(item => new SongEntity()
             {
                 song_id = item.song_id,
