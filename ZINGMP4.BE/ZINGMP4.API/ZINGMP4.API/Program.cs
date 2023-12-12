@@ -4,10 +4,12 @@ using ZINGMP4.Application.Interface;
 using ZINGMP4.Application.Interface.Playlist;
 using ZINGMP4.Application.Interface.Song;
 using ZINGMP4.Application.Service;
+using ZINGMP4.Domain.Cache;
 using ZINGMP4.Domain.Interface;
 using ZINGMP4.Domain.Interface.Auth;
 using ZINGMP4.Domain.MISAException;
 using ZINGMP4.Domain.Resource;
+using ZINGMP4.Infrastructure.Cache;
 using ZINGMP4.Infrastructure.Repository;
 using ZINGMP4.Infrastructure.UnitOfWork;
 using ZINGMP4.Middleware;
@@ -53,6 +55,12 @@ namespace ZingMP4.API
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             var connectionString = builder.Configuration.GetConnectionString("MP4");
+            builder.Services.AddStackExchangeRedisCache(
+                options =>
+                {
+                    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+                    options.InstanceName = "CacheMP4_";
+                });
 
             builder.Services.AddScoped<IAuthService, AuthService>();
 
@@ -67,6 +75,7 @@ namespace ZingMP4.API
             builder.Services.AddScoped<IPlaylistService, PlaylistService>();
 
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IRedisCache, RedisCache>();
 
 
             builder.Services.AddScoped<IUnitOfWork>((provider => new UnitOfWork(connectionString)));
