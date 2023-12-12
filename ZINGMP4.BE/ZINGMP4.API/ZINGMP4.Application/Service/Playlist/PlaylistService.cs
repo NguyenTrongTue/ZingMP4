@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ZINGMP4.Application.Dto.Playlist;
 using ZINGMP4.Application.Interface.Playlist;
+using ZINGMP4.Domain.Cache;
 using ZINGMP4.Domain.Entity;
 using ZINGMP4.Domain.Interface;
 
@@ -11,13 +12,14 @@ namespace ZINGMP4.Application.Service
         private readonly IMapper _mapper;
         private readonly IPlaylistRepository _playlistRepository;
         private readonly ISongRepository _songRepository;
+        private readonly IRedisCache _redisCache;
 
-        public PlaylistService(IMapper mapper, IPlaylistRepository playlistRepository, ISongRepository songRepository)
+        public PlaylistService(IMapper mapper, IPlaylistRepository playlistRepository, ISongRepository songRepository, IRedisCache redisCache)
         {
             _mapper = mapper;
             _playlistRepository = playlistRepository;
             _songRepository = songRepository;
-
+            _redisCache = redisCache;
         }
 
         public async Task<PlaylistEntity> AddPlaylistAsync(PlaylistDto playlistDto)
@@ -42,7 +44,7 @@ namespace ZINGMP4.Application.Service
             };
 
             var song = await _songRepository.GetSongByIdAsync(playlistConfig.song_id);
-            if(song == null)
+            if (song == null)
             {
                 throw new Exception("Bài hát không tồn tại");
             }
@@ -68,24 +70,35 @@ namespace ZINGMP4.Application.Service
 
         public async Task<PlaylistResponseDto> GetPlaylistAsync(Guid playlist_id)
         {
-            var res = await _playlistRepository.GetPlaylistAsync(playlist_id);
-            var listSong = res.Select(item => new SongEntity()
+            string key = $"playlist_{playlist_id}";
+            var resultCache = await _redisCache.GetRecordAsync<PlaylistResponseDto>(key);
+
+            if (resultCache is null)
             {
-                song_id = item.song_id,
-                song_name = item.song_name,
-                singer_name = item.singer_name,
-                thumnail = item.thumnail,
-                link_song = item.link_song,
-                location = item.location,
-                number_of_listens = item.number_of_listens
-            }).ToList();
-            var result = new PlaylistResponseDto();
-            if(res.Count > 0)
-            {
-                result = _mapper.Map<PlaylistResponseDto>(res[0]);
-                result.song_entities = listSong;
+                var res = await _playlistRepository.GetPlaylistAsync(playlist_id);
+                var listSong = res.Select(item => new SongEntity()
+                {
+                    song_id = item.song_id,
+                    song_name = item.song_name,
+                    singer_name = item.singer_name,
+                    thumnail = item.thumnail,
+                    link_song = item.link_song,
+                    location = item.location,
+                    number_of_listens = item.number_of_listens
+                }).ToList();
+                var result = new PlaylistResponseDto();
+                if (res.Count > 0)
+                {
+                    result = _mapper.Map<PlaylistResponseDto>(res[0]);
+                    result.song_entities = listSong;
+                }
+
+                await _redisCache.SetRecordAsync<PlaylistResponseDto>(key, result);
+
+                return result;
             }
-            return result;
+
+            return resultCache;
 
         }
 
