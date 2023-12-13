@@ -1,5 +1,6 @@
 package com.monopoco.musicmp4.Activities;
 
+import static com.monopoco.musicmp4.Classes.ApplicationClass.ACTION_NEXT;
 import static com.monopoco.musicmp4.Classes.ApplicationClass.ACTION_PLAY;
 import static com.monopoco.musicmp4.Classes.ApplicationClass.ACTION_PREVIOUS;
 import static com.monopoco.musicmp4.Classes.ApplicationClass.CHANNEL_ID_2;
@@ -34,6 +35,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.monopoco.musicmp4.CallBack.ApiCallback;
 import com.monopoco.musicmp4.Fragments.HomeFragment;
 import com.monopoco.musicmp4.Fragments.MusicPlayerFragment;
 import com.monopoco.musicmp4.Models.SongModel;
@@ -159,9 +161,19 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void onSkipFwd() {
-        mediaPlayerService.nextSong();
-        setFragment(new MusicPlayerFragment(mediaPlayerService.getCurrentSong(), true));
-        showNotification(R.drawable.ic_pause);
+        mediaPlayerService.nextSong(new ApiCallback<SongModel>() {
+            @Override
+            public void onApiSuccess(SongModel S) {
+                setFragment(new MusicPlayerFragment(mediaPlayerService.getCurrentSong(), true));
+                showNotification(R.drawable.ic_pause);
+            }
+
+            @Override
+            public void onApiFailure(Throwable t) {
+
+            }
+        });
+
     }
 
     public void onSkipBack() {
@@ -193,7 +205,7 @@ public class PlayerActivity extends AppCompatActivity {
         PendingIntent pausePending = PendingIntent.getBroadcast(this, 0, pauseIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Intent nextIntent = new Intent(this, NotificationReceiver.class)
-                .setAction(ACTION_PREVIOUS);
+                .setAction(ACTION_NEXT);
         PendingIntent nextPending = PendingIntent.getBroadcast(this, 0, nextIntent, PendingIntent.FLAG_IMMUTABLE);
 
         byte[] picture = null;

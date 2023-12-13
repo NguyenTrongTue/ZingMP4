@@ -34,11 +34,14 @@ public interface DataService {
 
     @Headers({"Accept: application/json", "Content-Type: application/json"})
     @POST("Playlist/add_song_playlist")
-    Call<Integer> addSongToPlayList(@Body PlayListAddSongModel body);
+    Call<PlayListModel> addSongToPlayList(@Body PlayListAddSongModel body);
 
 
     @Headers({"Accept: application/json", "Content-Type: application/json"})
     @POST("Playlist/add_playlist")
-    Call<Integer> AddNewPlaylist(@Body NewPlaylistModel body);
+    Call<PlayListModel> AddNewPlaylist(@Body NewPlaylistModel body);
+
+    @GET("Song/get_song_by_random")
+    Call<SongModel> GetRandomSong();
 
 }

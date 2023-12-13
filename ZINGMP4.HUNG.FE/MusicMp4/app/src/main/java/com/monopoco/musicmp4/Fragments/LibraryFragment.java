@@ -163,18 +163,22 @@ public class LibraryFragment extends Fragment {
                 1,
                 true
         );
-        APIService.getService().AddNewPlaylist(newPlaylistModel).enqueue(new Callback<Integer>() {
+        APIService.getService().AddNewPlaylist(newPlaylistModel).enqueue(new Callback<PlayListModel>() {
             @Override
-            public void onResponse(Call<Integer> call, Response<Integer> response) {
+            public void onResponse(Call<PlayListModel> call, Response<PlayListModel> response) {
                 if (response.code() == 200) {
-
-                    Toast.makeText(getContext(), "New playlist successfully added", Toast.LENGTH_LONG).show();
+                    if (response.body() != null && response.body().getPlaylistId() != null) {
+                        Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                        intent.putExtra("playlistId", response.body().getPlaylistId());
+                        startActivity(intent);
+                        Toast.makeText(getContext(), "New playlist successfully added", Toast.LENGTH_LONG).show();
+                    }
                 }
 
             }
 
             @Override
-            public void onFailure(Call<Integer> call, Throwable t) {
+            public void onFailure(Call<PlayListModel> call, Throwable t) {
                 Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
             }
         });

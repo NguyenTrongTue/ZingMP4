@@ -19,8 +19,10 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.monopoco.musicmp4.Activities.PlayerActivity;
+import com.monopoco.musicmp4.CallBack.ApiCallback;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Requests.APIService;
 import com.monopoco.musicmp4.Utils.SongUtils;
 
 import java.io.IOException;
@@ -30,6 +32,10 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MediaPlayerService extends Service {
 
@@ -113,7 +119,6 @@ public class MediaPlayerService extends Service {
                 String actionName = intent.getStringExtra("ActionName");
                 switch (actionName) {
                     case "playPause":
-
                         callBack.playOrPauseClick();
                         break;
                     case "next":
@@ -182,15 +187,30 @@ public class MediaPlayerService extends Service {
 
     }
 
-    public void nextSong() {
+    public void nextSong(final ApiCallback<SongModel> apiCallback) {
         mediaPlayer.reset();
         if (currentIndexPlaying < listSong.size() - 1) {
             currentIndexPlaying += 1;
             startMusic(listSong.get(currentIndexPlaying));
         } else {
-//            listSong.add(SongModel.allSongFake.get(new Random().nextInt(SongModel.allSongFake.size())));
-            currentIndexPlaying += 1;
-            startMusic(listSong.get(currentIndexPlaying));
+            APIService.getService().GetRandomSong().enqueue(new Callback<SongModel>() {
+                @Override
+                public void onResponse(Call<SongModel> call, Response<SongModel> response) {
+                    if (response.code() == 200) {
+                        listSong.add(response.body());
+                        currentIndexPlaying += 1;
+                        startMusic(listSong.get(currentIndexPlaying));
+                        apiCallback.onApiSuccess(listSong.get(currentIndexPlaying));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SongModel> call, Throwable t) {
+                    playOrPauseMusic();
+                    apiCallback.onApiFailure(t);
+                }
+            });
+
         }
     }
 

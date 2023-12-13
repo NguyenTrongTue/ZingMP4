@@ -140,9 +140,9 @@ public class PlayListActivity extends AppCompatActivity {
 
             PlayListAddSongModel body = new PlayListAddSongModel(playListId, songId);
 
-            APIService.getService().addSongToPlayList(body).enqueue(new Callback<Integer>() {
+            APIService.getService().addSongToPlayList(body).enqueue(new Callback<PlayListModel>() {
                 @Override
-                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                public void onResponse(Call<PlayListModel> call, Response<PlayListModel> response) {
                     if (response.code() == 200) {
                         Toast.makeText(PlayListActivity.this, "Add song to playlist successful", Toast.LENGTH_LONG).show();
                         getDataToRecycleView();
@@ -150,7 +150,7 @@ public class PlayListActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<Integer> call, Throwable t) {
+                public void onFailure(Call<PlayListModel> call, Throwable t) {
                     Toast.makeText(PlayListActivity.this, "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
                 }
             });
