@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Notification;
@@ -93,10 +94,13 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void setFragment(Fragment fragment) {
         if (fragment instanceof MusicPlayerFragment) {
-            this.playerFragment = (MusicPlayerFragment) fragment;
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(frameLayout.getId(), this.playerFragment);
-            fragmentTransaction.commit();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (!fragmentManager.isDestroyed()) {
+                this.playerFragment = (MusicPlayerFragment) fragment;
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(frameLayout.getId(), this.playerFragment);
+                fragmentTransaction.commit();
+            }
         }
     }
 
@@ -226,8 +230,9 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID_2)
-                .setSmallIcon(playOrPauseBtn)
+                .setSmallIcon(R.drawable.ic_splash_logo)
                 .setLargeIcon(thumb)
+                .setContentIntent(contentIntent)
                 .setContentTitle(mediaPlayerService.getCurrentSong().getSongName())
                 .setContentText(mediaPlayerService.getCurrentSong().getSinger())
                 .addAction(R.drawable.ic_skip_back, "Previous", prevPending)

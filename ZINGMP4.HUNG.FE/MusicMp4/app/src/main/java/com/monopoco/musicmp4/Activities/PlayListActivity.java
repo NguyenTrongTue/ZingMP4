@@ -251,8 +251,10 @@ public class PlayListActivity extends AppCompatActivity {
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PlayListActivity.this, LinearLayoutManager.VERTICAL, false);
                             rclSong.setLayoutManager(linearLayoutManager);
                             rclSong.setAdapter(searchSongAdapter);
-                            if (playListModel.getSongModelList().size() > 0) {
+                            if (playListModel.getPlaylistImage() != null) {
                                 ImageUtils.setImageUrl(playListModel.getPlaylistImage(), playlistImage, PlayListActivity.this);
+                            } else {
+                                playlistImage.setImageResource(R.drawable.playlist_empty);
                             }
                             btnPlayPl.setOnClickListener(new View.OnClickListener() {
                                 @Override

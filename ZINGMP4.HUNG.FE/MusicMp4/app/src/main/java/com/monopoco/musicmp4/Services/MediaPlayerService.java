@@ -130,12 +130,31 @@ public class MediaPlayerService extends Service {
                         break;
                     case "repeat":
                         setRepeat(!isRepeat);
-                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
+                        if (isRepeat) {
+                            if (mediaPlayer.isPlaying()) {
+                                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp) {
+                                        startMusic(listSong.get(currentIndexPlaying));
+                                    }
+                                });
+                            } else {
                                 startMusic(listSong.get(currentIndexPlaying));
+                                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp) {
+                                        startMusic(listSong.get(currentIndexPlaying));
+                                    }
+                                });
                             }
-                        });
+                        } else {
+                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    callBack.onSkipFwd();
+                                }
+                            });
+                        }
                         break;
                 }
             }
@@ -159,6 +178,13 @@ public class MediaPlayerService extends Service {
                 throw new RuntimeException(e);
             }
 
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    callBack.onSkipFwd();
+                }
+            });
+
         } else {
             mediaPlayer.reset();
             Uri songUri = Uri.parse(SongUtils.getSongResource(songModel.getResource()));
@@ -174,6 +200,7 @@ public class MediaPlayerService extends Service {
             throw new RuntimeException(e);
         }
         mediaPlayer.start();
+
     }
 
     private void playOrPauseMusic() {
