@@ -14,6 +14,7 @@ namespace ZINGMP4.Application.Dto.Playlist
         public PlaybackMode playback_mode { get; set; } = PlaybackMode.Sequentially;
 
         public bool is_public { get; set; } = true;
+        public string playlist_image { get; set; } = string.Empty;
 
         public List<SongEntity> song_entities { get; set; } = new List<SongEntity>();
     }
