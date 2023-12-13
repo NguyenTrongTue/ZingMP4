@@ -7,6 +7,7 @@ using ZINGMP4.Domain.Interface;
 using ZINGMP4.Application.Helper;
 using ZINGMP4.Application.Request;
 using ZINGMP4.Domain.Model;
+using ZINGMP4.Domain.Cache;
 
 namespace ZINGMP4.Application.Service
 {
@@ -15,15 +16,17 @@ namespace ZINGMP4.Application.Service
         #region Fields
         private readonly IConfiguration _configuration;
         private readonly ISongRepository _songRepository;
+        private readonly IRedisCache _redisCache;
         #endregion
 
 
         #region Constructor
-        public SongService(IConfiguration configuration, ISongRepository songRepository)
+        public SongService(IConfiguration configuration, ISongRepository songRepository, IRedisCache redisCache)
         {
             _configuration = configuration;
             _songRepository = songRepository;
-        } 
+            _redisCache = redisCache;
+        }
         #endregion
 
         #region Functions
@@ -50,9 +53,19 @@ namespace ZINGMP4.Application.Service
 
         public async Task<List<SongEntity>> GetTrendingAsync()
         {
-            var res = await _songRepository.GetTrendingAsync();
+            string key = "trending";
 
-            return res;
+            var result = await _redisCache.GetDataAsync<SongEntity>(key);
+
+            if (result is null || result.Count == 0)
+            {
+                var res = await _songRepository.GetTrendingAsync();
+
+                await _redisCache.SetDataAsync<SongEntity>(key, res);
+
+                return res;
+            } 
+            return result;
         }
 
         public async Task<List<SongEntity>> SearchSongAsync(FilterSongRequest request)
@@ -141,7 +154,7 @@ namespace ZINGMP4.Application.Service
 
         public async Task<SongModal> LikeSong(Guid song_id, Guid user_id)
         {
-           var song =  await _songRepository.LikeSong(song_id, user_id);
+            var song = await _songRepository.LikeSong(song_id, user_id);
 
             return song;
         }
