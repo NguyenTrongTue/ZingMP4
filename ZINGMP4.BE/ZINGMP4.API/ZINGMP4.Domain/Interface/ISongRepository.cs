@@ -35,5 +35,7 @@ namespace ZINGMP4.Domain.Interface
         Task<SongEntity> GetSongByRandomAsync();
 
         Task<SongEntity> GetSongByIdAsync(Guid song_id);
+
+        Task<List<SongEntity>> GetSongLikedByUserAsync(Guid user_id);
     }
 }

@@ -53,6 +53,8 @@ namespace ZINGMP4.Infrastructure.Repository
 
             return song;
         }
+
+
         #endregion
 
         #region Functions
@@ -112,6 +114,17 @@ namespace ZINGMP4.Infrastructure.Repository
             await _unitOfWork.Connection.ExecuteAsync(sql, param, commandType: CommandType.Text);
         }
 
+
+        public async Task<List<SongEntity>> GetSongLikedByUserAsync(Guid user_id)
+        {
+            var param = new DynamicParameters();
+
+            param.Add("p_user_id", user_id);
+            var sql = "select * from public.song where song_id in (select lsc.song_id from public.liked_song_config lsc where lsc.user_id = @p_user_id);";
+            var res = await _unitOfWork.Connection.QueryAsync<SongEntity>(sql, param);
+
+            return res.ToList();
+        }
         #endregion
     }
 }
