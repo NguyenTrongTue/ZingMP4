@@ -1,5 +1,6 @@
 package com.monopoco.musicmp4.Services;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.Notification;
@@ -10,6 +11,7 @@ import android.database.Cursor;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -113,7 +115,6 @@ public class MediaPlayerService extends Service {
                 }
             }
 
-            Log.e("monopoco", String.valueOf(callBack == null));
 
             if (intent.getStringExtra("ActionName") != null && callBack != null) {
                 String actionName = intent.getStringExtra("ActionName");
@@ -126,6 +127,15 @@ public class MediaPlayerService extends Service {
                         break;
                     case "previous":
                         callBack.onSkipBack();
+                        break;
+                    case "repeat":
+                        setRepeat(!isRepeat);
+                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                startMusic(listSong.get(currentIndexPlaying));
+                            }
+                        });
                         break;
                 }
             }
@@ -192,6 +202,7 @@ public class MediaPlayerService extends Service {
         if (currentIndexPlaying < listSong.size() - 1) {
             currentIndexPlaying += 1;
             startMusic(listSong.get(currentIndexPlaying));
+            apiCallback.onApiSuccess(listSong.get(currentIndexPlaying));
         } else {
             APIService.getService().GetRandomSong().enqueue(new Callback<SongModel>() {
                 @Override
@@ -245,4 +256,5 @@ public class MediaPlayerService extends Service {
     public void setCallBack(PlayerActivity activity) {
         this.callBack = activity;
     }
+
 }

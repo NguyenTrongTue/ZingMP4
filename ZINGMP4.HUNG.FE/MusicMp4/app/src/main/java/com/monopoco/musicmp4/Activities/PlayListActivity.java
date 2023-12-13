@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import com.monopoco.musicmp4.Requests.DataService;
 import com.monopoco.musicmp4.Utils.ImageUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -68,6 +70,8 @@ public class PlayListActivity extends AppCompatActivity {
     private ImageView playlistImage;
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
+
+    private FloatingActionButton btnPlayPl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +112,7 @@ public class PlayListActivity extends AppCompatActivity {
 
 
 
-        FloatingActionButton btnPlayPl = findViewById(R.id.btn_play_pl);
+        btnPlayPl = findViewById(R.id.btn_play_pl);
 
         getDataToRecycleView();
 
@@ -248,8 +252,16 @@ public class PlayListActivity extends AppCompatActivity {
                             rclSong.setLayoutManager(linearLayoutManager);
                             rclSong.setAdapter(searchSongAdapter);
                             if (playListModel.getSongModelList().size() > 0) {
-                                ImageUtils.setImageUrl(playListModel.getSongModelList().get(0).getImageUrl(), playlistImage, PlayListActivity.this);
+                                ImageUtils.setImageUrl(playListModel.getPlaylistImage(), playlistImage, PlayListActivity.this);
                             }
+                            btnPlayPl.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(v.getContext(), PlayerActivity.class);
+                                    intent.putExtra("songsInfo",new ArrayList<SongModel>( playListModel.getSongModelList()));
+                                    v.getContext().startActivity(intent);
+                                }
+                            });
                         }
                     }
                     if (playListModel != null) {

@@ -183,11 +183,14 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void onRepeatClick(View repeatBtn) {
+        Intent serviceIntent = new Intent(this, MediaPlayerService.class);
         if (mediaPlayerService.getRepeat()) {
-            mediaPlayerService.setRepeat(false);
+            serviceIntent.putExtra("ActionName", "repeat");
+            startService(serviceIntent);
             ((ImageView)repeatBtn).setImageResource(R.drawable.ic_repeat);
         } else {
-            mediaPlayerService.setRepeat(true);
+            serviceIntent.putExtra("ActionName", "repeat");
+            startService(serviceIntent);
             ((ImageView)repeatBtn).setImageResource(R.drawable.ic_repeat_active);
         }
     }
