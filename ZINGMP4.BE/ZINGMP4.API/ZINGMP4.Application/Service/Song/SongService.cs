@@ -194,6 +194,13 @@ namespace ZINGMP4.Application.Service
             return newSong;
 
         }
+
+        public async Task<List<SongEntity>> GetSongLikedByUserAsync(Guid user_id)
+        {
+            var result = await _songRepository.GetSongLikedByUserAsync(user_id);
+
+            return result;
+        }
         #endregion
     }
 }
