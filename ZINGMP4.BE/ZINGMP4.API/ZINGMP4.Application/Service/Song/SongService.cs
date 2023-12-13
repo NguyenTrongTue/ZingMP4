@@ -169,7 +169,28 @@ namespace ZINGMP4.Application.Service
         {
             var result = await _songRepository.GetSongByRandomAsync();
 
-            return result;
+            string key = "random_song";
+
+            var preSong = new SongEntity();
+
+            var newSong = new SongEntity();
+
+            var cacheSong = await _redisCache.GetRecordAsync<SongEntity>(key);
+
+            if (cacheSong != null)
+            {
+                preSong = cacheSong;
+            }
+
+
+            do
+            {
+                newSong = await _songRepository.GetSongByRandomAsync();
+            } while (preSong != null && newSong.song_id == preSong.song_id);
+
+            await _redisCache.SetRecordAsync<SongEntity>(key, newSong);
+            
+            return newSong;
 
         }
         #endregion
