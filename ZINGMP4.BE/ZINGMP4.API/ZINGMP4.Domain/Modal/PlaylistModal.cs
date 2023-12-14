@@ -14,6 +14,8 @@ namespace ZINGMP4.Domain.Modal
 
         public PlaybackMode playback_mode { get; set; } = PlaybackMode.Sequentially;
 
+        public string playlist_image { get; set; } = string.Empty;
+
         public bool is_public { get; set; } = true;
         public Guid song_id { get; set; } = Guid.Empty;
 

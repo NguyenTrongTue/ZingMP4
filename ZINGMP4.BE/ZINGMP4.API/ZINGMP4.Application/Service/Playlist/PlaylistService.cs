@@ -47,9 +47,13 @@ namespace ZINGMP4.Application.Service
             }
             await _playlistRepository.AddSongToPlaylistAsync(playlistConfigEntity);
 
-            await _playlistRepository.UpdatePlaylistImageAsync(song.thumnail, playlistConfig.playlist_id);
+            var playlist = await this.GetPlaylistAsync(playlistConfig.playlist_id);
 
+            if(playlist.playlist_image is null)
+            {
 
+                await _playlistRepository.UpdatePlaylistImageAsync(song.thumnail, playlistConfig.playlist_id);
+            }
         }
 
         public async Task DeleteSongToPlaylistAsync(PlaylistConfigDto playlistConfig)
