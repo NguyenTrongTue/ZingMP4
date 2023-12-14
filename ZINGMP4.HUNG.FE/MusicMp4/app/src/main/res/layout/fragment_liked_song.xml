@@ -14,19 +14,26 @@ tools:context=".Fragments.LikedSongFragment">
     android:paddingLeft="70px"
     android:textColor="@color/white"/>
 
-    <GridView
-        android:layout_marginTop="30dp"
-        android:paddingLeft="70px"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/liked_reload"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/like_song_grid_view"
-        android:verticalSpacing="70px"
-        android:horizontalSpacing="70px"
-        android:paddingRight="70px"
-        android:layout_marginBottom="70px"
-        android:scrollbars="none"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"/>
+        android:paddingTop="30dp"
+        android:layout_height="match_parent">
+        <GridView
+            android:layout_marginTop="30dp"
+            android:paddingLeft="70px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/like_song_grid_view"
+            android:verticalSpacing="70px"
+            android:horizontalSpacing="70px"
+            android:paddingRight="70px"
+            android:layout_marginBottom="70px"
+            android:scrollbars="none"
+            android:numColumns="2"
+            android:stretchMode="columnWidth"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 

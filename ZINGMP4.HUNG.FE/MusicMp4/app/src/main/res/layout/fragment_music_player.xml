@@ -66,22 +66,34 @@
         android:textSize="35dp"
         android:textFontWeight="700"
         android:ellipsize="marquee"/>
-    <TextView
-        android:id="@+id/singer_name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Singer"
-        android:scrollHorizontally="true"
-        android:focusable="true"
-        android:singleLine="true"
-        android:textFontWeight="100"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:focusableInTouchMode="true"
-        android:textColor="@color/singer_name_color"
-        android:maxLines="1"
-        android:gravity="center_vertical"
-        android:textSize="23dp"
-        android:ellipsize="marquee"/>
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/singer_name"
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="wrap_content"
+            android:text="Singer"
+            android:scrollHorizontally="true"
+            android:focusable="true"
+            android:singleLine="true"
+            android:textFontWeight="100"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/singer_name_color"
+            android:maxLines="1"
+            android:gravity="center_vertical"
+            android:textSize="23dp"
+            android:ellipsize="marquee"/>
+        <ImageView
+            android:id="@+id/ic_liked_hear"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="fitXY"
+            />
+    </LinearLayout>
 
     <SeekBar
         android:id="@+id/music_seekbar"

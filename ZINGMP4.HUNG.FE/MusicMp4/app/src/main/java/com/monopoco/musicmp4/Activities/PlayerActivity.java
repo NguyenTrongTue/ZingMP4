@@ -78,6 +78,7 @@ public class PlayerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         songModels = (ArrayList<SongModel>) getIntent().getSerializableExtra("songsInfo");
+
         frameLayout = findViewById(R.id.player_frame_layout);
         startService();
         Intent intent = new Intent(this, MediaPlayerService.class);
@@ -107,6 +108,9 @@ public class PlayerActivity extends AppCompatActivity {
     public void startService() {
         Intent intent = new Intent(this, MediaPlayerService.class);
         intent.putExtra("songs", songModels);
+        if (getIntent().getSerializableExtra("clear") != null ) {
+            intent.putExtra("clear", getIntent().getSerializableExtra("clear"));
+        }
         startService(intent);
     }
 

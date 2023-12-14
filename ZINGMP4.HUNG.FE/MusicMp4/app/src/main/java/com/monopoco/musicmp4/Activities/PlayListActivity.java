@@ -261,6 +261,7 @@ public class PlayListActivity extends AppCompatActivity {
                                 public void onClick(View v) {
                                     Intent intent = new Intent(v.getContext(), PlayerActivity.class);
                                     intent.putExtra("songsInfo",new ArrayList<SongModel>( playListModel.getSongModelList()));
+                                    intent.putExtra("clear", true);
                                     v.getContext().startActivity(intent);
                                 }
                             });

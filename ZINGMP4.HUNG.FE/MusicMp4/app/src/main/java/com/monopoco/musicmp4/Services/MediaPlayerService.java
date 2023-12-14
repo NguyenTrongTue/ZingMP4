@@ -100,6 +100,11 @@ public class MediaPlayerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
+            if (bundle.get("clear") != null) {
+                if ((Boolean) bundle.get("clear")) {
+                    listSong = new ArrayList<>();
+                }
+            }
             if (bundle.get("songs") != null) {
                 if (listSong.size() > 0) {
                     listSong.removeAll(listSong.subList(currentIndexPlaying + 1, listSong.size()));

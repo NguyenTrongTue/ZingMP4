@@ -35,14 +35,20 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
 import com.monopoco.musicmp4.Receiver.NotificationReceiver;
+import com.monopoco.musicmp4.Requests.APIService;
 import com.monopoco.musicmp4.Utils.ImageUtils;
 
 import java.io.ByteArrayOutputStream;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MusicPlayerFragment extends Fragment {
 
@@ -80,6 +86,8 @@ public class MusicPlayerFragment extends Fragment {
 
     private MediaSessionCompat mediaSessionCompat;
 
+    private ImageView likedHear;
+
     public MusicPlayerFragment(SongModel songModel, boolean isPlaying) {
         this.songModel = songModel;
         this.isPlaying = isPlaying;
@@ -116,6 +124,7 @@ public class MusicPlayerFragment extends Fragment {
         mSeekbar = view.findViewById(R.id.music_seekbar);
         mTimeFrom = view.findViewById(R.id.music_time_from);
         mTimeEnd = view.findViewById(R.id.music_time_end);
+        likedHear = view.findViewById(R.id.ic_liked_hear);
         initValue(view);
         skipFwdButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +190,45 @@ public class MusicPlayerFragment extends Fragment {
 
     public void initValue(View view) {
         if (view != null) {
+            APIService.getService().CheckLikedSong("4e0907f7-c69f-47eb-9bad-140357181195", getSongModel().getId()).enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if (response.code() == 200) {
+                        if (response.body()) {
+                            likedHear.setImageResource(R.drawable.full_hear);
+
+                        } else {
+                            likedHear.setImageResource(R.drawable.empty_hear);
+                            likedHear.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    APIService.getService().LikedSong("4e0907f7-c69f-47eb-9bad-140357181195", getSongModel().getId())
+                                            .enqueue(new Callback<Object>() {
+                                                @Override
+                                                public void onResponse(Call<Object> call, Response<Object> response) {
+                                                    if (response.code() == 200) {
+                                                        likedHear.setImageResource(R.drawable.full_hear);
+                                                        Toast.makeText(getContext(), "Add song to playlist successfully", Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<Object> call, Throwable t) {
+                                                    Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+
+                }
+            });
 //            songImageView.setImageResource(songModel.getImage());
             ImageUtils.setImageUrl(songModel.getImageUrl(), songImageView, getContext());
             Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);

@@ -44,4 +44,13 @@ public interface DataService {
     @GET("Song/get_song_by_random")
     Call<SongModel> GetRandomSong();
 
+    @GET("Song/get_song_liked_by_user")
+    Call<List<SongModel>> GetLikedSongByUser(@Query("user_id") String userId);
+
+    @GET("Song/is_liked_song")
+    Call<Boolean> CheckLikedSong(@Query("user_id") String userId, @Query("song_id") String songId);
+
+    @GET("Song/like_song")
+    Call<Object> LikedSong(@Query("user_id") String userId, @Query("song_id") String songId);
+
 }
