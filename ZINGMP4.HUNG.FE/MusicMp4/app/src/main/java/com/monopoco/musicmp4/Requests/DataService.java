@@ -1,20 +1,26 @@
 package com.monopoco.musicmp4.Requests;
 
+import com.monopoco.musicmp4.Models.LoginModel;
 import com.monopoco.musicmp4.Models.NewPlaylistModel;
 import com.monopoco.musicmp4.Models.PlayListAddSongModel;
 import com.monopoco.musicmp4.Models.PlayListModel;
+import com.monopoco.musicmp4.Models.RegisterModel;
 import com.monopoco.musicmp4.Models.SearchModel;
 import com.monopoco.musicmp4.Models.SongModel;
+import com.monopoco.musicmp4.Models.UserModel;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface DataService {
@@ -53,4 +59,15 @@ public interface DataService {
     @GET("Song/like_song")
     Call<Object> LikedSong(@Query("user_id") String userId, @Query("song_id") String songId);
 
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("User/login")
+    Call<UserModel> Login(@Body LoginModel body);
+
+//    @Headers({"Accept: application/json", "Content-Type: multipart/form-data"})
+    @Multipart
+    @POST("User/register")
+    Call<UserModel> Register(@Part("username") RequestBody username, @Part("password") RequestBody password, @Part("email") RequestBody email);
+
+    @GET("User/get_new_password")
+    Call<Object> GetNewPassword(@Query("email") String email);
 }

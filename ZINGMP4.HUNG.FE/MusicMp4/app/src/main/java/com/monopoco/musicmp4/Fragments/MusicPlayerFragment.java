@@ -37,6 +37,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
@@ -45,6 +47,7 @@ import com.monopoco.musicmp4.Requests.APIService;
 import com.monopoco.musicmp4.Utils.ImageUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -199,28 +202,37 @@ public class MusicPlayerFragment extends Fragment {
 
                         } else {
                             likedHear.setImageResource(R.drawable.empty_hear);
-                            likedHear.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    APIService.getService().LikedSong("4e0907f7-c69f-47eb-9bad-140357181195", getSongModel().getId())
-                                            .enqueue(new Callback<Object>() {
-                                                @Override
-                                                public void onResponse(Call<Object> call, Response<Object> response) {
-                                                    if (response.code() == 200) {
+                        }
+                        likedHear.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                APIService.getService().LikedSong("4e0907f7-c69f-47eb-9bad-140357181195", getSongModel().getId())
+                                        .enqueue(new Callback<Object>() {
+                                            @Override
+                                            public void onResponse(Call<Object> call, Response<Object> response) {
+                                                if (response.code() == 200) {
+                                                    Gson gson = new Gson();
+                                                    String json = gson.toJson(response.body());
+                                                    Map<String, Object> map = gson.fromJson(json, new TypeToken<Map<String, Object>>() {}.getType());
+                                                    if ((Boolean) map.get("is_liked")) {
+                                                        likedHear.setImageResource(R.drawable.empty_hear);
+                                                        Toast.makeText(getContext(), "Remove song from liked list successfully", Toast.LENGTH_LONG).show();
+                                                    } else {
                                                         likedHear.setImageResource(R.drawable.full_hear);
-                                                        Toast.makeText(getContext(), "Add song to playlist successfully", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(getContext(), "Add song to liked list successfully", Toast.LENGTH_LONG).show();
                                                     }
                                                 }
+                                            }
 
-                                                @Override
-                                                public void onFailure(Call<Object> call, Throwable t) {
-                                                    Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
+                                            @Override
+                                            public void onFailure(Call<Object> call, Throwable t) {
+                                                Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
 
-                                }
-                            });
-                        }
+                            }
+                        });
+
                     }
                 }
 

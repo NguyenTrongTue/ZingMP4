@@ -103,6 +103,7 @@ public class MediaPlayerService extends Service {
             if (bundle.get("clear") != null) {
                 if ((Boolean) bundle.get("clear")) {
                     listSong = new ArrayList<>();
+                    currentIndexPlaying = -1;
                 }
             }
             if (bundle.get("songs") != null) {

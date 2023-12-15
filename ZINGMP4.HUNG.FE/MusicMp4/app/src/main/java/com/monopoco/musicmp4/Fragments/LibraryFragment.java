@@ -3,6 +3,7 @@ package com.monopoco.musicmp4.Fragments;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import com.monopoco.musicmp4.Activities.PlayListActivity;
 import com.monopoco.musicmp4.Activities.PlayerActivity;
+import com.monopoco.musicmp4.Activities.SignInActivity;
 import com.monopoco.musicmp4.Adapters.GridAdapter;
 import com.monopoco.musicmp4.Adapters.LibraryAdapter;
 import com.monopoco.musicmp4.Models.NewPlaylistModel;
@@ -54,11 +56,21 @@ public class LibraryFragment extends Fragment {
 
     private List<PlayListModel> playListModelList;
 
+    private SharedPreferences sp;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_library, container, false);
+
+        sp= getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        Boolean isLogin = Boolean.valueOf(sp.getString("isLogin", null));
+        if (!isLogin) {
+            Intent intent = new Intent(getContext(), SignInActivity.class);
+            startActivity(intent);
+        }
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
 
@@ -123,65 +135,73 @@ public class LibraryFragment extends Fragment {
 
         List<PlayListModel> playListModels = new ArrayList<>();
 
-        String userID = "4e0907f7-c69f-47eb-9bad-140357181195";
-        APIService.getService().GetPlayListOfUser(userID).enqueue(new Callback<List<PlayListModel>>() {
-            @Override
-            public void onResponse(Call<List<PlayListModel>> call, Response<List<PlayListModel>> response) {
-                if (response.body() != null) {
-                    playListModels.addAll(response.body());
-                    playListModelList = playListModels;
+//        String userID = "4e0907f7-c69f-47eb-9bad-140357181195";
+        String userID = sp.getString("userId", null);
+        if (userID != null) {
+            APIService.getService().GetPlayListOfUser(userID).enqueue(new Callback<List<PlayListModel>>() {
+                @Override
+                public void onResponse(Call<List<PlayListModel>> call, Response<List<PlayListModel>> response) {
+                    if (response.body() != null) {
+                        playListModels.addAll(response.body());
+                        playListModelList = playListModels;
 
-                    libraryAdapter = new LibraryAdapter(playListModelList, getContext());
-                    gridView.setAdapter(libraryAdapter);
-                    gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent intent = new Intent(getActivity(), PlayListActivity.class);
-                            intent.putExtra("playlistId", playListModelList.get(position).getPlaylistId());
-                            startActivity(intent);
+                        libraryAdapter = new LibraryAdapter(playListModelList, getContext());
+                        gridView.setAdapter(libraryAdapter);
+                        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                                intent.putExtra("playlistId", playListModelList.get(position).getPlaylistId());
+                                startActivity(intent);
+                            }
+                        });
+                        if (swipeRefreshLayout.isRefreshing()) {
+                            swipeRefreshLayout.setRefreshing(false);
                         }
-                    });
-                    if (swipeRefreshLayout.isRefreshing()) {
-                        swipeRefreshLayout.setRefreshing(false);
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<PlayListModel>> call, Throwable t) {
-                Log.e("monopoco", "Call get playlist Error");
-                Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<List<PlayListModel>> call, Throwable t) {
+                    Log.e("monopoco", "Call get playlist Error");
+                    Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
     }
 
     private void addNewPlaylist(String playlistName) {
-        NewPlaylistModel newPlaylistModel = new NewPlaylistModel(
-                "4e0907f7-c69f-47eb-9bad-140357181195",
-                playlistName,
-                1,
-                true
-        );
-        APIService.getService().AddNewPlaylist(newPlaylistModel).enqueue(new Callback<PlayListModel>() {
-            @Override
-            public void onResponse(Call<PlayListModel> call, Response<PlayListModel> response) {
-                if (response.code() == 200) {
-                    if (response.body() != null && response.body().getPlaylistId() != null) {
-                        Intent intent = new Intent(getActivity(), PlayListActivity.class);
-                        intent.putExtra("playlistId", response.body().getPlaylistId());
-                        startActivity(intent);
-                        Toast.makeText(getContext(), "New playlist successfully added", Toast.LENGTH_LONG).show();
+
+        String userID = sp.getString("userId", null);
+        if (userID != null) {
+            NewPlaylistModel newPlaylistModel = new NewPlaylistModel(
+                    userID,
+                    playlistName,
+                    1,
+                    true
+            );
+            APIService.getService().AddNewPlaylist(newPlaylistModel).enqueue(new Callback<PlayListModel>() {
+                @Override
+                public void onResponse(Call<PlayListModel> call, Response<PlayListModel> response) {
+                    if (response.code() == 200) {
+                        if (response.body() != null && response.body().getPlaylistId() != null) {
+                            Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                            intent.putExtra("playlistId", response.body().getPlaylistId());
+                            startActivity(intent);
+                            Toast.makeText(getContext(), "New playlist successfully added", Toast.LENGTH_LONG).show();
+                        }
                     }
+
                 }
 
-            }
+                @Override
+                public void onFailure(Call<PlayListModel> call, Throwable t) {
+                    Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
-            @Override
-            public void onFailure(Call<PlayListModel> call, Throwable t) {
-                Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
 

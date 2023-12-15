@@ -1,6 +1,7 @@
 package com.monopoco.musicmp4.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,8 +10,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,19 +52,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private NavigationView navigationView;
 
-    private FirebaseAuth mAuth;
 
     private SearchView searchView;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e("monopoco", "Return2");
         super.onCreate(savedInstanceState);
-
-
-
-//        getSupportActionBar().hide();
-        mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() == null) {
+        SharedPreferences sp= getSharedPreferences("Login", Context.MODE_PRIVATE);
+        Boolean isLogin = Boolean.valueOf(sp.getString("isLogin", null));
+        if (!isLogin) {
             Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
         }
@@ -80,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        mAuth = FirebaseAuth.getInstance();
 
         frameLayout = findViewById(R.id.main_frame_layout);
         if (savedInstanceState == null) {
@@ -117,12 +119,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_home) {
             toFragment = new HomeFragment();
         } else if (id == R.id.nav_profile) {
-//            mAuth.signOut();
             toFragment = new ProfileFragment();
         } else if (id == R.id.nav_liked_song) {
             toFragment = new LikedSongFragment();
         } else if (id == R.id.nav_logout) {
-            mAuth.signOut();
+            SharedPreferences sp= getSharedPreferences("Login", Context.MODE_PRIVATE);
+            SharedPreferences.Editor Ed=sp.edit();
+            Ed.putString("isLogin", "false" );
+            Ed.remove("userId");
+            Ed.commit();
             Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
             return true;
