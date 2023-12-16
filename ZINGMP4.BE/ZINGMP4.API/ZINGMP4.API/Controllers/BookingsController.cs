@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQ;
 using ZINGMP4.API.Model;
-using ZINGMP4.API.Service;
 
 namespace ZINGMP4.API.Controllers
 {

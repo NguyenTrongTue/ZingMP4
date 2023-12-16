@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RabbitMQ\RabbitMQ.csproj" />
     <ProjectReference Include="..\ZINGMP4.Application\ZINGMP4.Application.csproj" />
     <ProjectReference Include="..\ZINGMP4.Infrastructure\ZINGMP4.Infrastructure.csproj" />
   </ItemGroup>

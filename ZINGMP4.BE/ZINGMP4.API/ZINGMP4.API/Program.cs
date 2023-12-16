@@ -1,6 +1,6 @@
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
-using ZINGMP4.API.Service;
+using RabbitMQ;
 using ZINGMP4.Application.Interface;
 using ZINGMP4.Application.Interface.Playlist;
 using ZINGMP4.Application.Interface.Song;

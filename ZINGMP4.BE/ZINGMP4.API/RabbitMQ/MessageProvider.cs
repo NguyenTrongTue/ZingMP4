@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Connections;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 
-namespace ZINGMP4.API.Service
+namespace RabbitMQ
 {
     public class MessageProvider : IMessagerProvider
     {
