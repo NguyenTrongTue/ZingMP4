@@ -1,4 +1,4 @@
-﻿namespace ZINGMP4.API.Service
+﻿namespace RabbitMQ
 {
     public interface IMessagerProvider
     {
