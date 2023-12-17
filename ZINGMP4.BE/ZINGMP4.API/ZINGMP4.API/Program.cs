@@ -1,5 +1,6 @@
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQ;
 using ZINGMP4.Application.Interface;
 using ZINGMP4.Application.Interface.Playlist;
 using ZINGMP4.Application.Interface.Song;
@@ -76,6 +77,8 @@ namespace ZingMP4.API
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IRedisCache, RedisCache>();
+
+            builder.Services.AddScoped<IMessagerProvider, MessageProvider>();
 
 
             builder.Services.AddScoped<IUnitOfWork>((provider => new UnitOfWork(connectionString)));

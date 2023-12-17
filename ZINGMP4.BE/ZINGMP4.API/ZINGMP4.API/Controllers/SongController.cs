@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ZINGMP4.Application.Dto.Song;
+using RabbitMQ;
 using ZINGMP4.Application.Interface.Song;
 using ZINGMP4.Application.Request;
+using ZINGMP4.Domain.Entity;
 
 namespace ZINGMP4.API.Controllers
 {
@@ -11,10 +12,14 @@ namespace ZINGMP4.API.Controllers
     {
         #region Fields
         private readonly ISongInterface _songInterface;
+        private readonly ILogger<SongController> _logger;
+        private readonly IMessagerProvider _messagerProvider;
         #endregion
-        public SongController(ISongInterface songInterface)
+        public SongController(ISongInterface songInterface, ILogger<SongController> logger, IMessagerProvider messagerProvider)
         {
             _songInterface = songInterface;
+            _logger = logger;
+            _messagerProvider = messagerProvider;
         }
         /// <summary>
         /// Hàm thêm bài hát 
@@ -29,6 +34,8 @@ namespace ZINGMP4.API.Controllers
             try
             {
                 var result = await _songInterface.AddSong(file);
+
+                _messagerProvider.SendingMessage<SongEntity>(result);                
                 return Ok(result);
             }
             catch (Exception ex)

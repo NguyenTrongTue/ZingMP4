@@ -11,13 +11,13 @@ namespace ZINGMP4.Infrastructure.Repository
     public class PlaylistRepository : BaseRepository<PlaylistEntity>, IPlaylistRepository
     {
         #region Properties
-        private readonly IUnitOfWork _unitOfWork; 
+        private readonly IUnitOfWork _unitOfWork;
         #endregion
         #region Constructor
         public PlaylistRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
-        } 
+        }
         #endregion
         #region Functions
         public async Task AddSongToPlaylistAsync(PlaylistConfigEntity entity)
@@ -33,6 +33,21 @@ namespace ZINGMP4.Infrastructure.Repository
             var sql = "insert into public.playlist_config(playlist_config_id,playlist_id, song_id) values(@playlist_config_id,@playlist_id, @song_id);";
 
             await _unitOfWork.Connection.ExecuteAsync(sql, param);
+        }
+
+        public async Task<bool> CheckSongExistsInPlaylistAsycn(Guid song_id, Guid playlist_id)
+        {
+            var param = new DynamicParameters();
+
+            param.Add("song_id", song_id);
+
+            param.Add("playlist_id", playlist_id);
+
+            var sql = "select * from  public.playlist_config where song_id = @song_id and playlist_id = playlist_id;";
+
+            var result = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<PlaylistConfigEntity>(sql, param);
+
+            return result == null ? false : true;
         }
 
         public async Task DeleteSongToPlaylistAsync(PlaylistConfigEntity entity)
@@ -81,7 +96,7 @@ namespace ZINGMP4.Infrastructure.Repository
 
             var functionName = "update public.playlist set playlist_image = @p_image where playlist_id = @p_playlist_id";
 
-           await _unitOfWork.Connection.ExecuteAsync(functionName, param);
+            await _unitOfWork.Connection.ExecuteAsync(functionName, param);
         }
         #endregion
     }

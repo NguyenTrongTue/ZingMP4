@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RabbitMQ\RabbitMQ.csproj" />
     <ProjectReference Include="..\ZINGMP4.Application\ZINGMP4.Application.csproj" />
     <ProjectReference Include="..\ZINGMP4.Infrastructure\ZINGMP4.Infrastructure.csproj" />
   </ItemGroup>

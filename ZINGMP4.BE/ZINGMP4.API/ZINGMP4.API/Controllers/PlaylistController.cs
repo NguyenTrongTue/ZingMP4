@@ -93,7 +93,7 @@ namespace ZINGMP4.API.Controllers
         {
             try
             {
-               var result =   await _playlistService.GetPlaylistAsync(playlist_id);
+                var result = await _playlistService.GetPlaylistAsync(playlist_id);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -114,6 +114,21 @@ namespace ZINGMP4.API.Controllers
             try
             {
                 var result = await _playlistService.GetPlaylistByUserAsync(user_id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        [HttpGet("check_song_exists_in_playlist")]
+        public async Task<IActionResult> CheckSongExistsInPlaylist(Guid song_id, Guid playlist_id)
+        {
+            try
+            {
+                var result = await _playlistService.CheckSongExistsInPlaylistAsycn(song_id, playlist_id);
                 return Ok(result);
             }
             catch (Exception ex)

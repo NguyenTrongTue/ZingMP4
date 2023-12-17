@@ -38,6 +38,8 @@ namespace ZINGMP4.Application.Interface.Playlist
 
         Task<List<PlaylistEntity>> GetPlaylistByUserAsync(Guid user_id);
 
+        Task<bool> CheckSongExistsInPlaylistAsycn(Guid song_id,  Guid playlist_id);
+
 
     }
 }

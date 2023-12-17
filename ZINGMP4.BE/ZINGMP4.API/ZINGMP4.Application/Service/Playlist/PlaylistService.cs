@@ -49,11 +49,18 @@ namespace ZINGMP4.Application.Service
 
             var playlist = await this.GetPlaylistAsync(playlistConfig.playlist_id);
 
-            if(playlist.playlist_image is null)
+            if (playlist.playlist_image is null)
             {
 
                 await _playlistRepository.UpdatePlaylistImageAsync(song.thumnail, playlistConfig.playlist_id);
             }
+        }
+
+        public async Task<bool> CheckSongExistsInPlaylistAsycn(Guid song_id, Guid playlist_id)
+        {
+            var result = await  _playlistRepository.CheckSongExistsInPlaylistAsycn(song_id, playlist_id);
+
+            return result;
         }
 
         public async Task DeleteSongToPlaylistAsync(PlaylistConfigDto playlistConfig)
@@ -73,21 +80,31 @@ namespace ZINGMP4.Application.Service
         {
 
             var res = await _playlistRepository.GetPlaylistAsync(playlist_id);
-            var listSong = res.Select(item => new SongEntity()
-            {
-                song_id = item.song_id,
-                song_name = item.song_name,
-                singer_name = item.singer_name,
-                thumnail = item.thumnail,
-                link_song = item.link_song,
-                location = item.location,
-                number_of_listens = item.number_of_listens
-            }).ToList();
+
+
+
             var result = new PlaylistResponseDto();
             if (res.Count > 0)
             {
                 result = _mapper.Map<PlaylistResponseDto>(res[0]);
-                result.song_entities = listSong;
+                if (res[0].song_id.ToString() != "00000000-0000-0000-0000-000000000000")
+                {
+
+                    var listSong = res.Select(item => new SongEntity()
+                    {
+                        song_id = item.song_id,
+                        song_name = item.song_name,
+                        singer_name = item.singer_name,
+                        thumnail = item.thumnail,
+                        link_song = item.link_song,
+                        location = item.location,
+                        number_of_listens = item.number_of_listens
+                    }).ToList();
+                    result.song_entities = listSong;
+                } else
+                {
+                    result.song_entities = new List<SongEntity>();
+                }
             }
             return result;
 
@@ -99,5 +116,7 @@ namespace ZINGMP4.Application.Service
 
             return res;
         }
+
+
     }
 }
