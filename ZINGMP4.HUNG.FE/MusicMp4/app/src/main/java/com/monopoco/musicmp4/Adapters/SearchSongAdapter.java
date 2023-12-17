@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -27,19 +28,27 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.monopoco.musicmp4.Activities.PlayerActivity;
+import com.monopoco.musicmp4.CallBack.ApiCallback;
 import com.monopoco.musicmp4.Interfaces.ItemClickListener;
 import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Requests.APIService;
 import com.monopoco.musicmp4.Utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.ViewHolder>{
 
@@ -120,7 +129,7 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
             public void onClick(View v) {
                 Toast.makeText(context, "Add Playlist", Toast.LENGTH_SHORT);
                 dialog.dismiss();
-                showDialogPlaylist();
+                showDialogPlaylist(songModel);
             }
         });
 
@@ -139,16 +148,103 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
                 dialog.dismiss();
             }
         });
+        SharedPreferences sp = getContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String userId = sp.getString("userId", null);
+        APIService.getService().CheckLikedSong(userId, songModel.getId()).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.code() == 200) {
+                    if (response.body()) {
+                        ((ImageView) dialog.findViewById(R.id.ic_liked)).setImageResource(R.drawable.full_hear);
+                        ((TextView) dialog.findViewById(R.id.txt_liked)).setTextColor(getContext().getResources().getColor(R.color.green));
+                    }
+                    ((TextView) dialog.findViewById(R.id.txt_liked)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            likeSong(userId, songModel.getId(), new ApiCallback<Boolean>() {
+                                @Override
+                                public void onApiSuccess(Boolean S) {
+                                    if (S) {
+                                        ((ImageView) dialog.findViewById(R.id.ic_liked)).setImageResource(R.drawable.full_hear);
+                                        ((TextView) dialog.findViewById(R.id.txt_liked)).setTextColor(getContext().getResources().getColor(R.color.green));
+                                    } else {
+                                        ((ImageView) dialog.findViewById(R.id.ic_liked)).setImageResource(R.drawable.empty_hear);
+                                        ((TextView) dialog.findViewById(R.id.txt_liked)).setTextColor(getContext().getResources().getColor(R.color.white));
+                                    }
+                                }
 
-        dialog.show();
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
+                                @Override
+                                public void onApiFailure(Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+
+                    ((ImageView) dialog.findViewById(R.id.ic_liked)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            likeSong(userId, songModel.getId(), new ApiCallback<Boolean>() {
+                                @Override
+                                public void onApiSuccess(Boolean S) {
+                                    if (S) {
+                                        ((ImageView) dialog.findViewById(R.id.ic_liked)).setImageResource(R.drawable.full_hear);
+                                        ((TextView) dialog.findViewById(R.id.txt_liked)).setTextColor(getContext().getResources().getColor(R.color.green));
+                                    } else {
+                                        ((ImageView) dialog.findViewById(R.id.ic_liked)).setImageResource(R.drawable.empty_hear);
+                                        ((TextView) dialog.findViewById(R.id.txt_liked)).setTextColor(getContext().getResources().getColor(R.color.white));
+                                    }
+                                }
+
+                                @Override
+                                public void onApiFailure(Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+
+                }
+                dialog.show();
+                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.MATCH_PARENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+
+            }
+        });
+
+
     }
 
-    private void showDialogPlaylist() {
+
+    private void likeSong(String userId, String songId, ApiCallback<Boolean> isLiked) {
+        APIService.getService().LikedSong(userId, songId)
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onResponse(Call<Object> call, Response<Object> response) {
+                        if (response.code() == 200) {
+                            Gson gson = new Gson();
+                            String json = gson.toJson(response.body());
+                            Map<String, Object> map = gson.fromJson(json, new TypeToken<Map<String, Object>>() {}.getType());
+
+                            isLiked.onApiSuccess(!(Boolean) map.get("is_liked"));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Object> call, Throwable t) {
+                        Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void showDialogPlaylist(SongModel songModel) {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.playlist_dialog);
@@ -167,31 +263,43 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
             }
         });
 
-        PlayListViewBottomAdapter playListViewBottomAdapter = new PlayListViewBottomAdapter(
-                new ArrayList<>(), context
-        );
-
-        listView.setAdapter(playListViewBottomAdapter);
-
-        txtClose.setOnClickListener(new View.OnClickListener() {
+        getListPlayList(new ApiCallback<List<PlayListModel>>() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            public void onApiSuccess(List<PlayListModel> S) {
+                PlayListViewBottomAdapter playListViewBottomAdapter = new PlayListViewBottomAdapter(
+                        S, context, songModel
+                );
+
+                listView.setAdapter(playListViewBottomAdapter);
+
+                txtClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                btnClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
+            }
+
+            @Override
+            public void onApiFailure(Throwable t) {
+
             }
         });
 
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
 
-        dialog.show();
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
     public void showAddNewPlaylistDialog() {
@@ -213,6 +321,24 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private void getListPlayList(ApiCallback<List<PlayListModel>> callback) {
+        SharedPreferences sp = getContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String userId = sp.getString("userId", null);
+        APIService.getService().GetPlayListOfUser(userId).enqueue(new Callback<List<PlayListModel>>() {
+            @Override
+            public void onResponse(Call<List<PlayListModel>> call, Response<List<PlayListModel>> response) {
+                if (response.code() == 200) {
+                    callback.onApiSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PlayListModel>> call, Throwable t) {
+                Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

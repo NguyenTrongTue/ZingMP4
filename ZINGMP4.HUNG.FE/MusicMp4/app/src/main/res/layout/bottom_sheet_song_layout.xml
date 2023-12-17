@@ -122,10 +122,12 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp">
                 <ImageView
+                    android:id="@+id/ic_liked"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_hear_white"/>
                 <TextView
+                    android:id="@+id/txt_liked"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/white"
                     android:gravity="start|center"

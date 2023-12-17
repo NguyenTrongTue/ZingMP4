@@ -86,4 +86,7 @@ public interface DataService {
 //    @Headers({"Accept: application/json", "Content-Type: multipart/form-data"})
     @POST("User/edit_user_info")
     Call<UserModel> EditUser(@Part("user_name") RequestBody username, @Part("email") RequestBody email, @Part MultipartBody.Part avatar);
+
+    @GET("Playlist/check_song_exists_in_playlist")
+    Call<Boolean> CheckSongInPlaylist(@Query("playlist_id") String playlistId, @Query("song_id") String songId);
 }

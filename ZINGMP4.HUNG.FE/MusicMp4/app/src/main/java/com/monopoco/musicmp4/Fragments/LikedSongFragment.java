@@ -1,6 +1,8 @@
 package com.monopoco.musicmp4.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -65,7 +67,9 @@ public class LikedSongFragment extends Fragment {
     }
 
     private void getData() {
-        APIService.getService().GetLikedSongByUser("4e0907f7-c69f-47eb-9bad-140357181195").enqueue(new Callback<List<SongModel>>() {
+        SharedPreferences sp = getContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String userId = sp.getString("userId", null);
+        APIService.getService().GetLikedSongByUser(userId).enqueue(new Callback<List<SongModel>>() {
             @Override
             public void onResponse(Call<List<SongModel>> call, Response<List<SongModel>> response) {
                 if (response.code() == 200) {

@@ -10,8 +10,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -193,7 +195,9 @@ public class MusicPlayerFragment extends Fragment {
 
     public void initValue(View view) {
         if (view != null) {
-            APIService.getService().CheckLikedSong("4e0907f7-c69f-47eb-9bad-140357181195", getSongModel().getId()).enqueue(new Callback<Boolean>() {
+            SharedPreferences sp = getContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+            String userId = sp.getString("userId", null);
+            APIService.getService().CheckLikedSong(userId, getSongModel().getId()).enqueue(new Callback<Boolean>() {
                 @Override
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                     if (response.code() == 200) {
@@ -206,7 +210,9 @@ public class MusicPlayerFragment extends Fragment {
                         likedHear.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                APIService.getService().LikedSong("4e0907f7-c69f-47eb-9bad-140357181195", getSongModel().getId())
+                                SharedPreferences sp = getContext().getSharedPreferences("Login", Context.MODE_PRIVATE);
+                                String userId = sp.getString("userId", null);
+                                APIService.getService().LikedSong(userId, getSongModel().getId())
                                         .enqueue(new Callback<Object>() {
                                             @Override
                                             public void onResponse(Call<Object> call, Response<Object> response) {
