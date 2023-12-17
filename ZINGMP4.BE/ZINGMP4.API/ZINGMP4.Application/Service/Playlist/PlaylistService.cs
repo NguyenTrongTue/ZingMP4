@@ -56,6 +56,13 @@ namespace ZINGMP4.Application.Service
             }
         }
 
+        public async Task<bool> CheckSongExistsInPlaylistAsycn(Guid song_id, Guid playlist_id)
+        {
+            var result = await  _playlistRepository.CheckSongExistsInPlaylistAsycn(song_id, playlist_id);
+
+            return result;
+        }
+
         public async Task DeleteSongToPlaylistAsync(PlaylistConfigDto playlistConfig)
         {
             var playlistConfigEntity = new PlaylistConfigEntity()
@@ -109,5 +116,7 @@ namespace ZINGMP4.Application.Service
 
             return res;
         }
+
+
     }
 }

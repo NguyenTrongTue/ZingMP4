@@ -14,5 +14,7 @@ namespace ZINGMP4.Domain.Interface
         Task<List<PlaylistEntity>> GetPlaylistByUserAsync(Guid user_id);
 
         Task UpdatePlaylistImageAsync(string image, Guid playlist_id);
+
+        Task<bool> CheckSongExistsInPlaylistAsycn(Guid song_id, Guid playlist_id);
     }
 }
