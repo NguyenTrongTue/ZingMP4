@@ -1,39 +1,41 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using System.Text.Json;
 
-namespace RabbitMQ.Consumer
+public class Program
 {
-    static class Program
+    public static void Main(string[] args)
     {
-
-        static void Main(string[] args)
+        var factory = new ConnectionFactory()
         {
-            var factory = new ConnectionFactory
-            {
-                Uri = new Uri("ampq://guest:guest@localhost:5672")
-            };
-            using var connection = factory.CreateConnection();
-            using var channel = connection.CreateModel();
-            channel.QueueDeclare("demo-queue",
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null);
+            HostName = "localhost",
+            UserName = "guest",
+            Password = "guest",
+            VirtualHost = "/"
+        };
 
-            var consumer = new EventingBasicConsumer(channel);
+        var connection = factory.CreateConnection();
 
-            consumer.Received += (sender, e) =>
-            {
-                var body = e.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
+        using var channel = connection.CreateModel();
 
-                Console.WriteLine(message);
+        channel.QueueDeclare("demo_queue", durable: true, exclusive: false);
 
-            };
 
-            channel.BasicConsume("demo-queue", true, consumer);
-        }
+        var consumer = new EventingBasicConsumer(channel);
+
+        consumer.Received += (model, eventArgs) =>
+        {
+
+            var body = eventArgs.Body.ToArray();
+
+            var message = Encoding.UTF8.GetString(body);
+
+            Console.WriteLine(message);
+
+        };
+
+        channel.BasicConsume("demo_queue", true, consumer);
+
     }
 }
+
