@@ -14,4 +14,5 @@
     <color name="gray">	#808080</color>
     <color name="bts_playlist_add">#7D7C7C</color>
     <color name="green">#1DB954</color>
+    <color name="disabletxt">#66FFFFFF</color>
 </resources>

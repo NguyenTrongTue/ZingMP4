@@ -66,7 +66,7 @@ namespace ZINGMP4.Application.Service
             string fileName = FileHelper.GenerateFileNameAsync(file);
             var baseUrl = _configuration.GetSection("BaseUrl");
 
-            var exactPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\users", fileName);
+            var exactPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/users", fileName);
 
             using (var stream = new FileStream(exactPath, FileMode.Create))
             {

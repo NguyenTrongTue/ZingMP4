@@ -4,6 +4,7 @@
     tools:showIn = "navigation_view">
 
     <group
+        android:id="@+id/general"
         android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_home"
@@ -28,20 +29,20 @@
                     android:title="Your Library"
                     />
     </group>
-    <item
-        android:title="">
-        <menu>
-            <item
-                android:id="@+id/nav_profile"
-                android:icon="@drawable/ic_profile"
-                android:title="Profile"
-                />
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_sign_out"
-                android:iconTint="#8996B8"
-                android:title="Logout"/>
-        </menu>
-    </item>
+
+    <group android:id="@+id/user" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="Profile"
+            />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_sign_out"
+            android:iconTint="#8996B8"
+            android:title="Logout"/>
+
+    </group>
+
 
 </menu>

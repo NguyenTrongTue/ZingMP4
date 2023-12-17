@@ -12,35 +12,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true">
+
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+                android:layout_height="match_parent"
+                app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
                 app:contentScrim="@color/transparent"
                 app:expandedTitleGravity="center_horizontal|bottom"
                 app:expandedTitleTextAppearance="@style/ExpandedAppBar"
-                app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
-                app:title="Playlist Name"
-                android:id="@+id/collapsing_toolbar">
+                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+                app:title="Playlist Name">
+
                 <ImageView
                     android:id="@+id/playlist_image"
-                    android:layout_marginTop="10dp"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/playlist_empty"/>
+                    android:src="@drawable/playlist_empty" />
 
                 <androidx.appcompat.widget.Toolbar
-                    app:titleTextAppearance="@style/ExpandedAppBar"
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/toolbar_height"
-                    android:elevation="4dp"
                     android:background="@color/transparent"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    android:elevation="4dp"
                     android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:layout_collapseMode="pin"/>
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:layout_collapseMode="pin"
+                    app:titleTextAppearance="@style/ExpandedAppBar" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

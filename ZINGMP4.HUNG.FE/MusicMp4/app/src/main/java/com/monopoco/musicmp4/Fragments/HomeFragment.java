@@ -41,6 +41,8 @@ public class HomeFragment extends Fragment {
     private LinearLayout linearRecommended;
 
     private LinearLayout linearPlaylist;
+
+    private final List<String> impressiveId = new ArrayList<>();
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,38 +101,51 @@ public class HomeFragment extends Fragment {
 
                 linearPlaylist = getView().findViewById(R.id.linear_play_list);
 
-                playListModels.forEach(playListModel -> {
-                    View viewItem = getLayoutInflater().inflate(R.layout.play_list_item, null);
-                    viewItem.setOnClickListener(new View.OnClickListener() {
+                impressiveId.forEach(playlistId -> {
+                    APIService.getService().GetPlayListById(playlistId).enqueue(new Callback<PlayListModel>() {
                         @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), PlayListActivity.class);
-                            intent.putExtra("playlistInfo", playListModel);
-                            startActivity(intent);
+                        public void onResponse(Call<PlayListModel> call, Response<PlayListModel> response) {
+                            if (response.code() == 200) {
+                                View viewItem = getLayoutInflater().inflate(R.layout.play_list_item, null);
+                                viewItem.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                                        intent.putExtra("playlistId",playlistId );
+                                        startActivity(intent);
+                                    }
+                                });
+
+                                ImageView playlistImage = viewItem.findViewById(R.id.play_list_image);
+                                ImageUtils.setImageUrl(response.body().getPlaylistImage(), playlistImage, getContext());
+                                TextView playListName = viewItem.findViewById(R.id.play_list_name);
+                                playListName.setText(response.body().getPlayListName());
+                                if (linearPlaylist.getChildCount() == 0) {
+                                    LinearLayout ll = new LinearLayout(getContext());
+                                    ll.setOrientation(LinearLayout.VERTICAL);
+                                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                    layoutParams.setMargins(70, 0, 0, 0);
+                                    linearPlaylist.addView(viewItem, layoutParams);
+                                } else if (linearPlaylist.getChildCount() == impressiveId.size() - 1) {
+                                    LinearLayout ll = new LinearLayout(getContext());
+                                    ll.setOrientation(LinearLayout.VERTICAL);
+                                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                    layoutParams.setMargins(0, 0, 70, 0);
+                                    linearPlaylist.addView(viewItem, layoutParams);
+                                } else {
+                                    linearPlaylist.addView(viewItem);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<PlayListModel> call, Throwable t) {
+
                         }
                     });
 
-                    ImageView playlistImage = viewItem.findViewById(R.id.play_list_image);
-//                    playlistImage.setImageResource(playListModel.getImage());
-                    TextView playListName = viewItem.findViewById(R.id.play_list_name);
-                    playListName.setText(playListModel.getPlayListName());
-                    if (playListModels.indexOf(playListModel) == 0) {
-                        LinearLayout ll = new LinearLayout(getContext());
-                        ll.setOrientation(LinearLayout.VERTICAL);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        layoutParams.setMargins(70, 0, 0, 0);
-                        linearPlaylist.addView(viewItem, layoutParams);
-                    } else if (playListModels.indexOf(playListModel) == playListModels.size() - 1) {
-                        LinearLayout ll = new LinearLayout(getContext());
-                        ll.setOrientation(LinearLayout.VERTICAL);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        layoutParams.setMargins(0, 0, 70, 0);
-                        linearPlaylist.addView(viewItem, layoutParams);
-                    } else {
-                        linearPlaylist.addView(viewItem);
-                    }
                 });
             }
 
@@ -146,6 +161,14 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        impressiveId.add("7d669019-dde3-44d8-a506-6881e3fb9ad8");
+        impressiveId.add("3ca6dacc-1c62-4ffa-857e-5a10822f63db");
+        impressiveId.add("a4f22c6c-ae80-4d1b-a673-f923f018cfd6");
+        impressiveId.add("e7ef7bfa-6d32-41a7-959f-4393b491b381");
+        impressiveId.add("8737a205-8ccc-4ab4-b890-5472c0c5a3a9");
+
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         getDataSong();
 

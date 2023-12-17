@@ -209,6 +209,9 @@ public class RegisterFragment extends Fragment {
                     } else if (response.code() == 400) {
                         Toast.makeText(getContext(), "Something wrong try again",
                                 Toast.LENGTH_LONG).show();
+                    } else if (response.code() == 404) {
+                        Toast.makeText(getContext(), "Email account is already existed",
+                                Toast.LENGTH_LONG).show();
                     }
 
                 }

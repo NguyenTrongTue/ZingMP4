@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -73,10 +75,18 @@ public class PlayListActivity extends AppCompatActivity {
 
     private FloatingActionButton btnPlayPl;
 
+    private SharedPreferences sp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_list);
+        sp= getSharedPreferences("Login", Context.MODE_PRIVATE);
+        Boolean isLogin = Boolean.valueOf(sp.getString("isLogin", null));
+        if (!isLogin) {
+            Intent intent = new Intent(this, SignInActivity.class);
+            startActivity(intent);
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
@@ -93,6 +103,7 @@ public class PlayListActivity extends AppCompatActivity {
 
         refreshLayout = findViewById(R.id.swipe_refresh);
         btnNewSong = findViewById(R.id.item_add_song);
+
         btnNewSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,10 +262,14 @@ public class PlayListActivity extends AppCompatActivity {
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PlayListActivity.this, LinearLayoutManager.VERTICAL, false);
                             rclSong.setLayoutManager(linearLayoutManager);
                             rclSong.setAdapter(searchSongAdapter);
-                            if (playListModel.getPlaylistImage() != null) {
+                            if (playListModel.getPlaylistImage() != null && !playListModel.getPlaylistImage().isEmpty()) {
                                 ImageUtils.setImageUrl(playListModel.getPlaylistImage(), playlistImage, PlayListActivity.this);
                             } else {
                                 playlistImage.setImageResource(R.drawable.playlist_empty);
+                            }
+                            String userID = sp.getString("userId", null);
+                            if (userID != null && !userID.equals(playListModel.getUserId())) {
+                                btnNewSong.setVisibility(View.GONE);
                             }
                             btnPlayPl.setOnClickListener(new View.OnClickListener() {
                                 @Override

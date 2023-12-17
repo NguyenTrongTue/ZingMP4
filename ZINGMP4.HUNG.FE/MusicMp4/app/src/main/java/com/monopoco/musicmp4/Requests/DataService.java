@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -70,4 +71,19 @@ public interface DataService {
 
     @GET("User/get_new_password")
     Call<Object> GetNewPassword(@Query("email") String email);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("Song/update_listen_of_number")
+    Call<Object> UpdateListenOfNumber(@Query("song_id") String songId, @Query("user_id") String userId);
+
+    @GET("User/get_recently_played")
+    Call<List<SongModel>> GetRecentlyPlayed(@Query("user_id") String userId);
+
+    @GET("User/get_user_by_id")
+    Call<UserModel> GetUserById(@Query("id") String userId);
+
+    @Multipart
+//    @Headers({"Accept: application/json", "Content-Type: multipart/form-data"})
+    @POST("User/edit_user_info")
+    Call<UserModel> EditUser(@Part("user_name") RequestBody username, @Part("email") RequestBody email, @Part MultipartBody.Part avatar);
 }

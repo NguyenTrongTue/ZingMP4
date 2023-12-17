@@ -20,12 +20,13 @@ public class PlayListModel implements Serializable {
     @SerializedName("playlist_image")
     private String playlistImage;
 
-    public PlayListModel(String playlistId, String playListName, String playlistImage, List<SongModel> songModelList, String userName) {
+    public PlayListModel(String playlistId, String playListName, String playlistImage, List<SongModel> songModelList, String userName, String userId) {
         this.playlistId = playlistId;
         this.playListName = playListName;
         this.playlistImage = playlistImage;
         this.songModelList = songModelList;
         this.userName = userName;
+        this.userId = userId;
     }
 
     @SerializedName("song_entities")
@@ -33,6 +34,9 @@ public class PlayListModel implements Serializable {
 
     @SerializedName("username")
     private String userName;
+
+    @SerializedName("user_id")
+    private String userId;
 
     public String getUserName() {
         return userName;
@@ -72,5 +76,13 @@ public class PlayListModel implements Serializable {
 
     public void setSongModelList(List<SongModel> songModelList) {
         this.songModelList = songModelList;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

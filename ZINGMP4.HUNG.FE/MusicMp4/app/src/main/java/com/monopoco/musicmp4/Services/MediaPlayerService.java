@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.Notification;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -206,7 +207,21 @@ public class MediaPlayerService extends Service {
             throw new RuntimeException(e);
         }
         mediaPlayer.start();
+        SharedPreferences sp = getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String userId = sp.getString("userId", null);
+        if (userId != null) {
+            APIService.getService().UpdateListenOfNumber(songModel.getId(), userId).enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
 
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
     private void playOrPauseMusic() {

@@ -42,7 +42,7 @@
             android:text="Bohemian Rhapsody"
             android:textColor="@color/white"
             android:textFontWeight="600"
-            android:textSize="25dp"></TextView>
+            android:textSize="20dp"></TextView>
 
     </LinearLayout>
 
