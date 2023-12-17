@@ -8,13 +8,11 @@ namespace RabbitMQ
     {
         public void SendingMessage<T>(T message)
         {
-            throw new NotImplementedException();
-
             var factory = new ConnectionFactory()
             {
                 HostName = "localhost",
-                UserName = "user",
-                Password = "mypass",
+                UserName = "guest",
+                Password = "guest",
                 VirtualHost = "/"
 
             };
@@ -23,13 +21,13 @@ namespace RabbitMQ
 
             using var channel = connection.CreateModel();
 
-            channel.QueueDeclare("booking", durable: true, exclusive: false);
+            channel.QueueDeclare("add_song", durable: true, exclusive: false);
 
             var jsonString = JsonSerializer.Serialize(message);
 
             var body = Encoding.UTF8.GetBytes(jsonString);
 
-            channel.BasicPublish("", "booking", body: body);
+            channel.BasicPublish("", "add_song", body: body);
 
 
         }
