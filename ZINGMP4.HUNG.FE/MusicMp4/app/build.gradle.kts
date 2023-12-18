@@ -77,4 +77,9 @@ dependencies {
 
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
 
+    implementation("io.reactivex.rxjava2:rxandroid:2.0.1")
+    implementation("io.reactivex.rxjava2:rxjava:2.0.1")
+
+    implementation("com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0")
+
 }

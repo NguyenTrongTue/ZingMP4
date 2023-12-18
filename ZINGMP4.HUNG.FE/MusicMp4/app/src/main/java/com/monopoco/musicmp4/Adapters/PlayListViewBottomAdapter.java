@@ -119,13 +119,14 @@ public class PlayListViewBottomAdapter extends BaseAdapter {
 //        }
 //        playListSongs.setText(songNumber);
 
+        View finalConvertView = convertView;
         APIService.getService().CheckSongInPlaylist(playListModelList.get(position).getPlaylistId(), songModel.getId()).enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 if (response.code() == 200) {
                     if (response.body()) {
-                        idsChosen.add(playListModelList.get(position).getPlaylistId());
                         checkRadio.setImageResource(R.drawable.ic_check_circle);
+                        finalConvertView.setClickable(false);
                     }
                 }
             }

@@ -33,6 +33,7 @@ import com.google.gson.Gson;
 import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.CallBack.ApiCallback;
 import com.monopoco.musicmp4.Interfaces.ItemClickListener;
+import com.monopoco.musicmp4.Models.PlayListAddSongModel;
 import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
@@ -46,6 +47,11 @@ import java.util.Map;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,6 +61,8 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
     private List<SongModel> songModelList;
 
     private Context context;
+
+    private PlayListViewBottomAdapter playListViewBottomAdapter;
 
 
     public SearchSongAdapter(List<SongModel> songModelList, Context context) {
@@ -266,7 +274,7 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
         getListPlayList(new ApiCallback<List<PlayListModel>>() {
             @Override
             public void onApiSuccess(List<PlayListModel> S) {
-                PlayListViewBottomAdapter playListViewBottomAdapter = new PlayListViewBottomAdapter(
+                playListViewBottomAdapter = new PlayListViewBottomAdapter(
                         S, context, songModel
                 );
 
@@ -282,7 +290,44 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
                 btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dialog.dismiss();
+                        Log.e("monopoco", playListViewBottomAdapter.getIdsChosen().toString());
+                        List<Observable<?>> request = new ArrayList<>();
+                        if (playListViewBottomAdapter != null && playListViewBottomAdapter.getIdsChosen() != null) {
+                            playListViewBottomAdapter.getIdsChosen().forEach(id -> {
+                                PlayListAddSongModel playListAddSongModel = new PlayListAddSongModel(
+                                        id, songModel.getId()
+                                );
+                                request.add(APIService.getService().addSongToPlayListObser(playListAddSongModel));
+                            });
+                        }
+                        Observable.zip(
+                                request,
+                                new Function<Object[], Object>() {
+                                    @Override
+                                    public Object apply(Object[] objects) throws Exception {
+                                        Log.e("monopco", "Hello bsajkfhasd");
+                                        return objects;
+                                    }
+                                }
+                        )
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread()).subscribe(
+                                new Consumer<Object>() {
+                                    @Override
+                                    public void accept(Object o) throws Exception {
+                                        dialog.dismiss();
+                                        Toast.makeText(getContext(), "Add song to playlists successfully", Toast.LENGTH_SHORT).show();
+                                    }
+                                },
+                                new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable e) throws Exception {
+                                        e.printStackTrace();
+                                        //Do something on error completion of requests
+                                    }
+                                }
+                        );
+
                     }
                 });
 

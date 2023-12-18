@@ -105,7 +105,7 @@
         android:background="@drawable/edittext_border"
         android:drawableLeft="@drawable/ic_lock"
         android:drawablePadding="10dp"
-        android:hint="Password (At least 8 characters)"
+        android:hint="Password (At least 6 characters)"
         android:paddingLeft="10dp"
         android:paddingTop="18dp"
         android:paddingRight="18dp"

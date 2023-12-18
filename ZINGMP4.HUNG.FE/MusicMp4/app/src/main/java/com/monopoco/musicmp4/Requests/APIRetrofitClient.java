@@ -2,6 +2,7 @@ package com.monopoco.musicmp4.Requests;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.security.cert.CertificateException;
 import java.util.Arrays;
@@ -38,6 +39,7 @@ public class APIRetrofitClient {
                 .baseUrl(base_url)
                 .client(getUnsafeOkHttpClient().addInterceptor(interceptor).build())
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
         return retrofit;

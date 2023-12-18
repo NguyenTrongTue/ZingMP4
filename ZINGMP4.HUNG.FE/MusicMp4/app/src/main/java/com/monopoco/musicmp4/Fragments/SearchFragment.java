@@ -83,7 +83,9 @@ public class SearchFragment extends Fragment {
                                     public void run() {
                                         // TODO: Do what you need here (refresh list).
                                         Log.e("monopoco", searchField.getText().toString());
-                                        getData();
+                                        if (!searchField.getText().toString().isEmpty()) {
+                                            getData();
+                                        }
                                     }
                                 },
                                 DELAY
