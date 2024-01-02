@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="circularTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textSize">17dp</item>
+        <item name="android:fontFamily">@font/circular_std_font</item>
+    </style>
+</resources>
