@@ -34,8 +34,7 @@ namespace ZINGMP4.API.Controllers
             try
             {
                 var result = await _songInterface.AddSong(file);
-
-                _messagerProvider.SendingMessage<SongEntity>(result);                
+               
                 return Ok(result);
             }
             catch (Exception ex)
