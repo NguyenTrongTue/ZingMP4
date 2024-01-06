@@ -32,6 +32,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.monopoco.musicmp4.Adapters.InsertSongAdapter;
 import com.monopoco.musicmp4.Adapters.SearchSongAdapter;
+import com.monopoco.musicmp4.CallBack.ApiCallback;
 import com.monopoco.musicmp4.Models.PlayListAddSongModel;
 import com.monopoco.musicmp4.Models.PlayListModel;
 import com.monopoco.musicmp4.Models.SearchModel;
@@ -308,5 +309,27 @@ public class PlayListActivity extends AppCompatActivity {
         if (searchSongDialog != null && searchSongDialog.isShowing()) {
             searchSongDialog.dismiss();
         }
+    }
+
+    public void deleteSong(String songId, ApiCallback<Integer> callback) {
+        Log.e("monopoco playlist ID", playListId);
+        Log.e("monopoco song ID", songId);
+        PlayListAddSongModel playListAddSongModel = new PlayListAddSongModel(
+                playListId, songId
+        );
+        APIService.getService().DeleteSongFromPlayList(playListAddSongModel).enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.code() == 200) {
+                    callback.onApiSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                callback.onApiFailure(t);
+            }
+        });
+
     }
 }

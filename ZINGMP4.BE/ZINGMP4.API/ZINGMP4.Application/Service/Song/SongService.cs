@@ -146,9 +146,10 @@ namespace ZINGMP4.Application.Service
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Console.WriteLine($"Error: {ex.Message}");
+                throw new Exception(ex.Message);
             }
         }
 

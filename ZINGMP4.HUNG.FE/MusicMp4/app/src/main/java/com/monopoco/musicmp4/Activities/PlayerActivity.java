@@ -244,6 +244,7 @@ public class PlayerActivity extends AppCompatActivity {
                 .addAction(R.drawable.ic_skip_fwd, "Next", nextPending)
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setProgress(100, 50, true)
                 .setOnlyAlertOnce(true)
                 .setNotificationSilent()
                 .build();

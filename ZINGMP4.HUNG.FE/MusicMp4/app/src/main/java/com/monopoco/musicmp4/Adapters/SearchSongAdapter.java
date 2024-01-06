@@ -30,6 +30,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.monopoco.musicmp4.Activities.MainActivity;
+import com.monopoco.musicmp4.Activities.PlayListActivity;
 import com.monopoco.musicmp4.Activities.PlayerActivity;
 import com.monopoco.musicmp4.CallBack.ApiCallback;
 import com.monopoco.musicmp4.Interfaces.ItemClickListener;
@@ -96,12 +98,37 @@ public class SearchSongAdapter extends RecyclerView.Adapter<SearchSongAdapter.Vi
     }
 
     public void showDialog(SongModel songModel) {
+
+
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_song_layout);
         TextView close = dialog.findViewById(R.id.bts_txt_close);
         BlurView blurView = dialog.findViewById(R.id.blur_layout);
         float radius = 3f;
+        LinearLayout removeFromPlaylist = dialog.findViewById(R.id.bts_remove);
+        if (context instanceof MainActivity) {
+            removeFromPlaylist.setVisibility(View.GONE);
+        } else if (context instanceof PlayListActivity) {
+            context = (PlayListActivity) context;
+            removeFromPlaylist.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((PlayListActivity) context).deleteSong(songModel.getId(), new ApiCallback<Integer>() {
+                        @Override
+                        public void onApiSuccess(Integer S) {
+                            dialog.dismiss();
+                            ((PlayListActivity) context).getDataToRecycleView();
+                        }
+
+                        @Override
+                        public void onApiFailure(Throwable t) {
+                            Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
+        }
 
         View decorView = ((Activity) context).getWindow().getDecorView();
         ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);

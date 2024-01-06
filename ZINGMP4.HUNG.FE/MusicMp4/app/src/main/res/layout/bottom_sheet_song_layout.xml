@@ -137,6 +137,30 @@
                     android:layout_weight="9"
                     android:text="Like this song"/>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/bts_remove"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp">
+                <ImageView
+                    android:id="@+id/ic_remove"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/remove_folder"/>
+                <TextView
+                    android:id="@+id/txt_remove"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/white"
+                    android:gravity="start|center"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:textSize="20dp"
+                    android:layout_weight="9"
+                    android:text="Remove from this playlist"/>
+            </LinearLayout>
         </LinearLayout>
 
 

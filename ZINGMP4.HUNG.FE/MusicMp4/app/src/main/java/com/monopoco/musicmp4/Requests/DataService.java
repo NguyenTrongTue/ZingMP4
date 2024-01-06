@@ -94,4 +94,8 @@ public interface DataService {
 
     @GET("Playlist/check_song_exists_in_playlist")
     Call<Boolean> CheckSongInPlaylist(@Query("playlist_id") String playlistId, @Query("song_id") String songId);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("Playlist/delete_song_playlist")
+    Call<Integer> DeleteSongFromPlayList(@Body PlayListAddSongModel body);
 }
