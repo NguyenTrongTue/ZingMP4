@@ -31,7 +31,7 @@ public class RecommendedSliderAdapter extends PagerAdapter {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.recomment_slide_item, null);
         ImageView slideImage = view.findViewById(R.id.image_song);
-        slideImage.setImageResource(songModelList.get(position).getImage());
+//        slideImage.setImageResource(songModelList.get(position).getImage());
         TextView songName = view.findViewById(R.id.song_name);
         songName.setText(songModelList.get(position).getSongName());
         TextView singerName = view.findViewById(R.id.singer_name);

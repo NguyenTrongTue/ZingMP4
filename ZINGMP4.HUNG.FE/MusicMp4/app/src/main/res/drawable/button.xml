@@ -2,9 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:state_pressed="true" >
         <shape android:shape="rectangle"  >
-            <corners android:radius="8dp" />
-            <stroke android:width="1dip" android:color="#186CD7" />
-            <solid android:color="#186CD7" />
+            <corners android:radius="500dp" />
+            <stroke android:width="1dip" android:color="#5F5858" />
+            <solid android:color="#5F5858" />
         </shape>
     </item>
     <item android:state_focused="true">
@@ -24,9 +24,9 @@
     </item>
     <item >
         <shape android:shape="rectangle"  >
-            <corners android:radius="8dp" />
-            <stroke android:width="1dip" android:color="@color/button_color" />
-            <solid android:color="@color/button_color" />
+            <corners android:radius="500dp" />
+            <stroke android:width="1dip" android:color="@color/white" />
+            <solid android:color="@color/white" />
         </shape>
     </item>
 </selector>

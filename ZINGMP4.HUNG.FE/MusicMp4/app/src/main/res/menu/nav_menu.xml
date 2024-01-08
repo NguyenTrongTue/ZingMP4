@@ -4,25 +4,45 @@
     tools:showIn = "navigation_view">
 
     <group
+        android:id="@+id/general"
         android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_home"
+                    android:icon="@drawable/ic_home"
+                    android:title="Home"
+                    />
 
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home"
-            android:title="Home"
-            />
+                <item
+                    android:id="@+id/nav_search"
+                    android:icon="@drawable/ic_search"
+                    android:title="Search"
+                    />
 
+                <item
+                    android:id="@+id/nav_liked_song"
+                    android:icon="@drawable/ic_hear"
+                    android:title="Liked song"
+                    />
+                <item
+                    android:id="@+id/nav_playlist"
+                    android:icon="@drawable/album_collection"
+                    android:title="Your Library"
+                    />
+    </group>
+
+    <group android:id="@+id/user" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_profile"
             android:title="Profile"
             />
-
         <item
-            android:id="@+id/nav_liked_song"
-            android:icon="@drawable/heart"
-            android:title="Liked song"
-            />
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_sign_out"
+            android:iconTint="#8996B8"
+            android:title="Logout"/>
+
     </group>
+
 
 </menu>

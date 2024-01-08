@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingVertical="5dp"
+    android:gravity="center_vertical"
+    android:layout_marginBottom="10dp"
+    android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/playlist_item_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/playlist1"/>
+
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_weight="9"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+
+            android:id="@+id/playlist_item_name"
+            android:text="Playlist name"
+            android:textSize="18dp"
+            android:ellipsize="end"
+            android:textColor="@color/white"
+            android:gravity="bottom|start"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/playlist_item_songs"
+            android:text="0 songs"
+            android:textSize="14dp"
+            android:ellipsize="end"
+            android:textColor="@color/gray"
+            android:gravity="top|start"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/playlist_item_check"
+        android:layout_marginLeft="10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_empty_circle"/>
+
+</LinearLayout>

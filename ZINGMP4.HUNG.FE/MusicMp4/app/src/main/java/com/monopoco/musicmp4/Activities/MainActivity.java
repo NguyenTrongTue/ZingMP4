@@ -1,27 +1,47 @@
 package com.monopoco.musicmp4.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.SearchView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.monopoco.musicmp4.Fragments.HomeFragment;
+import com.monopoco.musicmp4.Fragments.LibraryFragment;
 import com.monopoco.musicmp4.Fragments.LikedSongFragment;
 import com.monopoco.musicmp4.Fragments.ProfileFragment;
+import com.monopoco.musicmp4.Fragments.SearchFragment;
+import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Requests.APIService;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -33,14 +53,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private NavigationView navigationView;
 
-    private FirebaseAuth mAuth;
+
+    private SearchView searchView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e("monopoco", "Return2");
         super.onCreate(savedInstanceState);
-//        getSupportActionBar().hide();
-        mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() == null) {
+        SharedPreferences sp= getSharedPreferences("Login", Context.MODE_PRIVATE);
+        Boolean isLogin = Boolean.valueOf(sp.getString("isLogin", null));
+        if (!isLogin) {
             Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
         }
@@ -48,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar); //Ignore red line errors
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         drawerLayout = findViewById(R.id.drawer_layout);
 
 
@@ -61,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        mAuth = FirebaseAuth.getInstance();
 
         frameLayout = findViewById(R.id.main_frame_layout);
         if (savedInstanceState == null) {
@@ -79,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void closeNavMenu() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-
             drawerLayout.closeDrawer(GravityCompat.START);
         }
     }
@@ -89,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(frameLayout.getId(), fragment);
         fragmentTransaction.commit();
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -101,6 +123,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             toFragment = new ProfileFragment();
         } else if (id == R.id.nav_liked_song) {
             toFragment = new LikedSongFragment();
+        } else if (id == R.id.nav_logout) {
+            SharedPreferences sp= getSharedPreferences("Login", Context.MODE_PRIVATE);
+            SharedPreferences.Editor Ed=sp.edit();
+            Ed.putString("isLogin", "false" );
+            Ed.remove("userId");
+            Ed.commit();
+            Intent intent = new Intent(this, SignInActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.nav_search) {
+            toFragment = new SearchFragment();
+        } else if (id == R.id.nav_playlist) {
+            toFragment = new LibraryFragment();
         }
         if (toFragment != null) {
             setFragment(toFragment);

@@ -1,6 +1,10 @@
 package com.monopoco.musicmp4.Fragments;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -26,7 +30,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.monopoco.musicmp4.Activities.MainActivity;
+import com.monopoco.musicmp4.Models.RegisterModel;
+import com.monopoco.musicmp4.Models.UserModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Requests.APIService;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class RegisterFragment extends Fragment {
@@ -37,7 +50,7 @@ public class RegisterFragment extends Fragment {
 
     private EditText email;
     private EditText password;
-    private EditText confirmPassword;
+    private EditText username;
     private Button signUpButton;
 
     private FirebaseAuth mAuth;
@@ -45,6 +58,8 @@ public class RegisterFragment extends Fragment {
     private LinearLayout loading;
 
     private Drawable errorIcon;
+
+    private TextView txtToForget;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +78,7 @@ public class RegisterFragment extends Fragment {
         password = view.findViewById(R.id.register_password_field);
 
         // Get ConfirmPassword field
-        confirmPassword = view.findViewById(R.id.confirm_password_field);
+        username = view.findViewById(R.id.register_username_field);
 
         // Get Sign Up button
         signUpButton = view.findViewById(R.id.sign_up_button);
@@ -71,8 +86,7 @@ public class RegisterFragment extends Fragment {
         // Get Loading
         loading = view.findViewById(R.id.loading);
 
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
+        txtToForget = view.findViewById(R.id.text_to_forget);
 
 
 
@@ -87,6 +101,13 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setFragment(new SignInFragment());
+            }
+        });
+
+        txtToForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFragment(new ForgotPasswordFragment());
             }
         });
 
@@ -126,7 +147,7 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        confirmPassword.addTextChangedListener(new TextWatcher() {
+        username.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -155,32 +176,54 @@ public class RegisterFragment extends Fragment {
 
     private void signUpHandle() {
         if (email.getText().toString().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
-            if (password.getText().toString().equals(confirmPassword.getText().toString())) {
-                mAuth.createUserWithEmailAndPassword(
-                        email.getText().toString(),
-                        password.getText().toString()
-                ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Todo: handle if create successful
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
-                            getActivity().startActivity(intent);
-                            getActivity().finish();
-                        } else {
-                            // Todo: fail to create account
-                            Toast.makeText(getContext(), task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                            signUpButton.setEnabled(true);
-                            loading.setVisibility(View.GONE);
-                        }
+
+            RegisterModel registerModel = new RegisterModel(
+                    username.getText().toString(),
+                    email.getText().toString(),
+                    password.getText().toString()
+            );
+
+            APIService.getService().Register(
+                    RequestBody.create(MediaType.parse("text/plain"), registerModel.getUsername()),
+                    RequestBody.create(MediaType.parse("text/plain"), registerModel.getPassword()),
+                    RequestBody.create(MediaType.parse("text/plain"), registerModel.getEmail()))
+                    .enqueue(new Callback<UserModel>() {
+                @Override
+                public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                    loading.setVisibility(View.GONE);
+                    signUpButton.setEnabled(true);
+                    if (response.code() == 200) {
+                        Toast.makeText(getContext(), "Created account successfully",
+                                Toast.LENGTH_LONG).show();
+                        new AlertDialog.Builder(getContext())
+                                .setTitle("Created account successfully")
+                                .setPositiveButton("Login now", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        setFragment(new SignInFragment());
+                                    }
+                                })
+                                .setNegativeButton("Cancel", null)
+                                .setIcon(R.drawable.ic_check_circle)
+                                .show();
+                    } else if (response.code() == 400) {
+                        Toast.makeText(getContext(), "Something wrong try again",
+                                Toast.LENGTH_LONG).show();
+                    } else if (response.code() == 404) {
+                        Toast.makeText(getContext(), "Email account is already existed",
+                                Toast.LENGTH_LONG).show();
                     }
-                });
-            } else {
-                confirmPassword.setError("Password doesn't match.", errorIcon);
-                signUpButton.setEnabled(true);
-                loading.setVisibility(View.GONE);
-            }
+
+                }
+                @Override
+                public void onFailure(Call<UserModel> call, Throwable t) {
+                    Toast.makeText(getContext(), "Error",
+                            Toast.LENGTH_LONG).show();
+                    loading.setVisibility(View.GONE);
+                    signUpButton.setEnabled(true);
+
+                }
+            });
         } else {
             email.setError("Email invalidate.", errorIcon);
             signUpButton.setEnabled(true);
@@ -196,13 +239,9 @@ public class RegisterFragment extends Fragment {
     }
 
     private void checkInPuts() {
-        if (!email.getText().toString().isEmpty()) {
+        if (!email.getText().toString().isEmpty() && !username.getText().toString().isEmpty()) {
             if (!password.getText().toString().isEmpty() && password.getText().toString().length() >= 8) {
-                if (!confirmPassword.getText().toString().isEmpty()) {
-                    signUpButton.setEnabled(true);
-                } else {
-                    signUpButton.setEnabled(false);
-                }
+                signUpButton.setEnabled(true);
             } else {
                 signUpButton.setEnabled(false);
             }

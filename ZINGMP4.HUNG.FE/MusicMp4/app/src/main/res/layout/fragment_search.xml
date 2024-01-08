@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.SearchFragment"
+    android:orientation="vertical"
+    android:paddingRight="30px"
+    android:paddingLeft="30px">
+    <EditText
+        android:id="@+id/search_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/edittext_border"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="10dp"
+        android:hint="What do you want to listen to?"
+        android:inputType="textEmailAddress"
+        android:nextFocusDown="@id/login_password_field"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textColorHint="#B9FFFFFF"
+        android:textColorLink="@color/white"
+        android:paddingLeft="10dp"
+        android:textCursorDrawable="@drawable/text_cursor"
+        android:textSize="18dp" />
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:paddingTop="20dp"
+        android:id="@+id/search_reload"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcl_search_song"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_weight="9"
+            android:layout_height="0dp"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>

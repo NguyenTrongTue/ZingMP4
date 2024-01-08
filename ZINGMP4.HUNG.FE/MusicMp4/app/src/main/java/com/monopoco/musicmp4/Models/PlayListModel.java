@@ -1,21 +1,65 @@
 package com.monopoco.musicmp4.Models;
 
-public class PlayListModel {
-    private int Image;
+import com.google.gson.annotations.SerializedName;
+import com.monopoco.musicmp4.R;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+
+public class PlayListModel implements Serializable {
+
+    @SerializedName("playlist_id")
+    private String playlistId;
+
+//    private String  Image;
+
+    @SerializedName("playlist_name")
     private String playListName;
 
-    public PlayListModel(int image, String playListName) {
-        Image = image;
+    @SerializedName("playlist_image")
+    private String playlistImage;
+
+    public PlayListModel(String playlistId, String playListName, String playlistImage, List<SongModel> songModelList, String userName, String userId) {
+        this.playlistId = playlistId;
         this.playListName = playListName;
+        this.playlistImage = playlistImage;
+        this.songModelList = songModelList;
+        this.userName = userName;
+        this.userId = userId;
     }
 
-    public int getImage() {
-        return Image;
+    @SerializedName("song_entities")
+    private List<SongModel> songModelList;
+
+    @SerializedName("username")
+    private String userName;
+
+    @SerializedName("user_id")
+    private String userId;
+
+    public String getUserName() {
+        return userName;
     }
 
-    public void setImage(int image) {
-        Image = image;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPlaylistImage() {
+        return playlistImage;
+    }
+
+    public void setPlaylistImage(String playlistImage) {
+        this.playlistImage = playlistImage;
+    }
+
+    public String getPlaylistId() {
+        return playlistId;
+    }
+
+    public void setPlaylistId(String playlistId) {
+        this.playlistId = playlistId;
     }
 
     public String getPlayListName() {
@@ -24,5 +68,21 @@ public class PlayListModel {
 
     public void setPlayListName(String playListName) {
         this.playListName = playListName;
+    }
+
+    public List<SongModel> getSongModelList() {
+        return songModelList;
+    }
+
+    public void setSongModelList(List<SongModel> songModelList) {
+        this.songModelList = songModelList;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

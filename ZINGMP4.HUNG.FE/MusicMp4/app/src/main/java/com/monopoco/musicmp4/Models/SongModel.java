@@ -1,28 +1,57 @@
 package com.monopoco.musicmp4.Models;
 
 
+import com.google.gson.annotations.SerializedName;
+import com.monopoco.musicmp4.R;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SongModel implements Serializable {
 
-    private int Image;
-    private String songName;
-    private String singer;
-    private int resource;
+    @SerializedName("song_id")
+    private String id;
 
-    public SongModel(int image, String songName, String singer, int resource) {
-        Image = image;
+    @SerializedName("thumnail")
+    private String imageUrl;
+
+    @SerializedName("song_name")
+    private String songName;
+
+    @SerializedName("singer_name")
+    private String singer;
+
+
+    @SerializedName("link_song")
+    private String resource;
+
+    @SerializedName("liked")
+    private Integer liked;
+
+    public SongModel(String id, String imageUrl, String songName, String singer, String resource) {
+        this.id = id;
+        this.imageUrl = imageUrl;
         this.songName = songName;
         this.singer = singer;
         this.resource = resource;
     }
 
-    public int getImage() {
-        return Image;
+    public String getId() {
+        return id;
     }
 
-    public void setImage(int image) {
-        Image = image;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getSongName() {
@@ -41,11 +70,11 @@ public class SongModel implements Serializable {
         this.singer = singer;
     }
 
-    public int getResource() {
+    public String getResource() {
         return resource;
     }
 
-    public void setResource(int resource) {
+    public void setResource(String resource) {
         this.resource = resource;
     }
 }

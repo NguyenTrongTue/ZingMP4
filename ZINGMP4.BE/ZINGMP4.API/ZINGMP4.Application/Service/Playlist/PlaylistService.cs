@@ -49,7 +49,7 @@ namespace ZINGMP4.Application.Service
 
             var playlist = await this.GetPlaylistAsync(playlistConfig.playlist_id);
 
-            if (playlist.playlist_image is null)
+            if (String.IsNullOrEmpty(playlist.playlist_image))
             {
 
                 await _playlistRepository.UpdatePlaylistImageAsync(song.thumnail, playlistConfig.playlist_id);

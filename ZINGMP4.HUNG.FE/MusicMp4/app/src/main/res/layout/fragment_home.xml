@@ -9,18 +9,17 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="30px"
         android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:orientation="vertical">
             <TextView
                 android:id="@+id/text_recommended"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Recommended for you"
-                android:fontFamily="@font/circular_std_font"
                 android:textSize="30dp"
                 android:paddingLeft="70px"
                 android:textFontWeight="600"
@@ -50,8 +49,7 @@
                 android:id="@+id/text_play_list"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="My Playlist"
-                android:fontFamily="@font/circular_std_font"
+                android:text="Most Impressive"
                 android:textSize="30dp"
                 android:paddingLeft="70px"
                 android:textFontWeight="600"
@@ -67,6 +65,34 @@
 
                 <LinearLayout
                     android:id="@+id/linear_play_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@drawable/divider_horizontal"
+                    android:dividerPadding="20px"
+                    android:orientation="horizontal"
+                    android:showDividers="middle" />
+
+            </HorizontalScrollView>
+            <TextView
+                android:id="@+id/text_artists"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Popular artists"
+                android:textSize="30dp"
+                android:paddingLeft="70px"
+                android:textFontWeight="600"
+                android:layout_marginTop="30dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/white"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="600px"
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/linear_artists"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:divider="@drawable/divider_horizontal"

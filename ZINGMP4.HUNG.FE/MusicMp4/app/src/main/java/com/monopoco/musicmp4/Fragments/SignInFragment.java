@@ -1,6 +1,8 @@
 package com.monopoco.musicmp4.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -27,7 +29,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.monopoco.musicmp4.Activities.MainActivity;
+import com.monopoco.musicmp4.Models.LoginModel;
+import com.monopoco.musicmp4.Models.UserModel;
 import com.monopoco.musicmp4.R;
+import com.monopoco.musicmp4.Requests.APIService;
+
+import org.w3c.dom.Text;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SignInFragment extends Fragment {
@@ -47,6 +58,8 @@ public class SignInFragment extends Fragment {
     private FirebaseAuth mAuth;
 
     private Drawable errorIcon;
+
+    private TextView txtToForget;
 
 
     @Override
@@ -69,8 +82,8 @@ public class SignInFragment extends Fragment {
 
         loading = view.findViewById(R.id.loading);
 
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
+        txtToForget = view.findViewById(R.id.text_to_forget);
+
 
         return view;
     }
@@ -81,6 +94,13 @@ public class SignInFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setFragment(new RegisterFragment());
+            }
+        });
+
+        txtToForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFragment(new ForgotPasswordFragment());
             }
         });
 
@@ -133,31 +153,35 @@ public class SignInFragment extends Fragment {
 
     private void handleLogin() {
         if (email.getText().toString().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
-            mAuth.signInWithEmailAndPassword(
+            LoginModel loginBody = new LoginModel(
                     email.getText().toString(),
                     password.getText().toString()
-            ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            );
+            APIService.getService().Login(loginBody).enqueue(new Callback<UserModel>() {
                 @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
+                public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                    if (response.code() == 200) {
+                        SharedPreferences sp= getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor Ed=sp.edit();
+                        Ed.putString("isLogin", "true" );
+                        Ed.putString("userId", response.body().getUserId());
+                        Ed.commit();
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         getActivity().startActivity(intent);
                         getActivity().finish();
-                        loading.setVisibility(View.GONE);
-                    } else {
-                        Toast.makeText(getContext(), task.getException().getMessage(),
-                                Toast.LENGTH_SHORT).show();
+
+                    } else if (response.code() == 409) {
+                        Toast.makeText(getContext(), "Tài khoản mật khẩu không chính xác",
+                                Toast.LENGTH_LONG).show();
                         loginButton.setEnabled(true);
-                        loading.setVisibility(View.GONE);
                     }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                    loginButton.setEnabled(true);
                     loading.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onFailure(Call<UserModel> call, Throwable t) {
+                    loading.setVisibility(View.GONE);
+                    loginButton.setEnabled(true);
                 }
             });
         } else {

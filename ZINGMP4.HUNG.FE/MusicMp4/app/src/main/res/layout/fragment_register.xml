@@ -35,7 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:fontFamily="@font/circular_std_font"
+        android:textFontWeight="700"
         android:text="Sign Up"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -45,18 +45,17 @@
         app:layout_constraintTop_toBottomOf="@+id/logo" />
 
     <EditText
-        android:id="@+id/register_email_field"
+        android:id="@+id/register_username_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/edittext_border"
-        android:drawableLeft="@drawable/account_icon"
+        android:drawableLeft="@drawable/ic_profile"
         android:drawablePadding="10dp"
-        android:fontFamily="@font/circular_std_font"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
+        android:hint="Username"
+        android:inputType="text"
         android:nextFocusDown="@id/login_password_field"
         android:paddingLeft="10dp"
         android:paddingTop="18dp"
@@ -73,22 +72,46 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
-        android:inputType="textPassword"
-        android:id="@+id/register_password_field"
+        android:inputType="textEmailAddress"
+        android:id="@+id/register_email_field"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="21dp"
         android:background="@drawable/edittext_border"
-        android:drawableLeft="@drawable/locked_icon"
-        android:fontFamily="@font/circular_std_font"
+        android:drawableLeft="@drawable/ic_email"
         android:drawablePadding="10dp"
-        android:hint="Password (At least 8 characters)"
+        android:hint="Email"
         android:paddingLeft="10dp"
         android:paddingTop="18dp"
         android:paddingRight="18dp"
         android:paddingBottom="18dp"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        android:textColorHint="#B9FFFFFF"
+        android:textColorLink="@color/white"
+        android:textCursorDrawable="@drawable/text_cursor"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/register_username_field"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/register_username_field"
+        app:layout_constraintTop_toBottomOf="@+id/register_username_field" />
+    <EditText
+        android:inputType="textPassword"
+        android:id="@+id/register_password_field"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:background="@drawable/edittext_border"
+        android:drawableLeft="@drawable/ic_lock"
+        android:drawablePadding="10dp"
+        android:hint="Password (At least 6 characters)"
+        android:paddingLeft="10dp"
+        android:paddingTop="18dp"
+        android:paddingRight="18dp"
+        android:paddingBottom="18dp"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
         android:textColorHint="#B9FFFFFF"
         android:textColorLink="@color/white"
         android:textCursorDrawable="@drawable/text_cursor"
@@ -97,31 +120,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/register_email_field"
         app:layout_constraintTop_toBottomOf="@+id/register_email_field" />
-    <EditText
-        android:inputType="textPassword"
-        android:id="@+id/confirm_password_field"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:background="@drawable/edittext_border"
-        android:drawableLeft="@drawable/locked_icon"
-        android:fontFamily="@font/circular_std_font"
-        android:drawablePadding="10dp"
-        android:hint="Confirm Password"
-        android:paddingLeft="10dp"
-        android:paddingTop="18dp"
-        android:paddingRight="18dp"
-        android:paddingBottom="18dp"
-        android:textColor="@color/white"
-        android:textAllCaps="false"
-        android:textColorHint="#B9FFFFFF"
-        android:textColorLink="@color/white"
-        android:textCursorDrawable="@drawable/text_cursor"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/register_password_field"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/register_password_field"
-        app:layout_constraintTop_toBottomOf="@+id/register_password_field" />
 
     <LinearLayout
         android:id="@+id/line_text"
@@ -131,16 +129,15 @@
         android:layout_marginEnd="24dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@id/confirm_password_field"
-        app:layout_constraintStart_toStartOf="@id/confirm_password_field"
-        app:layout_constraintTop_toBottomOf="@id/confirm_password_field">
+        app:layout_constraintEnd_toEndOf="@id/register_password_field"
+        app:layout_constraintStart_toStartOf="@id/register_password_field"
+        app:layout_constraintTop_toBottomOf="@id/register_password_field">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="15dp"
-            android:fontFamily="@font/circular_std_font"
             android:text="Already have an account?"
             android:textColor="@color/white"
             android:textSize="16dp" />
@@ -153,7 +150,6 @@
             android:layout_weight="0.5"
             android:clickable="true"
             android:cursorVisible="true"
-            android:fontFamily="@font/circular_std_font"
             android:text="Login."
             android:textColor="@color/button_color"
             android:textSize="16dp"
@@ -169,9 +165,9 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
 
-        android:fontFamily="@font/circular_std_font"
         android:gravity="center"
-        android:letterSpacing=".2"
+        android:letterSpacing=".1"
+        android:textFontWeight="700"
         android:padding="13dp"
         android:text="Register Now"
         android:textAllCaps="false"
@@ -185,6 +181,42 @@
         android:background="@drawable/button">
 
     </Button>
+    <LinearLayout
+        android:id="@+id/forgot_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/sign_up_button"
+        app:layout_constraintStart_toStartOf="@id/sign_up_button"
+        app:layout_constraintTop_toBottomOf="@id/sign_up_button">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="15dp"
+            android:text="Can't sign in?"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/text_to_forget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:clickable="true"
+            android:cursorVisible="true"
+            android:text="Get new password."
+            android:textColor="@color/button_color"
+            android:textSize="16dp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/loading"

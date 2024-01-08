@@ -43,7 +43,7 @@ namespace ZINGMP4.Infrastructure.Repository
 
             param.Add("playlist_id", playlist_id);
 
-            var sql = "select * from  public.playlist_config where song_id = @song_id and playlist_id = playlist_id;";
+            var sql = "select * from  public.playlist_config where song_id = @song_id and playlist_id = @playlist_id;";
 
             var result = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<PlaylistConfigEntity>(sql, param);
 
@@ -58,7 +58,7 @@ namespace ZINGMP4.Infrastructure.Repository
 
             param.Add("playlist_id", entity.playlist_id);
 
-            var sql = "delete from public.playlist_config where song_id = @song_id and playlist_id = playlist_id;";
+            var sql = "delete from public.playlist_config where song_id = @song_id and playlist_id = @playlist_id;";
 
             await _unitOfWork.Connection.ExecuteAsync(sql, param);
         }

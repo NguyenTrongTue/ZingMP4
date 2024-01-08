@@ -10,7 +10,12 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:name=".Classes.ApplicationClass"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/ic_app_icon"
@@ -19,14 +24,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicMP4"
         tools:targetApi="31">
+        <activity
+            android:name=".Activities.PlayListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.SearchActivity"
+            android:exported="false" />
+
         <service
             android:name=".Services.MediaPlayerService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
 
         <activity
             android:name=".Activities.PlayerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".Activities.SignInActivity"
             android:exported="false"
@@ -54,6 +68,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name="com.monopoco.musicmp4.Receiver.NotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="actionprevious" />
+                <action android:name="actionnext" />
+                <action android:name="actionplay" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

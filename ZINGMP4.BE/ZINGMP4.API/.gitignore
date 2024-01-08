@@ -9,6 +9,7 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+ZINGMP4.API/wwwroot/
 
 # Build results
 [Dd]ebug/
