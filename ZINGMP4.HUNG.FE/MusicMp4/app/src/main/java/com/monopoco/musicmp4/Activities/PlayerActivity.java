@@ -43,6 +43,8 @@ import com.monopoco.musicmp4.Models.SongModel;
 import com.monopoco.musicmp4.R;
 import com.monopoco.musicmp4.Receiver.NotificationReceiver;
 import com.monopoco.musicmp4.Services.MediaPlayerService;
+import com.monopoco.musicmp4.Utils.ImageTask;
+import com.monopoco.musicmp4.Utils.ImageUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -59,6 +61,8 @@ public class PlayerActivity extends AppCompatActivity {
     private MediaSessionCompat mediaSessionCompat;
 
     private MusicPlayerFragment playerFragment;
+
+    private Intent serviceIntent;
 
     boolean mBound = false;
 
@@ -106,12 +110,14 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void startService() {
-        Intent intent = new Intent(this, MediaPlayerService.class);
-        intent.putExtra("songs", songModels);
-        if (getIntent().getSerializableExtra("clear") != null ) {
-            intent.putExtra("clear", getIntent().getSerializableExtra("clear"));
+        if (serviceIntent == null) {
+            serviceIntent = new Intent(this, MediaPlayerService.class);
+            serviceIntent.putExtra("songs", songModels);
+            if (getIntent().getSerializableExtra("clear") != null ) {
+                serviceIntent.putExtra("clear", getIntent().getSerializableExtra("clear"));
+            }
+            startService(serviceIntent);
         }
-        startService(intent);
     }
 
     /**
@@ -220,11 +226,15 @@ public class PlayerActivity extends AppCompatActivity {
         PendingIntent nextPending = PendingIntent.getBroadcast(this, 0, nextIntent, PendingIntent.FLAG_IMMUTABLE);
 
         byte[] picture = null;
+        try {
+            Bitmap bmp = new ImageTask().execute(mediaPlayerService.getCurrentSong().getImageUrl().replace("https://localhost:7211", "http://10.0.2.2:5109")).get();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            picture = stream.toByteArray();
+        } catch (Exception exception) {
+                exception.printStackTrace();
+        }
 
-//        Bitmap bmp = BitmapFactory.decodeResource(getResources(), mediaPlayerService.getCurrentSong().getImageUrl());
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        picture = stream.toByteArray();
 
         Bitmap thumb = null;
         if (picture != null) {

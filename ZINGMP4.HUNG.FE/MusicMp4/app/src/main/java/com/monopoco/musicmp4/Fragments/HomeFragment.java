@@ -42,7 +42,11 @@ public class HomeFragment extends Fragment {
 
     private LinearLayout linearPlaylist;
 
+    private LinearLayout linearArtist;
+
     private final List<String> impressiveId = new ArrayList<>();
+
+    private final List<String> artistsId = new ArrayList<>();
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +151,55 @@ public class HomeFragment extends Fragment {
                     });
 
                 });
+
+                linearArtist = getView().findViewById(R.id.linear_artists);
+
+                artistsId.forEach(artistId -> {
+                    APIService.getService().GetPlayListById(artistId).enqueue(new Callback<PlayListModel>() {
+                        @Override
+                        public void onResponse(Call<PlayListModel> call, Response<PlayListModel> response) {
+                            if (response.code() == 200) {
+                                View viewItem = getLayoutInflater().inflate(R.layout.artist_item, null);
+                                viewItem.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                                        intent.putExtra("playlistId",artistId );
+                                        startActivity(intent);
+                                    }
+                                });
+
+                                ImageView playlistImage = viewItem.findViewById(R.id.image_artist);
+                                ImageUtils.setImageUrl(response.body().getPlaylistImage(), playlistImage, getContext());
+                                TextView playListName = viewItem.findViewById(R.id.artist_name);
+                                playListName.setText(response.body().getPlayListName());
+                                if (linearArtist.getChildCount() == 0) {
+                                    LinearLayout ll = new LinearLayout(getContext());
+                                    ll.setOrientation(LinearLayout.VERTICAL);
+                                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                    layoutParams.setMargins(70, 0, 0, 0);
+                                    linearArtist.addView(viewItem, layoutParams);
+                                } else if (linearArtist.getChildCount() == artistsId.size() - 1) {
+                                    LinearLayout ll = new LinearLayout(getContext());
+                                    ll.setOrientation(LinearLayout.VERTICAL);
+                                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                    layoutParams.setMargins(0, 0, 70, 0);
+                                    linearArtist.addView(viewItem, layoutParams);
+                                } else {
+                                    linearArtist.addView(viewItem);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<PlayListModel> call, Throwable t) {
+
+                        }
+                    });
+
+                });
             }
 
             @Override
@@ -167,6 +220,14 @@ public class HomeFragment extends Fragment {
         impressiveId.add("a4f22c6c-ae80-4d1b-a673-f923f018cfd6");
         impressiveId.add("e7ef7bfa-6d32-41a7-959f-4393b491b381");
         impressiveId.add("8737a205-8ccc-4ab4-b890-5472c0c5a3a9");
+
+        artistsId.add("5670216d-bb4b-408b-915c-3565d01ab930");
+        artistsId.add("21b67d09-295f-485c-b133-38d1ca005619");
+        artistsId.add("ca3f2516-83f7-45c5-9355-30ef9c520831");
+        artistsId.add("72a27d22-93fd-4176-82cf-0e7e5c7ad274");
+        artistsId.add("1d821d19-5424-4888-bf33-64a90c5e0a5e");
+        artistsId.add("955f05b9-dee8-42b1-a1af-195892d1bde5");
+
 
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);

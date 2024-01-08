@@ -195,6 +195,7 @@ public class MediaPlayerService extends Service {
         } else {
             mediaPlayer.reset();
             Uri songUri = Uri.parse(SongUtils.getSongResource(songModel.getResource()));
+            Log.e("monopoco", songUri.toString());
             try {
                 mediaPlayer.setDataSource(getApplicationContext(), songUri);
             } catch (IOException e) {
